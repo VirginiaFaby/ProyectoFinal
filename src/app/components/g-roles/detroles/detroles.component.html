@@ -1,0 +1,112 @@
+<table class="table tabla-sombra">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Nonbre Rol</th>
+      <th scope="col"> Estado </th>
+      <th scope="col" class="text-center"> Acciones </th>
+    </tr>
+  </thead>
+  <tbody *ngFor="let rol of apiRoles | paginate: { itemsPerPage: 6, currentPage: pageActual } ; index as con">
+    <tr>
+      <td *ngIf="rol.estado == 1" class="activo" scope="col">{{con+1}}</td>
+      <td *ngIf="rol.estado == 0" class="inactivo" scope="col">{{con+1}}</td>
+      <td *ngIf="rol.estado == 1" class="activo">{{rol.nombre}} </td>
+      <td *ngIf="rol.estado == 0" class="inactivo">{{rol.nombre}} </td>
+      <td>
+        <!-- estado -->
+        <a *ngIf="rol.estado == 1" class="btn-custom">Activo</a>
+        <a *ngIf="rol.estado == 0" class="btn-customm">Inactivo</a>
+      </td>
+      <!--Modificar-->
+      <td class="text-center">
+        <a *ngIf="rol.estado == 1" href="javascript:void(0)" (click)="llamaModalMod(contentMod, rol)"
+          class="bi bi-pencil-fill enlace-icono"></a>
+        <a *ngIf="rol.estado == 0" class="bi bi-pencil-fill enlace-iconoo">
+        </a>
+      
+      <!--Eliminacion logica-->
+      
+        <a *ngIf="rol.estado==1" href="javascript:void(0)" (click)="llamaModalDel(contentDel, rol)"
+          class="bi bi-trash-fill enlace-icono">
+        </a>
+        <a *ngIf="rol.estado==0" class="bi bi-trash-fill enlace-iconoo"></a>
+      
+      <!--Habilitar -->
+      
+        <a *ngIf="rol.estado==0" href="javascript:void(0)" (click)="llamaModalHab(contentHab, rol)"
+          class="bi bi-arrow-clockwise enlace-icono">
+        </a>
+        <a *ngIf="rol.estado==1" class="bi bi-arrow-clockwise enlace-iconoo">
+        </a>
+      </td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <td colspan="8" align="center">
+      <pagination-controls (pageChange)="pageActual = $event" previousLabel="" nextLabel=""
+        class="my-pagination"></pagination-controls>
+    </td>
+  </tfoot>
+
+</table>
+
+<!--VENTANA MODAL PARA MODIFICAR DATOS  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentMod let-c="close" let-d="dismiss" id="modal-add">
+  <div class="modal-cuu">
+    <h4 class="modal-title" id="modal-basic-title" style="color: #236259; font-weight: bold;"> Modificar Datos del
+      Rol... </h4>
+  </div>
+  <form class="needs-validation" novalidate [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="modal-body">
+      <div class="form-group">
+        <label> Nombre Rol<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" formControlName="nombre" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.nombre.errors }" />
+        <div *ngIf="submitted && f.nombre.errors" class="invalid-feedback">
+          <p *ngIf="f.nombre.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.nombre.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.nombre.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+    </div>
+    <div class="modal-pie">
+      <button type="button" class="btn-custoo" (click)="c('Save click')"> Cancelar </button>
+      <button type="submit" class="btn-custo"> Modifcar </button>
+    </div>
+  </form>
+</ng-template>
+
+<!-- VENTANA MODAL PARA OPCION ELIMINAR xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentDel let-c="close" let-d="dismiss">
+  <div class="modal-cu">
+  </div>
+  <div class="modal-body">
+    <h5 class="text-center">¿Estas seguro? Se dara de baja el Rol:
+      <h5 style="color:#236259; font-weight: bold;"><strong>{{ rolesI.nombre }}</strong></h5>
+    </h5>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmitDel()">
+    <div class="modal-pie">
+      <button type="button" class="btn-custoo" (click)="c('Save click')"> Cancelar</button>
+      <button type="submit" class="btn-custo"> Aceptar </button>
+    </div>
+  </form>
+</ng-template>
+
+<!-- VENTANA MODAL PARA OPCION HABILITAR *************************************************************  -->
+<ng-template #contentHab let-c="close" let-d="dismiss">
+  <div class="modal-cu">
+  </div>
+  <div class="modal-body">
+    <h5 class="text-center">¿Esta seguro? De habilitar al Rol:
+      <h5 style="color:#236259; font-weight: bold;"><strong>{{ rolesI.nombre }}</strong></h5>
+    </h5>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmitHab()">
+    <div class="modal-pie">
+      <button type="button" class="btn-custoo" (click)="c('Save click')"> Cancelar</button>
+      <button type="submit" class="btn-custo"> Aceptar </button>
+    </div>
+  </form>
+</ng-template>

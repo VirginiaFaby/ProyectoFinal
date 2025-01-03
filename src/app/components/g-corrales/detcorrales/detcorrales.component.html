@@ -1,0 +1,123 @@
+<table class="table tabla-sombra">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">NOMBRE DE CORRAL</th>
+      <th scope="col">CAPACIDAD</th>
+      <th scope="col">TIP. ANIMALES</th>
+      <th scope="col">ING. ANIMALES</th>
+      <th scope="col"> ESTADO </th>
+      <th scope="col" colspan="2" class="text-center"> ACCIONES </th>
+    </tr>
+  </thead>
+  <tbody *ngFor="let cor of apiCorrales | paginate: { itemsPerPage: 5, currentPage: pageActual } ; index as con">
+    <tr>
+      <td *ngIf="cor.estado == 1" class="activo" scope="col">{{con+1}}</td>
+      <td *ngIf="cor.estado == 0" class="inactivo" scope="col">{{con+1}}</td>
+      <td *ngIf="cor.estado == 1" class="activo">{{cor.nomcor}} </td>
+      <td *ngIf="cor.estado == 0" class="inactivo">{{cor.nomcor}} </td>
+      <td *ngIf="cor.estado == 1" class="activo">{{cor.capcor}} </td>
+      <td *ngIf="cor.estado == 0" class="inactivo">{{cor.capcor}} </td>
+      <td *ngIf="cor.estado == 1" class="activo">{{cor.tipoanimal.nomtip}} </td>
+      <td *ngIf="cor.estado == 0" class="inactivo">{{cor.tipoanimal.nomtip}} </td>
+      <td *ngIf="cor.estado == 1" class="activo text-center">{{cor.corani}} </td>
+      <td *ngIf="cor.estado == 0" class="inactivo text-center">{{cor.corani}} </td>
+
+      <td>
+        <!-- estado -->
+        <a *ngIf="cor.estado == 1" class="btn-custom">Libre</a>
+        <a *ngIf="cor.estado == 0" class="btn-customm">Lleno</a>
+      </td>
+
+      <!--Modificar-->
+      <td>
+        <a *ngIf="cor.estado == 1" href="javascript:void(0)" (click)="llamaModalMod(contentMod, cor)"
+          class="bi bi-pencil-fill enlace-icono"></a>
+        <a *ngIf="cor.estado == 0" class="bi bi-pencil-fill enlace-iconoo">
+        </a>
+      </td>
+      <!--Eliminacion logica-->
+      <td>
+        <a *ngIf="cor.estado==1" href="javascript:void(0)" (click)="llamaModalDel(contentDel, cor)"
+          class="bi bi-trash-fill enlace-icono"></a>
+        <a *ngIf="cor.estado==0" class="bi bi-trash-fill enlace-iconoo"></a>
+      </td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <td colspan="8" align="center">
+      <pagination-controls (pageChange)="pageActual = $event" previousLabel="" nextLabel=""
+        class="my-pagination"></pagination-controls>
+    </td>
+  </tfoot>
+
+</table>
+
+<!--VENTANA MODAL PARA MODIFICAR DATOS  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentMod let-c="close" let-d="dismiss" id="modal-add">
+  <div class="modal-cuu">
+    <h4 class="modal-title" id="modal-basic-title" style="color: #236259; font-weight: bold;"> Modificar Datos de Corral... </h4>
+
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="modal-body">
+
+      <div class="form-group">
+        <label>Nombre de Corral<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" formControlName="nomcor" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.nomcor.errors }" />
+        <div *ngIf="submitted && f.nomcor.errors" class="invalid-feedback">
+          <p *ngIf="f.nomcor.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.nomcor.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.nomcor.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+      <div class="form-group mixtad">
+        <label>Capacidad (U.A.)<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="number" formControlName="capcor" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.capcor.errors }" />
+        <div *ngIf="submitted && f.capcor.errors" class="invalid-feedback">
+          <p *ngIf="f.capcor.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.capcor.errors.min"> Solo nuemeros Positivos </p>
+          <p *ngIf="f.capcor.errors.pattern"> Valores superiores a Cero </p>
+
+        </div>
+      </div>
+      <!--TipoAnimal-->
+      <div class="form-group mixtad ">
+        <label>Tipo Animal<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+        <select formControlName="tipoanimal" class="form-control form-select"
+          [ngClass]="{'is-invalid': submitted && f.tipoanimal.errors}">
+          <option value="">Tipo de Animales... </option>
+          <option *ngFor="let tip of apiTipoanimal" [value]="tip.idtip">{{ tip.nomtip }}</option>
+        </select>
+        <div *ngIf="submitted && f.tipoanimal.errors" class="invalid-feedback">
+          <p *ngIf="f.tipoanimal.errors.required"> Seleccione una opcion </p>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-pie">
+      <button type="button" class="btn-custoo" (click)="c('Save click')"> Cancelar </button>
+      <button type="submit" class="btn-custo" > Modifcar </button>
+    </div>
+  </form>
+</ng-template>
+
+
+<!-- VENTANA MODAL PARA OPCION ELIMINAR xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentDel let-c="close" let-d="dismiss">
+  <div class="modal-cu">
+  </div>
+  <div class="modal-body">
+    <h5 class="text-center" >¿Esta seguro? Se dara de baja al Corral:
+      <h5 style="color:#236259; font-weight: bold;"><strong>{{ corralesI.nomcor }}</strong></h5>
+    </h5>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmitDel()">
+    <div class="modal-pie">
+      <button type="button" class="btn-custoo" (click)="c('Save click')"> Cancelar</button>
+      <button type="submit" class="btn-custo"> Aceptar </button>
+    </div>
+  </form>
+</ng-template>

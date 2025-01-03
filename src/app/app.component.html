@@ -1,0 +1,184 @@
+<body>
+    <div>
+    <nav *ngIf="conectado()">
+      <router-outlet  name='menus'></router-outlet> 
+    </nav>
+</div>
+    <main>
+      <router-outlet></router-outlet>  
+    </main>
+    
+    <div>
+      <router-outlet name='footer'></router-outlet> 
+    </div>
+  </body> 
+ 
+ 
+ <!-- 
+
+<nav class="navbar navbar-expand-lg bg-light navbar-light">
+    <img src="assets/logo de mat .png" class="navbar-brand logo" />
+    <p class="titulo">Matadero Municipal</p>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="row flex-nowrap">
+        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0" style="background-color: #236259 !important;">
+            <div>
+                <ul id="menu" style="list-style-type: none;">
+
+                    <!-- Gestion de Granjas  --
+                    <li>
+                        <a href="#" class="nav-link px-0 align-middle" routerLink="granjas">
+                            <span class="ms-1 d-none d-sm-inline"
+                                style="color: #c3c3c3; font-weight: bold;">GRANJAS</span> </a>
+                    </li>
+                    <!-- Gestion de Tipo Servicios  --
+                    <li>
+                        <a href="#" class="nav-link px-0 align-middle" routerLink="tiposervicios">
+                            <span class="ms-1 d-none d-sm-inline" style="color: #c3c3c3; font-weight: bold;">TIPOS DE
+                                SERVICIOS</span> </a>
+                    </li>
+                    <!-- Gestion de Corrales--
+                    <li>
+                        <a href="#" class="nav-link px-0 align-middle" routerLink="corrales">
+                            <span class="ms-1 d-none d-sm-inline"
+                                style="color: #c3c3c3; font-weight: bold;">CORRALES</span> </a>
+                    </li>
+                    <!--Gestion de Razas  --
+                    <li>
+                        <a href="#" class="nav-link px-0 align-middle" routerLink="razas">
+                            <span class="ms-1 d-none d-sm-inline"
+                                style="color: #c3c3c3; font-weight: bold;">RAZAS</span> </a>
+                    </li>
+                    <!-- Gestion de Guia Senasag--
+                    <li>
+                        <a href="#" class="nav-link px-0 align-middle" routerLink="guiasenasag">
+                            <span class="ms-1 d-none d-sm-inline" style="color: #c3c3c3;font-weight: bold;">GUIA
+                                SENASAG</span> </a>
+                    </li>
+                    <!--Animales --
+                    <li>
+                        <a href="#" class="nav-link px-0 align-middle" routerLink="animales">
+                            <span class="ms-1 d-none d-sm-inline"
+                                style="color: #c3c3c3; font-weight: bold;">ANIMALES</span> </a>
+                    </li>
+                    <!-- Clientes --
+                    <li>
+                        <a href="#" class="nav-link px-0 align-middle" routerLink="clientes">
+                            <span class="ms-1 d-none d-sm-inline"
+                                style="color: #c3c3c3; font-weight: bold;">CLIENTES</span> </a>
+                    </li>
+                    <!-- Usuarios --
+                    <li>
+                        <a href="#" class="nav-link px-0 align-middle" routerLink="personas">
+                            <span class="ms-1 d-none d-sm-inline"
+                                style="color: #c3c3c3; font-weight: bold;">USUARIOS</span> </a>
+                    </li>
+
+                    <!--Servicios de faena  --
+                    <li>
+                        <a href="#" class="nav-link px-0 align-middle" routerLink="serviciofaena">
+                            <span class="ms-1 d-none d-sm-inline" style="color: #c3c3c3; font-weight: bold;">SERVICIO DE
+                                FAENA</span> </a>
+                    </li>
+
+                    <!--Servicios de faena  --
+                    <li>
+                        <a href="#" class="nav-link px-0 align-middle" routerLink="ventaser">
+                            <span class="ms-1 d-none d-sm-inline" style="color: #c3c3c3; font-weight: bold;">SERVICIO DE
+                                FAENA</span> </a>
+                    </li>
+                    <!--Compras --
+                    <li>
+                        <a href="#" class="nav-link px-0 align-middle" routerLink="compras">
+                            <span class="ms-1 d-none d-sm-inline"
+                                style="color: #c3c3c3; font-weight: bold;">COMPRAS</span> </a>
+                    </li>
+
+                    <!--camara--
+                    <li>
+                        <a href="#" class="nav-link px-0 align-middle" routerLink="camara">
+                            <span class="ms-1 d-none d-sm-inline"
+                                style="color: #c3c3c3; font-weight: bold;">CAMARA</span> </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link px-0 align-middle" routerLink="roles">
+                            <span class="ms-1 d-none d-sm-inline"
+                                style="color: #c3c3c3; font-weight: bold;">ROLES</span> </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link px-0 align-middle" routerLink="menuss">
+                            <span class="ms-1 d-none d-sm-inline"
+                                style="color: #c3c3c3; font-weight: bold;">MENUS</span> </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link px-0 align-middle" routerLink="procesos">
+                            <span class="ms-1 d-none d-sm-inline"
+                                style="color: #c3c3c3; font-weight: bold;">PROCESOS</span> </a>
+                    </li>
+
+
+                    <!--Proveedores--
+                    <li>
+                        <a href="#" class="nav-link px-0 align-middle" routerLink="proveedores">
+                            <span class="ms-1 d-none d-sm-inline"
+                                style="color: #c3c3c3; font-weight: bold;">PROVEEDORES</span> </a>
+                    </li>
+                    <!--servicios--
+                    <li>
+                        <a href="#" class="nav-link px-0 align-middle" routerLink="servicios">
+                            <span class="ms-1 d-none d-sm-inline"
+                                style="color: #c3c3c3; font-weight: bold;">SERVICIOS</span> </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link px-0 align-middle" routerLink="guiasenasag">
+                            <span class="ms-1 d-none d-sm-inline" style="color: #c3c3c3; font-weight: bold;">GUIA
+                                SENASAG</span> </a>
+                    </li>
+                  
+                    <!--productos--
+                    <li>
+                        <a href="#" class="nav-link px-0 align-middle" routerLink="productos">
+                            <span class="ms-1 d-none d-sm-inline"
+                                style="color: #c3c3c3; font-weight: bold;">PRODUCTOS</span> </a>
+                    </li>
+
+
+                    <!--Empleados--
+                    <li>
+                        <a href="#" class="nav-link px-0 align-middle" routerLink="empleados">
+                            <span class="ms-1 d-none d-sm-inline"
+                                style="color: #c3c3c3; font-weight: bold;">EMPLEADOS</span> </a>
+                    </li>
+                    <!--INVENTARIOS--
+                    <li>
+                        <a href="#" class="nav-link px-0 align-middle" routerLink="inventarios">
+                            <span class="ms-1 d-none d-sm-inline"
+                                style="color: #c3c3c3; font-weight: bold;">INVENTARIOS</span> </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link px-0 align-middle" routerLink="ventasprd">
+                            <span class="ms-1 d-none d-sm-inline"
+                                style="color: #c3c3c3; font-weight: bold;">VENTAS</span> </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link px-0 align-middle" routerLink="login">
+                            <span class="ms-1 d-none d-sm-inline"
+                                style="color: #c3c3c3; font-weight: bold; ">LOGIN</span> </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col py-3 ml-8" style=" margin-left: 30px; margin-right: 45px;">
+            <!-- Añade un margen izquierdo de 20px --
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>
+-->

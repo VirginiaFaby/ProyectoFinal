@@ -1,0 +1,193 @@
+<div class="row">
+  <ng-container *ngFor="let raz of apiRazas | paginate: { itemsPerPage: 6, currentPage: pageActual } ; index as con">
+    <div class="col-md-4 mb-4">
+      <div class="card">
+        <div class="headerr" [ngClass]="{'bg-success text-white': raz.estado == 1, 'bg-danger text-white': raz.estado == 0}">
+          <img id="fotom" [src]="'./assets/' + raz.fotoh" class="left-img" alt="no tieneFoto">
+          <img id="fotoh" [src]="'./assets/' + raz.fotom" class="right-img" alt="no tieneFoto">
+          <p class="text-center">{{raz.nomraz}}</p>
+        </div>
+
+        <div class="body">
+          <p> {{raz.carraz}} <br>Precio Referencial: Bs.{{raz.prerefm}} (Macho), Bs. {{raz.prerefh}} (Hembra)</p>  
+        </div>
+        <div class="footer"> 
+          <a href="javascript:void(0)" *ngIf="raz.estado == 1" class="bi bi-hand-thumbs-up-fill enlace-icono"></a>
+          <a href="javascript:void(0)" *ngIf="raz.estado == 0" class="bi bi-hand-thumbs-down-fill enlace-iconoo"></a>
+          <a href="javascript:void(0)" *ngIf="raz.estado == 1" (click)="llamaModalMod(contentMod, raz)" class="bi bi-pencil-fill enlace-icono"></a>
+          <a href="javascript:void(0)" *ngIf="raz.estado == 0" class="bi bi-pencil-fill enlace-iconoo"></a>
+          <a href="javascript:void(0)" *ngIf="raz.estado == 1" (click)="llamaModalDel(contentDel, raz)" class="bi bi-trash-fill enlace-icono"></a>
+          <a href="javascript:void(0)" *ngIf="raz.estado == 0" class="bi bi-trash-fill enlace-iconoo"></a>
+          <a href="javascript:void(0)" *ngIf="raz.estado == 0" (click)="llamaModalHab(contentHab, raz)" class="bi bi-arrow-clockwise enlace-icono"></a>
+          <a href="javascript:void(0)" *ngIf="raz.estado == 1" class="bi bi-arrow-clockwise enlace-iconoo"></a>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-md-4"> <!-- Ajuste el tamaño de la columna según sea necesario -->
+    <pagination-controls (pageChange)="pageActual = $event" previousLabel="" nextLabel="" class="my-pagination"></pagination-controls>
+  </div>
+</div>
+
+
+
+
+<!--VENTANA MODAL PARA MODIFICAR DATOS  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentMod let-c="close" let-d="dismiss" id="modal-add" >
+  <div class="modal-cuu" >
+    <h4 class="modal-title" id="modal-basic-title" style="color: #236259; font-weight: bold;"> Modificar Datos Raza... </h4>
+
+  </div>  
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="modal-body" >
+              <!--Nombre de la Raza -->
+      <div class="mixtad form-group">
+        <label> Nombre Raza<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" formControlName="nomraz" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.nomraz.errors }" />
+        <div *ngIf="submitted && f.nomraz.errors" class="invalid-feedback">
+          <p *ngIf="f.nomraz.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.nomraz.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.nomraz.errors.maxlength"> Máximo 30 caracteres </p>
+          <p *ngIf="f.nomraz.errors.pattern"> Ingresar solo Letras </p>
+        </div>
+      </div>
+
+      <!--TipoAnimal-->
+      <div class="mixtad form-group">
+        <label>Tipo Animal<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+        <select formControlName="tipoanimal" class="form-control max form-select"
+          [ngClass]="{'is-invalid': submitted && f.tipoanimal.errors}">
+          <option value="">Tipo de Animales... </option>
+          <option *ngFor="let tip of apiTipoanimal" [value]="tip.idtip">{{ tip.nomtip }}</option>
+        </select>
+        <div *ngIf="submitted && f.tipoanimal.errors" class="invalid-feedback">
+          <p *ngIf="f.tipoanimal.errors.required"> Seleccione una opcion </p>
+        </div>
+      </div>
+
+      <!--Caracteristicas de la Raza -->
+      <div class="form-group">
+        <label> Caracteristicas<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <textarea formControlName="carraz" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.carraz.errors }"></textarea>
+        <div *ngIf="submitted && f.carraz.errors" class="invalid-feedback">
+          <p *ngIf="f.carraz.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.carraz.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.carraz.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+
+      <!--Foto de la Raza Animal Macho -->
+      <div class="mixtad form-group">
+        <label for="archivoInput1">Foto Macho</label>
+        <div class="form-group">
+          <input type="file" name="fotom" id="archivoInput1" class="form-control" formcontrolname="fotom"
+            (change)="OnFileChange($event)">
+          <img  id="imagenPrevia1" src="./assets/{{this.auxfotom}}" alt="Vista previa de la imagen" class="imagen-previa">
+        </div>
+      </div>
+      <div class="mixtad form-group">
+        <label for="archivoInput2">Foto Hembra</label>
+        <div class="form-group">
+          <input type="file" name="fotoh" id="archivoInput2" class="form-control" formcontrolname="fotoh"
+            (change)="onFileChange($event)">
+          <img id="imagenPrevia2" src="./assets/{{this.auxfotoh}}" alt="Vista previa de la imagen" class="imagen-previa">
+        </div>
+      </div>
+
+      <div class="mixtad form-group">
+        <label> Peso Promedio Macho<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" formControlName="pesprom" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.pesprom.errors }" />
+        <div *ngIf="submitted && f.pesprom.errors" class="invalid-feedback">
+          <p *ngIf="f.pesprom.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.pesprom.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.pesprom.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+
+      <div class="mixtad form-group">
+        <label> Peso Promedio Hembra<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" formControlName="pesproh" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.pesproh.errors }" />
+        <div *ngIf="submitted && f.pesproh.errors" class="invalid-feedback">
+          <p *ngIf="f.pesproh.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.pesproh.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.pesproh.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+
+      <div class="mixtad form-group">
+        <label> Precio Referencial Macho<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="number" formControlName="prerefm" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.prerefm.errors }" />
+        <div *ngIf="submitted && f.prerefm.errors" class="invalid-feedback">
+          <p *ngIf="f.prerefm.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.prerefm.errors.min"> Solo Valores Positivos </p>
+          <p *ngIf="f.prerefm.errors.pattern"> Valores superiores a Cero </p>
+        </div>
+      </div>
+
+      <div class="mixtad form-group">
+        <label> Precio Referencial Hembra<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="number" formControlName="prerefh" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.prerefh.errors }" />
+        <div *ngIf="submitted && f.prerefh.errors" class="invalid-feedback">
+          <p *ngIf="f.prerefh.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.prerefh.errors.min"> Solo Valores Positivos </p>
+          <p *ngIf="f.prerefh.errors.pattern"> Valores superiores a Cero </p>
+        </div>
+      </div>
+        </div>      
+      <div class="modal-pie">
+        <button type="button" class="btn-custoo" (click)="c('Save click')"> Cancelar </button>
+        <button type="submit" class="btn-custo"> Modifcar </button>
+      </div>
+  </form> 
+</ng-template>
+
+<!-- VENTANA MODAL PARA OPCION ELIMINAR xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentDel let-c="close" let-d="dismiss">
+  <div class="modal-cu">
+  </div>
+  <div class="modal-body">
+     <h5 class="text-center">¿Esta seguro? Se dara de baja a la Raza :
+      <h5 style="color:#236259"><strong>{{ razasI.nomraz }} </strong></h5>
+    </h5>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmitDel()">
+    <div class="modal-pie">        
+      <button type="button" class="btn-custoo" (click)="c('Save click')">Cancelar</button>
+      <button type="submit" class="btn-custo"> Aceptar </button>
+    </div>
+  </form>
+</ng-template>
+
+ <!-- VENTANA MODAL PARA OPCION HABILITAR *************************************************************  -->
+ <ng-template #contentHab let-c="close" let-d="dismiss">
+  <div class="modal-cu">
+  </div>
+  <div class="modal-body">
+    <h5 class="text-center">¿Esta seguro? De habilitar la Raza:
+      <h5 style="color:#236259"><strong>{{ razasI.nomraz }}</strong></h5>
+    </h5>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmitHab()">
+    <div class="modal-pie">        
+      <button type="button" class="btn-custoo" (click)="c('Save click')">Cancelar</button>
+      <button type="submit" class="btn-custo"> Aceptar </button>
+    </div>
+  </form>
+</ng-template>
+
+
+
+  
+
+
+
+

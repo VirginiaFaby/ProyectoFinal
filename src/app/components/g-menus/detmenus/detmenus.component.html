@@ -1,0 +1,113 @@
+<table class="table tabla-sombra">
+    <thead class="thead-light">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Nonbre Menu</th>
+          <th scope="col"> Estado </th>
+          <th scope="col" colspan="3" class="text-center"> Acciones </th>
+        </tr>
+    </thead>
+    <tbody *ngFor="let men of apiMenus | paginate: { itemsPerPage: 5, currentPage: pageActual } ; index as con">
+        <tr>
+          <td *ngIf="men.estado == 1" class="activo" scope="col">{{con+1}}</td> 
+          <td *ngIf="men.estado == 0" class="inactivo" scope="col">{{con+1}}</td> 
+          <td *ngIf="men.estado == 1" class="activo">{{men.nombre}} </td>
+          <td *ngIf="men.estado == 0" class="inactivo" >{{men.nombre}} </td>
+          <td>
+            <!-- estado -->
+            <a *ngIf="men.estado == 1" class="btn-custom">Activo</a>  
+            <a *ngIf="men.estado == 0" class="btn-customm">Inactivo</a> 
+          </td>
+          <!--Modificar-->
+          <td>
+            <a  *ngIf="men.estado == 1" href="javascript:void(0)" (click)="llamaModalMod(contentMod, men)" class="bi bi-pencil-fill enlace-icono"></a>
+            <a  *ngIf="men.estado == 0" class="bi bi-pencil-fill enlace-iconoo">     
+            </a>              
+          </td>
+          <!--Eliminacion logica-->
+          <td>
+            <a *ngIf="men.estado==1" href="javascript:void(0)" (click)="llamaModalDel(contentDel, men)" class="bi bi-trash-fill enlace-icono">  
+            </a>
+            <a *ngIf="men.estado==0" class="bi bi-trash-fill enlace-iconoo"></a>
+          </td>
+          <!--Habilitar -->
+          <td>
+            <a *ngIf="men.estado==0" href="javascript:void(0)" (click)="llamaModalHab(contentHab, men)" class="bi bi-arrow-clockwise enlace-icono">
+            </a>
+            <a *ngIf="men.estado==1" class="bi bi-arrow-clockwise enlace-iconoo">
+            </a>
+          </td>
+        </tr>       
+    </tbody>
+    <tfoot>
+      <td colspan="8" align="center" >
+        <pagination-controls (pageChange)="pageActual = $event" previousLabel=""
+        nextLabel="" class="my-pagination"></pagination-controls>
+      </td>
+    </tfoot>
+      
+</table>
+
+<!--VENTANA MODAL PARA MODIFICAR DATOS  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentMod let-c="close" let-d="dismiss" id="modal-add" >
+    <div class="modal-cuu" >
+      <h4 class="modal-title" id="modal-basic-title" style="color: #236259; font-weight: bold;"> Modificar Datos de Menu... </h4>
+
+    </div>  
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="modal-body" >          
+              <div class="form-group">
+                <label> Nombre Menu<span style="color: #8B0000; font-size: 1.2em;">*</span></label> 
+                <input type="text" formControlName="nombre" class="form-control" [ngClass]="{'is-invalid': submitted && f.nombre.errors }"/>
+                <div *ngIf="submitted && f.nombre.errors" class="invalid-feedback">
+                    <p *ngIf="f.nombre.errors.required"> Campo obligatorio </p> 
+                    <p *ngIf="f.nombre.errors.minlength"> Mínimo 5 caracteres </p>
+                    <p *ngIf="f.nombre.errors.maxlength"> Máximo 30 caracteres </p>              
+                </div>
+              </div>              
+          </div>      
+        <div class="modal-pie">
+          <button type="button" class="btn-custoo" (click)="c('Save click')"> Cancelar </button>
+      <button type="submit" class="btn-custo"> Modifcar </button>
+        </div>
+    </form> 
+  </ng-template>
+
+  <!-- VENTANA MODAL PARA OPCION ELIMINAR xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+ <ng-template #contentDel let-c="close" let-d="dismiss">
+    <div class="modal-cuu">
+    </div>
+    <div class="modal-body">
+      <h5 class="text-center">¿Estas seguro? Se dara de baja al Menu:
+        <h5 style="color:#236259; font-weight: bold;"><strong>{{ menusI.nombre }}</strong></h5>
+      </h5>
+    </div>
+    <form [formGroup]="form" (ngSubmit)="onSubmitDel()">
+      <div class="modal-pie">        
+        <button type="button" class="btn-custoo" (click)="c('Save click')"> Cancelar</button>
+        <button type="submit" class="btn-custo"> Aceptar </button>
+      </div>
+    </form>
+  </ng-template>
+  
+   <!-- VENTANA MODAL PARA OPCION HABILITAR *************************************************************  -->
+   <ng-template #contentHab let-c="close" let-d="dismiss">
+    <div class="modal-cu">
+    </div>
+    <div class="modal-body">
+      <h5 class="text-center">¿Esta seguro? De habilitar el Menu:
+        <h5 style="color:#236259; font-weight: bold;"><strong>{{ menusI.nombre }}</strong></h5>
+      </h5>
+    </div>
+    <form [formGroup]="form" (ngSubmit)="onSubmitHab()">
+      <div class="modal-pie">        
+        <button type="button" class="btn-custoo" (click)="c('Save click')"> Cancelar</button>
+        <button type="submit" class="btn-custo"> Aceptar </button>
+      </div>
+    </form>
+  </ng-template>
+  
+  
+    
+  
+  

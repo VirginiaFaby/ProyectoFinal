@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css?family=Lobster|Montserrat&display=swap');
+
+.logo {
+    max-width: 105px; /* Ancho máximo de la imagen */
+    max-height: 55px; /* Altura máxima de la imagen */
+    margin-right: 15px; /* Agregar un margen derecho para separar la imagen del texto */
+    box-shadow: 5px 0px 5px rgba(0, 0, 0, 0.5); /* Sombra en el lado derecho */
+    border-radius: 100%;
+}
+
+
+.titulo {
+    font-size: 25px;
+    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lobster', cursive;
+    color: #236259;
+    margin-left: 100px;
+}
+
+/* Estilos para el menú */
+#menu {
+    padding-left: 0;
+    margin-right: 0; /* Ajustado para eliminar el margen derecho */
+}
+
+#menu .nav-link {
+    color: #c3c3c3 !important; /* Color de las letras */
+    display: block;
+    padding: 10px 20px; /* Ajustado para proporcionar un espacio adecuado */
+    transition: background-color 0.3s ease, color 0.3s ease;
+    width: 100%; /* Ajustado para que el ancho sea el 100% del menú */
+    text-align: left; /* Alineación del texto a la izquierda */
+}
+
+#menu .nav-item:last-child {
+    border-bottom: none;
+}
+
+#menu .nav-link:hover {
+    background-color:   #f0f0f0; /* Cambio de color al hacer hover */
+    color: #236259; /* Cambio de color del texto al hacer hover */
+}
+
+/* Animación al hacer hover */
+#menu .nav-link:hover {
+    animation: hoverAnimation 0.3s ease;
+}
+
+/* Animación al seleccionar */
+@keyframes selectedAnimation {
+    0% {
+        transform: scale(1);
+        background-color: #fff;
+    }
+    50% {
+        transform: scale(1.05);
+        background-color: #f0f0f0;
+    }
+    100% {
+        transform: scale(1);
+        background-color: #fff;
+    }
+}
+
+#menu .nav-item.selected {
+    animation: selectedAnimation 0.5s ease;
+}
+
+/* Ajuste del tamaño del icono */
+#menu .nav-link i {
+    font-size: 1.5rem; /* Tamaño del icono */
+    margin-right: 10px; /* Espacio entre el icono y el texto */
+}
+
+/* Media query para ajustar el diseño en pantallas más pequeñas */
+@media (max-width: 768px) {
+    #menu .nav-link {
+        padding: 10px 15px; /* Ajustado para pantallas más pequeñas */
+    }
+}
+/* Eliminar margen y padding del cuerpo y contenedores */
+body, .container, .container-fluid {
+    margin: 0;
+    padding: 0;
+}
+
+/* Ajustar el CSS del menú */
+#menu {
+    padding-left: 0;
+    margin-right: 0; /* Asegúrate de que no haya margen derecho */
+    width: 100%; /* Asegúrate de que el menú ocupe todo el ancho disponible */
+}
+
+#menu .nav-link {
+    padding: 10px 20px; /* Ajusta el padding interno según sea necesario */
+    width: 100%; /* Asegúrate de que el enlace ocupe todo el ancho disponible */
+}
+#menu .nav-link {
+    padding: 10px 20px; /* Ajusta el padding interno según sea necesario */
+    width: 102%; /* Asegúrate de que el enlace ocupe todo el ancho disponible */
+    border-radius: 8px; /* Ajusta el radio de borde según sea necesario */
+   
+}
+
+#menu .nav-link span {
+    padding-left: 20px; /* Añade un margen a la izquierda del texto */
+}
+
+
+#menu .nav-link i {
+    padding-left: 20px;
+    font-size: 1.5rem; /* Tamaño del icono */
+    margin-right: 0px; /* Añade espacio a la derecha del icono */
+}

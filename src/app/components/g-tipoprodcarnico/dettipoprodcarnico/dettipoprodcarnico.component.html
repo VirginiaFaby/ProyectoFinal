@@ -1,0 +1,169 @@
+<table class="table tabla-sombra">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">NOMBRE </th>
+      <th scope="col">TIPO</th>
+      <th scope="col">DESCRIPCION</th>
+      <th scope="col"> ESTADO </th>
+      <th scope="col" colspan="4" class="text-center"> ACCIONES </th>
+    </tr>
+  </thead>
+  <tbody
+    *ngFor="let tipp of apiTipoprodcarnico | paginate: { itemsPerPage: 6, currentPage: pageActual } ; index as con">
+    <tr>
+      <td *ngIf="tipp.estado == 1" class="activo" scope="col">{{con+1}}</td>
+      <td *ngIf="tipp.estado == 0" class="inactivo" scope="col">{{con+1}}</td>
+
+      <td *ngIf="tipp.estado == 1" class="activo">{{tipp.nompro}} </td>
+      <td *ngIf="tipp.estado == 0" class="inactivo">{{tipp.nompro}} </td>
+
+      <td *ngIf="tipp.estado == 1" class="activo">{{tipp.tipo}} </td>
+      <td *ngIf="tipp.estado == 0" class="inactivo">{{tipp.nompro}}</td>
+
+      <td *ngIf="tipp.estado == 1" class="activo">{{tipp.despro}} </td>
+      <td *ngIf="tipp.estado == 0" class="inactivo">{{tipp.despro}} </td>
+
+      <td>
+        <!-- estado -->
+        <a *ngIf="tipp.estado == 1" class="btn-custom">Activo</a>
+        <a *ngIf="tipp.estado == 0" class="btn-customm">Inactivo</a>
+      </td>
+
+      <!--Modificar-->
+      <td>
+        <a *ngIf="tipp.estado == 1" href="javascript:void(0)" (click)="llamaModalMod(contentMod, tipp)"
+          class="bi bi-pencil-fill enlace-icono"></a>
+        <a *ngIf="tipp.estado == 0" class="bi bi-pencil-fill enlace-iconoo">
+        </a>
+      </td>
+      <!--Eliminacion logica-->
+      <td>
+        <a *ngIf="tipp.estado==1" href="javascript:void(0)" (click)="llamaModalDel(contentDel, tipp)"
+          class="bi bi-trash-fill enlace-icono"></a>
+        <a *ngIf="tipp.estado==0" class="bi bi-trash-fill enlace-iconoo"></a>
+      </td>
+
+      <!--Habilitar -->
+      <td>
+        <a *ngIf="tipp.estado==0" href="javascript:void(0)" (click)="llamaModalHab(contentHab, tipp)"
+          class="bi bi-arrow-clockwise enlace-icono"></a>
+        <a *ngIf="tipp.estado==1" class="bi bi-arrow-clockwise enlace-iconoo"></a>
+      </td>
+
+
+    </tr>
+  </tbody>
+  <tfoot>
+    <td colspan="8" align="center">
+      <pagination-controls (pageChange)="pageActual = $event" previousLabel="" nextLabel=""
+        class="my-pagination"></pagination-controls>
+    </td>
+  </tfoot>
+
+</table>
+
+<!--VENTANA MODAL PARA MODIFICAR DATOS  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentMod let-c="close" let-d="dismiss" id="modal-add">
+  <div class="modal-cuu">
+    <h4 class="modal-title" id="modal-basic-title" style="color: #236259; font-weight: bold;">Modificar Tipo Producto
+    </h4>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="modal-body">
+
+      <div class="form-group">
+        <label>Nombre<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" formControlName="nompro" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.nompro.errors }" />
+        <div *ngIf="submitted && f.nompro.errors" class="invalid-feedback">
+          <p *ngIf="f.nompro.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.nompro.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.nompro.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+      <!-- Tipo de Producto  -->
+      <div class="mixtad form-group">
+        <label>Tipo<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+        <select formControlName="tipo" class="form-select max form-control"
+          [ngClass]="{'is-invalid': submitted && f.tipo.errors}">
+          <option value="">Seleccionar Tipo</option>
+          <option value="Corte">Corte</option>
+          <option value="Víscera">Víscera</option>
+          <option value="Cabeza">Cabeza</option>
+          <option value="Patas">Patas</option>
+          <option value="Grasa">Grasa</option>
+          <option value="Cuero">Cuero</option>
+          <option value="Subprod por sexo">Subprod por sexo</option>
+        </select>
+        <div *ngIf="submitted && f.tipo.errors" class="invalid-feedback">
+          <p *ngIf="f.tipo.errors.required">Seleccione una opción</p>
+        </div>
+      </div>
+
+      <!--TipoAnimal-->
+      <div class="form-group mixtad ">
+        <label>Tipo Animal<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+        <select formControlName="tipoanimal" class="form-control form-select"
+          [ngClass]="{'is-invalid': submitted && f.tipoanimal.errors}">
+          <option value="">Tipo de Animales... </option>
+          <option *ngFor="let tip of apiTipoanimal" [value]="tip.idtip">{{ tip.nomtip }}</option>
+        </select>
+        <div *ngIf="submitted && f.tipoanimal.errors" class="invalid-feedback">
+          <p *ngIf="f.tipoanimal.errors.required"> Seleccione una opcion </p>
+        </div>
+      </div>
+
+      <!--Descripcion-->
+      <div class="form-group mixtadpe ">
+        <label>Descripcion</label>
+        <textarea formControlName="despro" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.despro.errors }"></textarea>
+        <div *ngIf="submitted && f.despro.errors" class="invalid-feedback">
+          <p *ngIf="f.despro.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.despro.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+
+
+    </div>
+    <div class="modal-pie">
+      <button type="button" class="btn-custoo" (click)="c('Save click')"> Cancelar </button>
+      <button type="submit" class="btn-custo"> Modifcar </button>
+    </div>
+  </form>
+</ng-template>
+
+<!-- VENTANA MODAL PARA OPCION ELIMINAR xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentDel let-c="close" let-d="dismiss">
+  <div class="modal-cu">
+  </div>
+  <div class="modal-body">
+    <h5 class="text-center">¿Esta seguro? Se dara de baja a:
+      <h5 style="color:#236259"><strong>{{ tippI.nompro }} </strong></h5>
+    </h5>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmitDel()">
+    <div class="modal-pie">
+      <button type="button" class="btn-custoo" (click)="c('Save click')">Cancelar</button>
+      <button type="submit" class="btn-custo"> Aceptar </button>
+    </div>
+  </form>
+</ng-template>
+
+<!-- VENTANA MODAL PARA OPCION HABILITAR *************************************************************  -->
+<ng-template #contentHab let-c="close" let-d="dismiss">
+  <div class="modal-cu">
+  </div>
+  <div class="modal-body">
+    <h5 class="text-center">¿Esta seguro? De habilitar a:
+      <h5 style="color:#236259"><strong>{{ tippI.nompro }} </strong></h5>
+    </h5>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmitHab()">
+    <div class="modal-pie">
+      <button type="button" class="btn-custoo" (click)="c('Save click')">Cancelar</button>
+      <button type="submit" class="btn-custo"> Aceptar </button>
+    </div>
+  </form>
+</ng-template>

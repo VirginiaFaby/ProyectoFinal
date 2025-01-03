@@ -1,0 +1,131 @@
+<div class="container">
+    <div class="container-with-shadow">
+        <div class="content">
+            <h5 class="text-center" style="color: #236259; font-weight: bold;">GESTIÓN ENTREGA DE PRODUCTOS</h5>
+            <a href="javascript:void(0)" (click)="llamaModalAdd(contentAdd)" class="btn-custom-color">Nueva Entrega</a>
+        </div>
+    </div>
+    <div class="dropdown-divider"></div>
+    <form [formGroup]="formFiltro" class="filtro-form">
+        <div class="formArriba">
+            <div class="form-group filtro">
+                <div class="input-group">
+                    <input class="form-control" formControlName="filtro" type="text" name="busqueda"
+                        placeholder="Buscar...." (keyup)="filtrarNombre()">
+                    <span class="input-group-addon">
+                        <i class="bi bi-search"></i>
+                    </span>
+                </div>
+            </div>
+
+
+            <div class="form-group opciones">
+                <div class="form-check form-check-inline ">
+                    <input class="form-check-input" type="radio" formControlName="estadosEnt" name="estadosEnt"
+                        id="exampleRadios1" value="1" (change)="filtrarNombre()">
+                    <label class="form-check-label" for="exampleRadios1">Activo</label>
+                </div>
+                <div class="form-check form-check-inline radio-container">
+                    <input class="form-check-input" type="radio" formControlName="estadosEnt" name="estadosEnt"
+                        id="exampleRadios2" value="0" (change)="filtrarNombre()">
+                    <label class="form-check-label" for="exampleRadios2">baja</label>
+                </div>
+                <div class="form-check form-check-inline radio-container">
+                    <input class="form-check-input" type="radio" formControlName="estadosEnt" name="estadosEnt"
+                        id="exampleRadios3" value="-1" (change)="filtrarNombre()" checked="true">
+                    <label class="form-check-label" for="exampleRadios3">Todos</label>
+                </div>
+            </div>
+        </div>
+    </form>
+    <!--fin de formulario del Filtro-->
+    <div class="dropdown-divider"></div>
+    <div>
+        <app-detentregaprodc></app-detentregaprodc>
+    </div>
+
+</div>
+
+
+<!--VENTANA MODAL PARA ADICIONAR DATOS  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentAdd let-c="close" let-d="dismiss" id="modal-add">
+    <div class="modal-cuu">
+        <h4 class="modal-title" id="modal-basic-title" style="font-weight: bold;"> Adicionar Entrega... </h4>
+    </div>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="modal-body">
+
+            <!--ProdCarnicos -->
+            <div class="form-group mixtad ">
+                <label>Productos Carnicos</label><br>
+                <select formControlName="prodcarnicos" class="form-control form-select"
+                    [ngClass]="{'is-invalid': submitted && f.prodcarnicos.errors}" (change)="onProdcChange()">
+                    <option value="">Productos Carnicos... </option>
+                    <option *ngFor="let prod of  apiProdcarnicos " [value]="prod.idprod">{{ prod.numpro }}</option>
+                </select>
+                <div *ngIf="submitted && f.prodcarnicos.errors" class="invalid-feedback">
+                    <p *ngIf="f.prodcarnicos.errors.required"> Seleccione una opcion </p>
+                </div>
+            </div>
+
+            <div class="mixtad form-group">
+                <label>Peso Entrega: </label>
+                <input type="number" formControlName="pesent" class="form-control"
+                    [ngClass]="{'is-invalid': submitted && f.pesent.errors }" />
+                <div *ngIf="submitted && f.pesent.errors" class="invalid-feedback">
+                    <p *ngIf="f.pesent.errors.required"> Campo obligatorio </p>
+                    <p *ngIf="f.pesent.errors.minlength"> Mínimo 5 caracteres </p>
+                    <p *ngIf="f.pesent.errors.maxlength"> Máximo 30 caracteres </p>
+                </div>
+            </div>
+
+            <!--Camara -->
+            <div class="form-group mixtad ">
+                <label>Camara</label><br>
+                <select formControlName="camara" class="form-control form-select"
+                    [ngClass]="{'is-invalid': submitted && f.camara.errors}">
+                    <option value="">Camara... </option>
+                    <option *ngFor="let cam of apiCamara" [value]="cam.idcamfri">{{ cam.nomcam }}</option>
+                </select>
+                <div *ngIf="submitted && f.camara.errors" class="invalid-feedback">
+                    <p *ngIf="f.camara.errors.required"> Seleccione una opcion </p>
+                </div>
+            </div>
+
+
+
+            <div class="mixtad form-group">
+                <label>Dirección Entrega: </label>
+                <input type="text" formControlName="dirent" class="form-control"
+                    [ngClass]="{'is-invalid': submitted && f.dirent.errors }" />
+                <div *ngIf="submitted && f.dirent.errors" class="invalid-feedback">
+                    <p *ngIf="f.dirent.errors.required"> Campo obligatorio </p>
+                    <p *ngIf="f.dirent.errors.minlength"> Mínimo 5 caracteres </p>
+                    <p *ngIf="f.dirent.errors.maxlength"> Máximo 30 caracteres </p>
+                </div>
+            </div>
+
+
+
+            <div class="mixtad form-group">
+                <label>Fecha de Entrega: </label>
+                <input type="date" formControlName="fecent" class="form-control"
+                    [ngClass]="{'is-invalid': submitted && f.fecent.errors }" />
+                <div *ngIf="submitted && f.fecent.errors" class="invalid-feedback">
+                    <p *ngIf="f.fecent.errors.required"> Campo obligatorio </p>
+                    <p *ngIf="f.fecent.errors.minlength"> Mínimo 5 caracteres </p>
+                    <p *ngIf="f.fecent.errors.maxlength"> Máximo 30 caracteres </p>
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+        <div class="modal-pie">
+            <button type="button" class="btn-customm" (click)="c('Save click')"> Cancelar </button>
+            <button type="submit" class="btn-custom"> Guardar </button>
+        </div>
+    </form>
+</ng-template>

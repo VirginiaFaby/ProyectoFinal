@@ -1,0 +1,68 @@
+/* Sidebar */
+.sidebar {
+    width: 200px;
+    height: 100vh;
+    position: fixed;
+    overflow-y: auto;
+    background-color: #236259;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar .logo {
+    margin: 15px 0;
+}
+
+.sidebar img {
+    width: 150px;
+    border-radius: 10px;
+}
+
+/* Menús principales y procesos */
+.nav-link {
+    display: block;
+    padding: 10px 12px; /* Aumentado ligeramente */
+    color: white;
+    font-size: 14px; /* Letras más grandes y legibles */
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.nav-link:hover {
+    background-color: #fafafa;
+    color: #1b4d4a;
+}
+
+/* Procesos - mismos estilos que los menús */
+.procesos-list .list-group-item button {
+    display: block;
+    padding: 10px 12px; /* Coherente con el menú principal */
+    width: 100%;
+    text-align: left;
+    font-size: 13px; /* Letras más grandes y más naturales */
+    color: white;
+    background-color: transparent;
+    border: none;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.procesos-list .list-group-item button:hover {
+    background-color: #1b4d4a;
+    color: white;
+    border-radius: 5px;
+}
+
+/* Scrollbar estilizado */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background-color: #236259;
+    border-radius: 10px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background-color: #ddd;
+}

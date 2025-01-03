@@ -1,0 +1,41 @@
+<div class="container">
+  <div class="container-with-shadow">
+    <div class="content">
+      <h5 class="text-center" style="color: #236259; font-weight: bold;">REPORTE DE SERVICIO DE FAENA POR ANIMALES</h5>
+
+      <div *ngIf="mensaje" class="alert alert-warning text-center">
+        {{ mensaje }}
+      </div>
+
+      <div *ngIf="!mensaje">
+        <h6 class="text-center" style="color: #236259; font-weight: bold;">Estadísticas de Razas</h6>
+        <p class="text-center">
+          <strong>Raza con mayor cantidad:</strong> {{ razaMayor }} ({{ totalMayor }})<br>
+          <strong>Raza con menor cantidad:</strong> {{ razaMenor }} ({{ totalMenor }})
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="dropdown-divider"></div>
+
+  <!-- Tabla de detalles -->
+  <div>
+    <table class="table tabla-sombra">
+      <thead class="thead-light text-center">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">ANIMALES</th>
+          <th scope="col">TIPO DE SERVICIO</th>
+        </tr>
+      </thead>
+      <tbody class="text-center" *ngFor="let ser of apiDetserfa; index as con">
+        <tr>
+          <td [ngClass]="ser.estado == 1 ? 'activo' : 'inactivo'" scope="col">{{ con + 1 }}</td>
+          <td [ngClass]="ser.estado == 1 ? 'activo' : 'inactivo'">{{ ser.animales.razas.nomraz }}</td>
+          <td [ngClass]="ser.estado == 1 ? 'activo' : 'inactivo'">{{ ser.tiposervicios.nomser }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

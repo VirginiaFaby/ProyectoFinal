@@ -1,0 +1,119 @@
+<table class="table tabla-sombra">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">FECHA</th>
+      <th scope="col">GRANJA</th>
+      <th scope="col">COMPRADOS</th>
+      <th scope="col">VENDIDOS</th>
+      <th scope="col">RESTANTES</th>
+      <th scope="col">IMPORTE</th>
+      <th scope="col"> ESTADO </th>
+      <th scope="col" colspan="3" class="text-center"> ACCIONES </th>
+    </tr>
+  </thead>
+  <tbody *ngFor="let com of apiCompras| paginate: { itemsPerPage: 6, currentPage: pageActual } ; index as con">
+    <tr>
+      <td *ngIf="com.estado == 1" class="activo" scope="col">{{con+1}}</td>
+      <td *ngIf="com.estado == 0" class="inactivo" scope="col">{{con+1}}</td>
+      <td *ngIf="com.estado == 1" class="activo">{{com.feccom | date: 'dd/MM/yyyy'}} </td>
+      <td *ngIf="com.estado == 0" class="inactivo">{{com.feccom | date: 'dd/MM/yyyy'}} </td>
+      <td *ngIf="com.estado == 1" class="activo">{{com.granjas.nomgra}} </td>
+      <td *ngIf="com.estado == 0" class="inactivo">{{com.granjas.nomgra}} </td>
+      <td *ngIf="com.estado == 1" class="activo">{{com.cancani}} </td>
+      <td *ngIf="com.estado == 0" class="inactivo">{{com.cancani}} </td>
+      <td *ngIf="com.estado == 1" class="activo">{{com.comven}} </td>
+      <td *ngIf="com.estado == 0" class="inactivo">{{com.comven}} </td>
+
+      <td *ngIf="com.estado == 1" class="activo">{{com.parven}} </td>
+      <td *ngIf="com.estado == 0" class="inactivo">{{com.parven}} </td>
+      <td *ngIf="com.estado == 1" class="activo">{{com.impcom}} </td>
+      <td *ngIf="com.estado == 0" class="inactivo">{{com.impcom}} </td>
+      <td>
+        <!-- estado -->
+        <a *ngIf="com.estado == 1" class="btn-custom">Activo</a>
+        <a *ngIf="com.estado == 0" class="btn-customm">Inactivo</a>
+      </td>
+      <!--Eliminacion logica-->
+      <td>
+        <a *ngIf="com.estado==1" href="javascript:void(0)" (click)="llamaModalDel(contentDel, com)"
+          class="bi bi-trash-fill enlace-icono"></a>
+        <a *ngIf="com.estado==0" class="bi bi-trash-fill enlace-iconoo"></a>
+      </td>
+
+      <td>
+        <a  href="javascript:void(0)" (click)="llamaModalMos(contentMos, com)"
+          class="bi bi-eye-fill enlace-icono"></a>
+      
+      </td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <td colspan="8" align="center">
+      <pagination-controls (pageChange)="pageActual = $event" previousLabel="" nextLabel=""
+        class="my-pagination"></pagination-controls>
+    </td>
+  </tfoot>
+</table>
+
+<!-- VENTANA MODAL PARA OPCION ELIMINAR -->
+<ng-template #contentDel let-c="close" let-d="dismiss">
+  <div class="modal-cu">
+  </div>
+  <div class="modal-body">
+    <h5 class="text-center">¿Esta seguro? Se eliminara la compra de la granja:
+      <h5 style="color:#236259; font-weight: bold;"><strong>{{ comI.granjas.nomgra }}</strong></h5>
+    </h5>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmitDel()">
+    <div class="modal-pie">
+      <button type="button" class="btn-custoo" (click)="c('Save click')"> Cancelar</button>
+      <button type="submit" class="btn-custo"> Aceptar </button>
+    </div>
+  </form>
+</ng-template>
+
+<!-- VENTANA MODAL PARA OPCION MOSTRAR  *************************************************************  -->
+<ng-template #contentMos let-c="close" let-d="dismiss">
+
+  <div class="modal-body">
+    <h4 class="text-center" style="color:#236259; font-weight: bold;">DETALLE DE COMPRAS</h4><br>
+    <h6 class="mixtadm text-center">FECHA:</h6>
+    <h6 class="mixtadm text-center">{{ comI.feccom | date: 'dd/MM/yyyy' }}</h6>
+    <h6 class="mixtadm text-center">Nº RECIBO:</h6>
+    <h6 class="mixtadm text-center">{{ comI.numcom }}</h6>
+    <h6 class="mixtadm text-center">GRANJA:</h6>
+    <h6 class="mixtadm text-center">{{ comI.granjas.nomgra}}</h6>
+    <h6 class="mixtadm text-center">CODIGO:</h6>
+    <h6 class="mixtadm text-center">{{ comI.granjas.codigo}}</h6>
+
+    <table class="table tabla-sombra-2">
+      <thead class="thead-light">
+        <tr>
+          <th class="text-center">CANT.</th>
+          <th class="text-center">DESCRIPCIÓN </th>
+          <th class="text-center">PRECIO</th>
+          <th class="text-center">SUBTOTAL</th>
+        </tr>
+      </thead>
+      <tbody *ngFor=" let dcom of apiDetcompras, index as con">
+        <tr>
+          <td scope="col" class="text-center">{{con+1}}</td>
+          <td scope="col" >RAZA {{dcom.animales.razas.nomraz}} CON UN PESO DE {{dcom.animales.pesani}} KG.</td>
+          <td scope="col" class="text-center">{{dcom.precom}}</td>
+          <td scope="col" class="text-center">{{dcom.precom}}</td>
+        </tr>
+
+      </tbody>
+      <tr>
+        <td colspan="3" class="text-center">TOTAL</td>
+        <td class="text-center">{{ comI.impcom }}</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="modal-pie">
+    <button type="button" class="btn-custoo" (click)="c('Save click')"> Cancelar </button>
+    <button type="submit" class="btn-custo" (click)="createPdf()">Crear PDF</button>
+  </div>
+</ng-template>

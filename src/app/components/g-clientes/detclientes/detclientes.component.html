@@ -1,0 +1,229 @@
+<table class="table tabla-sombra">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">NIT</th>
+      <th scope="col">NOMBRE CLIENTE</th>
+      <th scope="col">TIP. CLIENTE</th>
+      <th scope="col"> ESTADO </th>
+      <th scope="col" colspan="3" class="text-center"> ACCIONES </th>
+    </tr>
+  </thead>
+  <tbody *ngFor="let cli of apiClientes | paginate: { itemsPerPage: 6, currentPage: pageActual } ; index as con">
+    <tr>
+      <td *ngIf="cli.estado == 1" class="activo" scope="col">{{con+1}}</td>
+      <td *ngIf="cli.estado == 0" class="inactivo" scope="col">{{con+1}}</td>
+      <td *ngIf="cli.estado == 1" class="activo">{{cli.nit}} </td>
+      <td *ngIf="cli.estado == 0" class="inactivo">{{cli.nit}} </td>
+      <td *ngIf="cli.estado == 1" class="activo">{{cli.nomcli}} </td>
+      <td *ngIf="cli.estado == 0" class="inactivo">{{cli.nomcli}} </td>
+      <td *ngIf="cli.estado == 1" class="text-center activo">{{cli.tipcli}} </td>
+      <td *ngIf="cli.estado == 0" class="text-center inactivo">{{cli.tipcli}} </td>
+      <td>
+        <!-- estado -->
+        <a *ngIf="cli.estado == 1" class="btn-custom">Activo</a>
+        <a *ngIf="cli.estado == 0" class="btn-customm">Inactivo</a>
+      </td>
+      <!--Modificar-->
+      <td>
+        <a *ngIf="cli.estado == 1" href="javascript:void(0)" (click)="llamaModalMod(contentMod, cli)"
+        class="bi bi-pencil-fill enlace-icono"></a>
+        <a *ngIf="cli.estado == 0" class="bi bi-pencil-fill enlace-iconoo">
+        </a>
+      </td>
+      <!--Eliminacion logica-->
+      <td>
+        <a *ngIf="cli.estado==1" href="javascript:void(0)" (click)="llamaModalDel(contentDel, cli)"
+        class="bi bi-trash-fill enlace-icono"></a>
+        <a *ngIf="cli.estado==0" class="bi bi-trash-fill enlace-iconoo"></a>
+      </td>
+      <!--Habilitar -->
+      <td>
+        <a *ngIf="cli.estado==0" href="javascript:void(0)" (click)="llamaModalHab(contentHab, cli)"
+        class="bi bi-arrow-clockwise enlace-icono"></a>
+        <a *ngIf="cli.estado==1"  class="bi bi-arrow-clockwise enlace-iconoo">
+        </a>
+      </td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <td colspan="8" align="center">
+      <pagination-controls (pageChange)="pageActual = $event" previousLabel="" nextLabel=""
+        class="my-pagination"></pagination-controls>
+    </td>
+  </tfoot>
+
+</table>
+
+<!--VENTANA MODAL PARA MODIFICAR DATOS  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentMod let-c="close" let-d="dismiss" id="modal-add">
+  <div class="modal-cuu">
+    <h4 class="modal-title" id="modal-basic-title" style="color: #236259; font-weight: bold;"> Modificar Datos del Cliente... </h4>
+
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="modal-body">
+
+
+
+      <div class="form-group">
+        <label> Nombre Cliente<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" formControlName="nomcli" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.nomcli.errors }" />
+        <div *ngIf="submitted && f.nomcli.errors" class="invalid-feedback">
+          <p *ngIf="f.nomcli.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.nomcli.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.nomcli.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+
+      <div class="form-group mixtad">
+        <label> Nit<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" formControlName="nit" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.nit.errors }" />
+        <div *ngIf="submitted && f.nit.errors" class="invalid-feedback">
+          <p *ngIf="f.nit.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.nit.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.nit.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+
+      <div class="form-group mixtad">
+        <label>Nompre Propietario<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" formControlName="nompro" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.nompro.errors }" />
+        <div *ngIf="submitted && f.nompro.errors" class="invalid-feedback">
+          <p *ngIf="f.nompro.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.nompro.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.nompro.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+
+      <div class="form-group opciones">
+        <label class="mr-4">Tipo Cliente<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <div class="form-check form-check-inline radio-container">
+          <input class="form-check-input" type="radio" formControlName="tipcli" name="tipcli" id="exampleRadios1"
+            value="F" required>
+          <label class="form-check-label mr-4" for="exampleRadios1"> Frial </label>
+        </div>
+        <div class="form-check form-check-inline radio-container">
+          <input class="form-check-input" type="radio" formControlName="tipcli" name="tipcli" id="exampleRadios2"
+            value="C">
+          <label class="form-check-label mr-4" for="exampleRadios2"> Carniceria </label>
+        </div>
+        <div class="form-check form-check-inline radio-container">
+          <input class="form-check-input" type="radio" formControlName="tipcli" name="tipcli" id="exampleRadios3"
+            value="M">
+          <label class="form-check-label mr-4" for="exampleRadios3"> Mercado </label>
+        </div>
+        <div *ngIf="submitted && f.tipcli.errors" class="invalid-feedback">
+          <p *ngIf="f.tipcli.errors.required"> Seleccione una opcion </p>
+        </div>
+      </div>
+
+
+
+
+
+      <div *ngIf="form.get('tipcli').value === 'M'">
+
+        <div class="form-group mixtad">
+          <label for="mercado">Mercados </label>
+          <select id="mercado" formControlName="nommer" class="form-control"
+            [ngClass]="{'is-invalid': submitted && f.nommer.errors }">
+            <option value="" disabled selected>Selecciona un mercado</option>
+            <option value="Mercado Central">Mercado Central</option>
+            <option value="Mercado Campesino">Mercado Campesino</option>
+            <option value="Mercado Bolívar">Mercado Bolívar</option>
+            <option value="Mercado Lourdes">Mercado Lourdes</option>
+            <option value="Mercado Abasto del Sur">Mercado Abasto del Sur</option>
+            <option value="Mercado Senac">Mercado Senac</option>
+            <option value="Mercado Abaroa">Mercado Abaroa</option>
+            <option value="Mercado Narciso Campero">Mercado Narciso Campero</option>
+            <option value="Mercado La Loma">Mercado La Loma</option>
+            <option value="Mercado El Constructor">Mercado El Constructor</option>
+            <option value="Mercado San Bernardo">Mercado San Bernardo</option>
+
+          </select>
+          <div *ngIf="submitted && f.nommer.errors" class="invalid-feedback">
+            <p *ngIf="f.nommer.errors.required">Campo obligatorio</p>
+            <p *ngIf="f.nommer.errors.minlength">Mínimo 5 caracteres</p>
+            <p *ngIf="f.nommer.errors.maxlength">Máximo 30 caracteres</p>
+          </div>
+        </div>
+
+        <div class="form-group mixtad">
+          <label>Número de Local: </label>
+          <input type="number" formControlName="numlocal" class="form-control"
+            [ngClass]="{'is-invalid': submitted && f.numlocal.errors }" />
+          <div *ngIf="submitted && f.numlocal.errors" class="invalid-feedback">
+            <p *ngIf="f.numlocal.errors.required"> Campo obligatorio </p>
+            <p *ngIf="f.numlocal.errors.minlength"> Mínimo 1 caracter </p>
+            <p *ngIf="f.numlocal.errors.maxlength"> Máximo 10 caracteres </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group mixtad">
+        <label> Telefono<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" formControlName="telecli" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.telecli.errors }" />
+        <div *ngIf="submitted && f.telecli.errors" class="invalid-feedback">
+          <p *ngIf="f.telecli.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.telecli.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.telecli.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+      <div class="form-group mixtad">
+        <label> Direccion<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" formControlName="direcli" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.direcli.errors }" />
+        <div *ngIf="submitted && f.direcli.errors" class="invalid-feedback">
+          <p *ngIf="f.direcli.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.direcli.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.direcli.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="modal-pie">
+      <button type="button" class="btn-custoo" (click)="c('Save click')"> Cancelar </button>
+      <button type="submit" class="btn-custo"> Modifcar </button>
+    </div>
+  </form>
+</ng-template>
+
+<!-- VENTANA MODAL PARA OPCION ELIMINAR xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentDel let-c="close" let-d="dismiss">
+  <div class="modal-cu">
+  </div>
+  <div class="modal-body">
+    <h5 class="text-center" >¿Esta seguro? Se dara de baja al Cliente:
+      <h5 style="color:#236259; font-weight: bold;"><strong>{{ clientesI.nomcli }}</strong></h5>
+    </h5>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmitDel()">
+    <div class="modal-pie">
+      <button type="button" class="btn-custoo" (click)="c('Save click')"> Cancelar</button>
+      <button type="submit" class="btn-custo"> Aceptar </button>
+    </div>
+  </form>
+</ng-template>
+
+<!-- VENTANA MODAL PARA OPCION HABILITAR *************************************************************  -->
+<ng-template #contentHab let-c="close" let-d="dismiss">
+  <div class="modal-cu">
+  </div>
+  <div class="modal-body">
+    <h5 class="text-center" >¿Esta seguro? De habilitar al Cliente:
+      <h5 style="color:#236259; font-weight: bold;"><strong>{{ clientesI.nomcli }}</strong></h5>
+    </h5>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmitHab()">
+    <div class="modal-pie">
+      <button type="button" class="btn-custoo" (click)="c('Save click')"> Cancelar</button>
+      <button type="submit" class="btn-custo"> Aceptar </button>
+    </div>
+  </form>
+</ng-template>

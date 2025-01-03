@@ -1,0 +1,194 @@
+.my-pagination /deep/ .ngx-pagination .current{
+  background: #236259;
+}
+
+.card {
+  position: relative;
+  height: 420px;
+  width: 300px;
+  background-color: #fff;
+  margin: 25px auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.headerr {
+  position: absolute;
+  height: 200px;
+  width: 95%;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  top: -30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  background-image: linear-gradient(to right, #fff, #236259);
+}
+.headerr img {
+  position: absolute;
+  height: 120px;
+  width: 120px;
+  border-radius: 50%;
+  top: 22px;
+}
+
+.left-img {
+  left: 30px; /* Ajustar posición izquierda */
+}
+
+.right-img {
+  right: 30px; /* Ajustar posición derecha */
+}
+
+.headerr p {
+  position: absolute;
+  font-family: sans-serif;
+  color: black;
+  font-size: 13px;
+  bottom: 10px; /* Ajustar posición del texto */
+  left: 50%;  
+  transform: translateX(-50%);
+  text-align: center;
+  font-weight: bold;
+}
+
+.body {
+  position: absolute;
+  height: 200px;
+  left: 5px;
+  right: 5px;
+  top: 42%;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+.body p {
+  position: absolute;
+  font-family: sans-serif;
+  color: #2c2b2b;
+  font-size: 15px;
+  margin: 12px;
+  font-weight: bold;
+}
+
+.footer {
+  position: absolute;
+  height: 60px;
+  bottom: -30px;
+  left: 0;
+  right: 0;
+  border-radius: 12px;
+  width: 95%;
+  margin: 0 auto;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  background-image: linear-gradient(to right, #c3c3c3, #c3c3c3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer a {
+  margin: 0 5px;
+}
+
+.enlace-icono {
+  font-size: 20px;
+  color: #236259;
+  margin: 5px;
+}
+
+.enlace-iconoo {
+  font-size: 20px;
+  color: #666; /* Cambiado a un tono de gris más oscuro */
+  margin: 5px;
+}
+
+/* Cambio de color de botones del formulario */
+
+.btn-custo {
+  background-color: #236259;
+  color: #fff;
+  padding: 8px 20px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  border-radius: 5px;
+  border: none;
+  margin: 5px;
+}
+
+.btn-custoo {
+  background-color: rgb(153, 152, 152);
+  color: #fff;
+  padding: 8px 20px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  border-radius: 5px;
+  border: none;
+}
+
+/* Cambio de color cuando el puntero se acerca (hover) */
+.btn-custo:hover {
+  background-color: #164c4e;
+}
+
+.btn-custoo:hover {
+  background-color: rgb(102, 101, 101);
+}
+
+.modal-cu {
+padding: 5px;
+font-size: 16px;
+line-height: 1.5;
+color: #333;
+}
+.modal-pie {
+padding: 5px;
+display: flex;
+justify-content: flex-end;
+align-items: center;
+}
+
+.mixtad {
+  width: 50%;
+  display: inline-block;
+  padding: 10px;
+ }
+ .modal-cuu   {
+  padding: 15px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333;
+  display: flex;
+  align-items: center; /* Centra verticalmente el contenido */
+  justify-content: center; /* Centra horizontalmente el contenido */
+  height: 100%;
+}
+#imagenPrevia1{
+
+  width: 100px;
+  height: 100px;
+  border-radius: 30%;
+  margin-top: 10px;
+  margin-left: 30px;
+  margin-bottom: -30px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.50); /* Añade sombra alrededor de la imagen */
+}
+#imagenPrevia2{
+
+  width: 100px;
+  height: 100px;
+  border-radius: 30%;
+  margin-top: 10px;
+  margin-left: 50px;
+  margin-bottom: -30px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.50); /* Añade sombra alrededor de la imagen */
+ 
+}
+
+.modal-pie {
+  margin-top: -30px; /* Reducir el margen superior */
+  text-align: center; /* Centrar los botones */
+}
+.modal-cuu{
+  margin-bottom: -35px;
+}

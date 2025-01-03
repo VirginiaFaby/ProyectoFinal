@@ -1,0 +1,213 @@
+<div class="container">
+  <div class="container-with-shadow">
+    <div class="content">
+      <h5 class="text-center" style="color: #236259; font-weight: bold;">GESTIONAR COMPRAS</h5>
+      <a href="javascript:void(0)" (click)="llamaModalAdd(contentAdd)" class="btn-custom-color">Nueva Compras</a>
+    </div>
+  </div>
+  <div class="dropdown-divider"></div>
+  <form [formGroup]="formFiltro" class="filtro-form">
+    <div class="formArriba">
+      <div class="mixtad form-group">
+        <select formControlName="idgranja" class="form-control max form-select" (change)="filtrarNombre()">
+          <option [ngValue]="null">Granjas...</option>
+          <option *ngFor="let gra of apiGranjas" [ngValue]="gra.idgranja">{{ gra.nomgra }}</option>
+        </select>
+      </div>
+
+      <div class="form-group opciones">
+        <div class="form-check form-check-inline radio-container">
+          <input class="form-check-input" type="radio" formControlName="estadoCom" name="estadoCom" id="exampleRadios1"
+            value="1" (change)="filtrarNombre()">
+          <label class="form-check-label" for="exampleRadios1">Activos</label>
+        </div>
+        <div class="form-check form-check-inline radio-container">
+          <input class="form-check-input" type="radio" formControlName="estadoCom" name="estadoCom" id="exampleRadios2"
+            value="0" (change)="filtrarNombre()">
+          <label class="form-check-label" for="exampleRadios2">Inactivos</label>
+        </div>
+        <div class="form-check form-check-inline radio-container">
+          <input class="form-check-input" type="radio" formControlName="estadoCom" name="estadoCom" id="exampleRadios3"
+            value="-1" (change)="filtrarNombre()" checked>
+          <label class="form-check-label" for="exampleRadios3">Todos</label>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="dropdown-divider"></div>
+  <div>
+    <app-detcompras></app-detcompras>
+  </div>
+
+</div>
+
+
+<!--VENTANA MODAL PARA ADICIONAR DATOS  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentAdd let-c="close" let-d="dismiss" id="modal-add">
+  <div class="modal-cuu">
+    <h4 class="modal-title" id="modal-basic-title" style="font-weight: bold;"> Adicionar Compra... </h4>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="modal-body">
+
+
+
+      <div class="form-group mixtad">
+        <label>Fecha<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="date" formControlName="feccom" class="form-control"
+          [ngClass]="{'is-invalid': submitted && form.get('feccom').errors}" />
+        <div *ngIf="submitted && form.get('feccom').errors" class="invalid-feedback">
+          <p *ngIf="form.get('feccom').errors.required">Campo obligatorio</p>
+          <p *ngIf="form.get('feccom').errors.dateNotToday">La fecha debe ser de hoy</p>
+        </div>
+      </div>
+
+      <!-- Buscardor Granjas-->
+      <div class="form-group mixtad" (mouseleave)="interactuandoConListaGranjas = false">
+        <label>Buscar Granja<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" class="form-control" [class.is-invalid]="submitted && !granjaSeleccionada"
+          [formControl]="granjaCtrl" placeholder="Ingrese el nombre o código de la granja"
+          (focus)="mostrarListaGranjas = true" (input)="filtrarGranjas(granjaCtrl.value)"
+          (blur)="ocultarListaGranjas()" />
+        <ul *ngIf="mostrarListaGranjas && filteredGranjas.length" class="list-group-granjas"
+          (mouseenter)="interactuandoConListaGranjas = true" (mouseleave)="interactuandoConListaGranjas = false">
+          <li *ngFor="let granja of filteredGranjas" class="list-group-item" (click)="seleccionarGranja(granja)">
+            {{ granja.nomgra }} - {{ granja.codigo }}
+          </li>
+        </ul>
+        <div *ngIf="submitted && !granjaSeleccionada" class="invalid-feedback">
+          Seleccione una opción.
+        </div>
+      </div>
+
+
+      <!--Tabla -->
+      <table class="table tabla-sombra">
+        <thead class="thead-light">
+          <tr>
+            <th>CANT.</th>
+            <th>DESCRIPCIÓN </th>
+            <th>PRECIO</th>
+            <th>IMPORTE</th>
+            <th>Op.</th>
+          </tr>
+        </thead>
+        <tbody *ngFor=" let det of  apiDetcomtemp, index as con">
+          <tr>
+            <td scope="col"class="text-center">{{con+1}}</td>
+            <td scope="col">RAZA {{det.animales.razas.nomraz}} CON UN PESO DE {{det.animales.pesani}} KG.</td>
+            <td scope="col" class="text-center">{{det.precom}}</td>
+            <td scope="col"class="text-center">{{det.precom}}</td>
+            <td>
+              <a (click)="eliminardet(det.idtempcom , det.cancom, det.precom, det.animales.idani)"
+                class="bi bi-trash-fill enlace-iconoo"></a>
+            </td>
+          </tr>
+        </tbody>
+        <tr>
+          <td>
+            <a href="javascript:void(0)" (click)="llamaModaldet(contentdet)"
+              class="bi bi-plus-circle-fill enlace-icono"></a>
+          </td>
+          <td scope="col" colspan="2" class="text-center">TOTAL</td>
+          <td class="text-center">{{ total }}</td>
+        </tr>
+      </table>
+      <!--Tabla fin  -->
+    </div>
+    <div class="modal-pie">
+      <button type="button" class="btn-customm" (click)="cancelar()"> Cancelar </button>
+      <button type="submit" class="btn-custom"> Guardar </button>
+    </div>
+  </form>
+</ng-template>
+
+
+<!-- Modal de Adicion de Detserviciofaena -->
+<ng-template #contentdet let-c="close" let-d="dismiss" id="modal-add">
+  <div class="modal-cuu">
+    <h4 class="modal-title" id="modal-basic-title" style="font-weight: bold;">
+      Adicionar Detalle de Compra...
+    </h4>
+  </div>
+
+  <form [formGroup]="formdet" (ngSubmit)="onDetcompras()">
+    <div class="modal-body">
+      <div class="row">
+        <!-- Columna izquierda: Buscador con imagen debajo -->
+        <div class="col-md-5">
+          <!-- Buscador -->
+          <div class="form-group">
+            <label for="buscarAnimal">Buscar Animal<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+            <input type="text" id="buscarAnimal" class="form-control" placeholder="Buscar por raza, Nº Guia o peso"
+              (input)="filtrarAnimales($event.target.value)" />
+            <ul *ngIf="animalesFiltrados.length > 0" class="list-group-animales mt-2">
+              <li class="list-group-item" *ngFor="let animal of animalesFiltrados" (click)="seleccionarAnimal(animal)">
+                {{ animal.razas.nomraz }} - {{ animal.guiasenasag.nroguia }} - {{ animal.pesani }} kg
+              </li>
+            </ul>
+          </div>
+
+
+          <!-- Imagen debajo del buscador -->
+          <div class="text-center mt-4 imagen-estatica">
+            <img src="assets/com.jpeg" alt="Imagen representativa" class="img-fluid" />
+          </div>
+        </div>
+
+        <!-- Columna derecha: Inputs -->
+        <div class="col-md-7">
+          <!-- Animal Seleccionado -->
+          <div class="form-group ">
+            <label>Animal Seleccionado<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+            <input type="text" formControlName="animales" class="form-control"
+              [value]="animalSeleccionado ? (animalSeleccionado.razas.nomraz + ' - Peso: ' + animalSeleccionado.pesani + ' kg') : ''"  disabled />
+          </div>
+
+          <!-- Precio de Compras -->
+          <div class="mixtad form-group">
+            <label>Precio de Compras (U.A.)<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+            <input type="number" formControlName="precom" class="form-control"
+              [ngClass]="{'is-invalid': submitted && formdet.get('precom').errors}" />
+            <div *ngIf="submitted && formdet.get('precom').errors" class="invalid-feedback">
+              <p *ngIf="formdet.get('precom').errors.required"> Campo obligatorio </p>
+              <p *ngIf="formdet.get('precom').errors.minlength"> Mínimo 5 caracteres </p>
+              <p *ngIf="formdet.get('precom').errors.maxlength"> Máximo 30 caracteres </p>
+            </div>
+          </div>
+          <!--Precio de Compras -->
+          <div class="mixtad form-group">
+            <label>Precio Compra x Kg.</label>
+            <input type="number" formControlName="prekil" class="form-control"
+              [ngClass]="{'is-invalid': submitted && f3.prekil.errors }" />
+            <div *ngIf="submitted && f3.prekil.errors" class="invalid-feedback">
+              <p *ngIf="f3.prekil.errors.required"> Campo obligatorio </p>
+              <p *ngIf="f3.prekil.errors.minlength"> Mínimo 5 caracteres </p>
+              <p *ngIf="f3.prekil.errors.maxlength"> Máximo 30 caracteres </p>
+            </div>
+          </div>
+          <!--Precio de Compras -->
+          <div class="mixtad form-group">
+            <label>Precio de Ventas (U.A.)<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+            <input type="number" formControlName="preven" class="form-control"
+              [ngClass]="{'is-invalid': submitted && f3.preven.errors }" />
+            <div *ngIf="submitted && f3.preven.errors" class="invalid-feedback">
+              <p *ngIf="f3.preven.errors.required"> Campo obligatorio </p>
+              <p *ngIf="f3.preven.errors.minlength"> Mínimo 5 caracteres </p>
+              <p *ngIf="f3.preven.errors.maxlength"> Máximo 30 caracteres </p>
+            </div>
+          </div>
+
+
+
+
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-pie">
+      <button type="button" class="btn-customm" (click)="c('Cancel click')">Cancelar</button>
+      <button type="submit" class="btn-custom">Guardar</button>
+    </div>
+  </form>
+</ng-template>

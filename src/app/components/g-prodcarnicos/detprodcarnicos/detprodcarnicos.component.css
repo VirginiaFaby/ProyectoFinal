@@ -1,0 +1,104 @@
+.my-pagination /deep/ .ngx-pagination .current{
+    background: #236259;
+  }
+  .tabla-sombra {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.40);
+    }
+  
+    .btn-custom {
+      background-color: #236259;
+      color: #fff;
+      padding: 8px 20px; /* Ajusta el relleno según sea necesario */
+      text-decoration: none; /* Elimina el subrayado del enlace */
+      transition: background-color 0.3s ease; /* Transición suave */
+      border-radius: 5px;
+    }
+    .btn-customm {
+      background-color: rgb(153, 152, 152);
+      color: #fff;
+      padding: 8px 15px; /* Ajusta el relleno según sea necesario */
+      text-decoration: none; /* Elimina el subrayado del enlace */
+      transition: background-color 0.3s ease; /* Transición suave */
+      border-radius: 5px;
+    }
+    
+    .enlace-icono {
+      font-size: 20px;
+      color: #236259;
+      margin: 5px;
+  }
+  
+  .enlace-iconoo {
+      font-size: 20px;
+      color:rgb(153, 152, 152);
+      margin: 5px;
+  }
+  
+  .modal-cuu   {
+    padding: 15px;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+    display: flex;
+    align-items: center; /* Centra verticalmente el contenido */
+    justify-content: center; /* Centra horizontalmente el contenido */
+    height: 100%;
+  }
+  
+  
+  
+  
+  .modal-cu {
+    padding: 15px;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+  }
+    .modal-pie {
+      padding: 10px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+  
+  /* Cambio de color de botones del formulario */
+  .btn-custo {
+    background-color: #236259;
+    color: #fff;
+    padding: 8px 20px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    border-radius: 5px;
+    border: none;
+    margin: 5px;
+  }
+  
+  .btn-custoo {
+    background-color: rgb(153, 152, 152);
+    color: #fff;
+    padding: 8px 20px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    border-radius: 5px;
+    border: none;
+  }
+  .mixtad {
+    width: 50%;
+    display: inline-block;
+    padding: 10px;
+  }
+
+  
+  .mixtadm {
+    width: 48%;
+    display: inline-block;
+  }
+
+  .mixtadm1{
+    width: 20%;
+    display: inline-block;
+  }
+  .mixtadm2{
+    width: 80%;
+    display: inline-block;
+  }

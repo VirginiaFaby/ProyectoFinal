@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css?family=Lobster|Montserrat&display=swap');
+img{
+    margin:auto;
+	display:block;
+    width: 450px;    
+    border-radius: 100%;
+  
+}
+p{
+    font-size: 30px;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lobster', cursive;
+    
+}
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .welcome-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full height of the viewport */
+  }
+  
+  .welcome-content {
+    text-align: center;
+    margin-top: 70px; /* Adjust the margin as needed to move content down */
+  }
+  
+  .welcome-content img {
+    display: block;
+    margin: 20px auto 0; /* Center the image horizontally and add some top margin */
+    max-width: 100%; /* Make sure the image is responsive */
+    height: auto; /* Maintain aspect ratio */
+  }
+  

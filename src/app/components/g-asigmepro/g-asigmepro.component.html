@@ -1,0 +1,81 @@
+<div class="container">
+  <h5 class="text-center" style="color: #236259; font-weight: bold;">ASIGNACIÓN DE MENÚS Y PROCESOS</h5>
+
+  <div class="row">
+    <!-- Tabla de Menús -->
+    <div class="col-md-6">
+      <div class="mb-3">
+        <input type="text" class="form-control cada" placeholder="Buscar menú por nombre" [(ngModel)]="busquedaMenu"
+          (input)="filtrarMenus()" />
+      </div>
+
+      <div class="table-responsive">
+        <table class="table tabla-sombra">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Seleccionar</th>
+              <th scope="col">Lista de Menús</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let men of menusFiltrados; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>
+                <input type="radio" name="menuSelection" (change)="selectMenu(men.idmen)"
+                  [checked]="selectedMenu === men.idmen" />
+              </td>
+              <td>{{ men.nombre }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tabla de Procesos y filtro de estado -->
+    <div class="col-md-6">
+      <!-- Filtro de estado -->
+      <div class="mb-3">
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="estadoFiltro" id="estadoActivo" [value]="1"
+            [(ngModel)]="estadoFiltro" (change)="filtrarProcesosPorEstado()" />
+          <label class="form-check-label" for="estadoActivo">Activo</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="estadoFiltro" id="estadoBaja" [value]="0"
+            [(ngModel)]="estadoFiltro" (change)="filtrarProcesosPorEstado()" />
+          <label class="form-check-label" for="estadoBaja">Baja</label>
+        </div>
+
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="estadoFiltro" id="estadoTodo" [value]="-1"
+            [(ngModel)]="estadoFiltro" (change)="filtrarProcesosPorEstado()" />
+          <label class="form-check-label" for="estadoTodo">Todo</label>
+        </div>
+      </div>
+
+      <!-- Tabla de Procesos -->
+      <div class="table-responsive">
+        <table class="table tabla-sombra">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Seleccionar</th>
+              <th scope="col">Lista de Procesos</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let pro of filteredProcesos; let j = index" [ngClass]="{'text-muted': pro.estado === 0}">
+              <td>{{ j + 1 }}</td>
+              <td>
+                <input type="checkbox" [checked]="procesosAsignados.includes(pro.idpro)"
+                  (change)="onProcessChange(pro.idpro, $event)" [disabled]="pro.estado === 0" />
+              </td>
+              <td>{{ pro.nombre }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

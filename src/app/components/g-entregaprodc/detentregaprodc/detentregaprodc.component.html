@@ -1,0 +1,178 @@
+<table class="table tabla-sombra">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">FECHA ENTREGA</th>
+      <th scope="col">DIRECCION</th>
+      <th scope="col">PESO ENTREGA</th>
+      <th scope="col"> ESTADO </th>
+      <th scope="col" colspan="3" class="text-center"> ACCIONES </th>
+    </tr>
+  </thead>
+  <tbody *ngFor="let ent of apiEntprdc | paginate: { itemsPerPage: 5, currentPage: pageActual } ; index as con">
+    <tr>
+      <td *ngIf="ent.estado == 1" class="activo" scope="col">{{con+1}}</td>
+      <td *ngIf="ent.estado == 0" class="inactivo" scope="col">{{con+1}}</td>
+
+      <td *ngIf="ent.estado == 1" class="activo">{{ent.fecent}} </td>
+      <td *ngIf="ent.estado == 0" class="inactivo">{{ent.fecent}} </td>
+
+      <td *ngIf="ent.estado == 1" class="activo">{{ent.dirent}} </td>
+      <td *ngIf="ent.estado == 0" class="inactivo">{{ent.dirent}} </td>
+
+      <td *ngIf="ent.estado == 1" class="activo">{{ent.pesent}} </td>
+      <td *ngIf="ent.estado == 0" class="inactivo">{{ent.pesent}} </td>
+
+      <td>
+        <!-- estado -->
+        <a *ngIf="ent.estado == 1" class="btn-custom">Activo</a>
+        <a *ngIf="ent.estado == 0" class="btn-customm">Inactivo</a>
+      </td>
+      <!--Modificar-->
+      <td>
+        <a *ngIf="ent.estado == 1" href="javascript:void(0)" (click)="llamaModalMod(contentMod, ent)"
+          class="bi bi-pencil-fill enlace-icono"></a>
+        <a *ngIf="ent.estado == 0" class="bi bi-pencil-fill enlace-iconoo"></a>
+      </td>
+      <!--Eliminacion logica-->
+      <td>
+        <a *ngIf="ent.estado==1" href="javascript:void(0)" (click)="llamaModalDel(contentDel, ent)"
+          class="bi bi-trash-fill enlace-icono"></a>
+        <a *ngIf="ent.estado==0" class="bi bi-trash-fill enlace-iconoo"></a>
+      </td>
+      <!--Habilitar -->
+      <td>
+        <a *ngIf="ent.estado==0" href="javascript:void(0)" (click)="llamaModalHab(contentHab, ent)"
+          class="bi bi-arrow-clockwise enlace-icono"></a>
+        <a *ngIf="ent.estado==1" class="bi bi-arrow-clockwise enlace-iconoo"></a>
+      </td>
+
+    </tr>
+  </tbody>
+  <tfoot>
+    <td colspan="8" align="center">
+      <pagination-controls (pageChange)="pageActual = $event" previousLabel="" nextLabel=""
+        class="my-pagination"></pagination-controls>
+    </td>
+  </tfoot>
+
+</table>
+
+<!--VENTANA MODAL PARA MODIFICAR DATOS  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentMod let-c="close" let-d="dismiss" id="modal-add">
+  <div class="modal-cuu">
+    <h4 class="modal-title" id="modal-basic-title" style="color: #236259; font-weight: bold;"> Modificar Datos de la
+      Granja ... </h4>
+
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="modal-body">
+
+      <!--ProdCarnicos -->
+      <div class="form-group mixtad ">
+        <label>Productos Carnicos</label><br>
+        <select formControlName="prodcarnicos" class="form-control form-select"
+          [ngClass]="{'is-invalid': submitted && f.prodcarnicos.errors}" (change)="onProdcChange()">
+          <option value="">Productos Carnicos... </option>
+          <option *ngFor="let prod of  apiProdcarnicos " [value]="prod.idprod">{{ prod.numpro }}</option>
+        </select>
+        <div *ngIf="submitted && f.prodcarnicos.errors" class="invalid-feedback">
+          <p *ngIf="f.prodcarnicos.errors.required"> Seleccione una opcion </p>
+        </div>
+      </div>
+
+      <div class="mixtad form-group">
+        <label>Peso Entrega: </label>
+        <input type="number" formControlName="pesent" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.pesent.errors }" />
+        <div *ngIf="submitted && f.pesent.errors" class="invalid-feedback">
+          <p *ngIf="f.pesent.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.pesent.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.pesent.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+
+      <!--Camara -->
+      <div class="form-group mixtad ">
+        <label>Camara</label><br>
+        <select formControlName="camara" class="form-control form-select"
+          [ngClass]="{'is-invalid': submitted && f.camara.errors}">
+          <option value="">Camara... </option>
+          <option *ngFor="let cam of apiCamara" [value]="cam.idcamfri">{{ cam.nomcam }}</option>
+        </select>
+        <div *ngIf="submitted && f.camara.errors" class="invalid-feedback">
+          <p *ngIf="f.camara.errors.required"> Seleccione una opcion </p>
+        </div>
+      </div>
+
+
+
+      <div class="mixtad form-group">
+        <label>Dirección Entrega: </label>
+        <input type="text" formControlName="dirent" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.dirent.errors }" />
+        <div *ngIf="submitted && f.dirent.errors" class="invalid-feedback">
+          <p *ngIf="f.dirent.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.dirent.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.dirent.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+
+
+
+      <div class="mixtad form-group">
+        <label>Fecha de Entrega: </label>
+        <input type="date" formControlName="fecent" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.fecent.errors }" />
+        <div *ngIf="submitted && f.fecent.errors" class="invalid-feedback">
+          <p *ngIf="f.fecent.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.fecent.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.fecent.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+
+
+
+
+    </div>
+    <div class="modal-pie">
+      <button type="button" class="btn-custoo" (click)="c('Save click')"> Cancelar </button>
+      <button type="submit" class="btn-custo"> Modifcar </button>
+    </div>
+  </form>
+</ng-template>
+
+
+<!-- VENTANA MODAL PARA OPCION ELIMINAR xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentDel let-c="close" let-d="dismiss">
+  <div class="modal-cu">
+  </div>
+  <div class="modal-body">
+    <h5 class="text-center">¿Esta seguro? De eliminar entrega de la direccion:
+      <h5 style="color:#236259; font-weight: bold;"><strong>{{ EntprdcI.dirent }}</strong></h5>
+    </h5>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmitDel()">
+    <div class="modal-pie">
+      <button type="button" class="btn-custoo" (click)="c('Save click')">Cancelar</button>
+      <button type="submit" class="btn-custo"> Aceptar </button>
+    </div>
+  </form>
+</ng-template>
+
+<!-- VENTANA MODAL PARA OPCION HABILITAR *************************************************************  -->
+<ng-template #contentHab let-c="close" let-d="dismiss">
+  <div class="modal-cu">
+  </div>
+  <div class="modal-body">
+    <h5 class="text-center">¿Esta seguro? De habilitar entega de la direccion:
+      <h5 style="color:#236259; font-weight: bold;"><strong>{{ EntprdcI.dirent }}</strong></h5>
+    </h5>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmitHab()">
+    <div class="modal-pie">
+      <button type="button" class="btn-custoo" (click)="c('Save click')">Cancelar</button>
+      <button type="submit" class="btn-custo"> Aceptar </button>
+    </div>
+  </form>
+</ng-template>

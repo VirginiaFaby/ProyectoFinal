@@ -1,0 +1,220 @@
+<div class="container">
+  <div class="container-with-shadow">
+    <div class="content">
+      <h5 class="text-center" style="color: #236259; font-weight: bold;">GESTIÓN ANIMALES</h5>
+      <a href="javascript:void(0)" (click)="llamaModalAdd(contentAdd)" class="btn-custom-color">Nuevo Animal</a>
+    </div>
+  </div>
+  <div class="dropdown-divider"></div>
+  <form [formGroup]="formFiltro" class="filtro-form">
+    <div class="formArriba">
+      <div class="form-group filtro">
+        <div class="input-group">
+          <input class="form-control" formControlName="filtro" type="text" name="busqueda" placeholder="Buscar...."
+            (keyup)="filtrarNombre()">
+          <span class="input-group-addon">
+            <i class="bi bi-search"></i>
+          </span>
+        </div>
+      </div>
+
+
+      <div class="form-group opciones">
+        <div class="form-check form-check-inline ">
+          <input class="form-check-input" type="radio" formControlName="estadosAni" name="estadosAni"
+            id="exampleRadios1" value="1" (change)="filtrarNombre()">
+          <label class="form-check-label" for="exampleRadios1">Activo</label>
+        </div>
+        <div class="form-check form-check-inline radio-container">
+          <input class="form-check-input" type="radio" formControlName="estadosAni" name="estadosAni"
+            id="exampleRadios2" value="0" (change)="filtrarNombre()">
+          <label class="form-check-label" for="exampleRadios2">baja</label>
+        </div>
+        <div class="form-check form-check-inline radio-container">
+          <input class="form-check-input" type="radio" formControlName="estadosAni" name="estadosAni"
+            id="exampleRadios3" value="-1" (change)="filtrarNombre()" checked="true">
+          <label class="form-check-label" for="exampleRadios3">Todos</label>
+        </div>
+      </div>
+    </div>
+  </form>
+  <!--fin de formulario del Filtro-->
+  <div class="dropdown-divider"></div>
+  <div>
+    <app-detanimales></app-detanimales>
+  </div>
+
+</div>
+
+
+<!--VENTANA MODAL PARA ADICIONAR DATOS  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+
+<ng-template #contentAdd let-c="close" let-d="dismiss" id="modal-add">
+  <!-- Encabezado del modal -->
+  <div class="modal-cuu">
+    <h4 class="modal-title" id="modal-basic-title" style="font-weight: bold;">Adicionar Animal...</h4>
+  </div>
+
+  <!-- Inicio del formulario en un contenedor de Flexbox -->
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="modal-body">
+      <div class="row">
+        <!-- Columna izquierda: Buscador con imagen debajo -->
+        <div class="col-md-5">
+          <!-- Buscador -->
+          <div class="form-group" (mouseleave)="interactuandoConListaGuias = false">
+            <label>Buscar N° Guia Senasag:</label>
+            <input type="text" class="form-control" [class.is-invalid]="submitted && !guiaSeleccionada"
+              [formControl]="guiaCtrl" placeholder="Ingrese el número de guía" (focus)="mostrarListaGuias = true"
+              (input)="filtrarGuias(guiaCtrl.value)" (blur)="ocultarListaGuias()" />
+            <ul *ngIf="mostrarListaGuias && filteredGuias.length" class="list-group-guias"
+              (mouseenter)="interactuandoConListaGuias = true" (mouseleave)="interactuandoConListaGuias = false">
+              <li *ngFor="let guia of filteredGuias" class="list-group-item" (click)="seleccionarGuia(guia)">
+                {{ guia.nroguia }} - {{ guia.granjas.nomgra }}
+              </li>
+            </ul>
+            <div *ngIf="submitted && !guiaSeleccionada" class="invalid-feedback">
+              Seleccione una opción.
+            </div>
+          </div>
+
+
+
+
+
+
+
+
+
+
+          <!-- Imagen debajo del buscador -->
+          <div class="text-center mt-4 imagen-estatica">
+            <img src="assets/res.jpeg" alt="Imagen representativa" class="img-fluid" />
+          </div>
+        </div>
+
+        <!-- Columna derecha: Inputs -->
+        <div class="col-md-7">
+          <!-- Animal Seleccionado -->
+          <div class="mixtad form-group">
+            <label>Fecha de llegada<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+            <input type="date" formControlName="feclleg" class="form-control"
+              [ngClass]="{'is-invalid': submitted && f.feclleg.errors }" />
+            <div *ngIf="submitted && f.feclleg.errors" class="invalid-feedback">
+              <p *ngIf="f.feclleg.errors.required"> Campo obligatorio </p>
+              <p *ngIf="f.feclleg.errors.minlength"> Mínimo 5 caracteres </p>
+              <p *ngIf="f.feclleg.errors.maxlength"> Máximo 30 caracteres </p>
+            </div>
+          </div>
+
+          <!--TipoAnimal-->
+          <div class="mixtad form-group">
+            <label>Tipo Animal<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+            <select formControlName="tipoanimal" class="form-select max " class="form-control"
+              [ngClass]="{'is-invalid': submitted && f.tipoanimal.errors}" (ngModelChange)="cargarTipoanimal()">
+              <option value="">Tipo de Animales... </option>
+              <option *ngFor="let tip of apiTipoanimal" [value]="tip.idtip">{{ tip.nomtip }}</option>
+            </select>
+            <div *ngIf="submitted && f.tipoanimal.errors" class="invalid-feedback">
+              <p *ngIf="f.tipoanimal.errors.required"> Seleccione una opcion </p>
+            </div>
+          </div>
+          <!--Corrales-->
+          <div class="form-group mixtad">
+            <label>Corrales<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+            <select formControlName="corrales" class="form-control max form-select"
+              [ngClass]="{'is-invalid': submitted && f.corrales.errors}">
+              <option value="">Corrales ... </option>
+              <option *ngFor="let corr of apiCorrales" [value]="corr.idcorral">{{ corr.nomcor }}</option>
+            </select>
+            <div *ngIf="submitted && f.corrales.errors" class="invalid-feedback">
+              <p *ngIf="f.corrales.errors.required"> Corrales </p>
+            </div>
+          </div>
+
+          <!-- Razas   -->
+          <div class=" mixtad form-group ">
+            <label>Raza de Animal<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+            <select formControlName="razas" class="form-select max form-control"
+              [ngClass]="{'is-invalid': submitted && f.razas.errors}">
+              <option value="">Razas de Animales </option>
+              <option *ngFor="let raz of apiRazas" [value]="raz.idraz">{{ raz.nomraz }}</option>
+            </select>
+            <div *ngIf="submitted && f.razas.errors" class="invalid-feedback">
+              <p *ngIf="f.razas.errors.required"> Seleccione una opcion </p>
+            </div>
+          </div>
+
+          <div class="mixtad form-group">
+            <label>Edad del Animal (Años)<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+            <input type="text" formControlName="edadani" class="form-control"
+              [ngClass]="{'is-invalid': submitted && f.edadani.errors }" />
+            <div *ngIf="submitted && f.edadani.errors" class="invalid-feedback">
+              <p *ngIf="f.edadani.errors.required"> Campo obligatorio </p>
+              <p *ngIf="f.edadani.errors.minlength"> Mínimo 5 caracteres </p>
+              <p *ngIf="f.edadani.errors.maxlength"> Máximo 30 caracteres </p>
+            </div>
+          </div>
+
+          <div class="mixtad form-group">
+            <label>Peso del Animal (Kg.)<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+            <input type="text" formControlName="pesani" class="form-control"
+              [ngClass]="{'is-invalid': submitted && f.pesani.errors }" />
+            <div *ngIf="submitted && f.pesani.errors" class="invalid-feedback">
+              <p *ngIf="f.pesani.errors.required"> Campo obligatorio </p>
+              <p *ngIf="f.pesani.errors.minlength"> Mínimo 5 caracteres </p>
+              <p *ngIf="f.pesani.errors.maxlength"> Máximo 30 caracteres </p>
+            </div>
+          </div>
+
+
+
+          <div class="mixtad form-group">
+            <label>Origen del Animal<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+            <select formControlName="origenani" class="form-select max form-control"
+              [ngClass]="{'is-invalid': submitted && f.origenani.errors}">
+              <option value="">Seleccionar tipo</option>
+              <option value="CRIOLLA">CRIOLLA</option>
+              <option value="GRANJA">GRANJA</option>
+            </select>
+            <div *ngIf="submitted && f.origenani.errors" class="invalid-feedback">
+              <p *ngIf="f.origenani.errors.required">Seleccione una opción</p>
+            </div>
+          </div>
+
+          <!-- Sexo del Animal -->
+          <div class="mixtad form-group">
+            <label>Sexo del Animal<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+            <select formControlName="sexo" class="form-select max form-control"
+              [ngClass]="{'is-invalid': submitted && f.sexo.errors}">
+              <option value="">Seleccionar Sexo</option>
+              <option value="macho">Macho</option>
+              <option value="hembra">Hembra</option>
+            </select>
+            <div *ngIf="submitted && f.sexo.errors" class="invalid-feedback">
+              <p *ngIf="f.sexo.errors.required">Seleccione una opción</p>
+            </div>
+          </div>
+
+          <div class="mixtad form-group">
+            <label>Tipo<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+            <select formControlName="tipocs" class="form-select max form-control"
+              [ngClass]="{'is-invalid': submitted && f.tipocs.errors}">
+              <option value="">Seleccionar tipo</option>
+              <option value="compra">Compra</option>
+              <option value="servicio">Servicio</option>
+            </select>
+            <div *ngIf="submitted && f.tipocs.errors" class="invalid-feedback">
+              <p *ngIf="f.tipocs.errors.required">Seleccione una opción</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Pie del modal -->
+    <div class="modal-pie">
+      <button type="button" class="btn-customm" (click)="c('Save click')">Cancelar</button>
+      <button type="submit" class="btn-custom">Guardar</button>
+    </div>
+  </form>
+</ng-template>

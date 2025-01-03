@@ -1,0 +1,99 @@
+<div class="container">
+  <div class="container-with-shadow">
+    <div class="content">
+      <h5 class="text-center" style="color: #236259; font-weight: bold;">GESTIÓN CORRALES</h5>
+      <a href="javascript:void(0)" (click)="llamaModalAdd(contentAdd)" class="btn-custom-color">Nuevo Corral</a>
+    </div>
+  </div>
+  <div class="dropdown-divider"></div>
+  <form [formGroup]="formFiltro" class="filtro-form">
+    <div class="formArriba">
+      <div class="form-group filtro">
+        <div class="input-group">
+          <input class="form-control" formControlName="filtro" type="text" name="busqueda" placeholder="Buscar...."
+            (keyup)="filtrarNombre()">
+          <span class="input-group-addon">
+            <i class="bi bi-search"></i>
+          </span>
+        </div>
+      </div>
+
+
+      <div class="form-group opciones">
+        <div class="form-check form-check-inline ">
+          <input class="form-check-input" type="radio" formControlName="estadosCor" name="estadosCor"
+            id="exampleRadios1" value="1" (change)="filtrarNombre()">
+          <label class="form-check-label" for="exampleRadios1">Libre</label>
+        </div>
+        <div class="form-check form-check-inline radio-container">
+          <input class="form-check-input" type="radio" formControlName="estadosCor" name="estadosCor"
+            id="exampleRadios2" value="0" (change)="filtrarNombre()">
+          <label class="form-check-label" for="exampleRadios2">Lleno</label>
+        </div>
+        <div class="form-check form-check-inline radio-container">
+          <input class="form-check-input" type="radio" formControlName="estadosCor" name="estadosCor"
+            id="exampleRadios3" value="-1" (change)="filtrarNombre()" checked="true">
+          <label class="form-check-label" for="exampleRadios3">Todos</label>
+        </div>
+      </div>
+    </div>
+  </form>
+  <!--fin de formulario del Filtro-->
+  <div class="dropdown-divider"></div>
+  <div>
+    <app-detcorrales></app-detcorrales>
+  </div>
+
+</div>
+
+
+
+<!--VENTANA MODAL PARA ADICIONAR DATOS  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentAdd let-c="close" let-d="dismiss" id="modal-add">
+  <div class="modal-cuu">
+    <h4 class="modal-title" id="modal-basic-title" style="font-weight: bold;"> Adicionar Corral... </h4>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="modal-body">
+
+      <div class="form-group">
+        <label>Nombre de Corral<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" formControlName="nomcor" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.nomcor.errors }" />
+        <div *ngIf="submitted && f.nomcor.errors" class="invalid-feedback">
+          <p *ngIf="f.nomcor.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.nomcor.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.nomcor.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+      <div class="form-group mixtad">
+        <label>Capacidad (U.A.)<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="number" formControlName="capcor" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.capcor.errors }" />
+        <div *ngIf="submitted && f.capcor.errors" class="invalid-feedback">
+          <p *ngIf="f.capcor.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.capcor.errors.min"> Solo nuemeros Positivos </p>
+          <p *ngIf="f.capcor.errors.pattern"> Valores superiores a Cero </p>
+
+        </div>
+      </div>
+      <!--TipoAnimal-->
+      <div class="form-group mixtad ">
+        <label>Tipo Animal<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+        <select formControlName="tipoanimal" class="form-control form-select"
+          [ngClass]="{'is-invalid': submitted && f.tipoanimal.errors}">
+          <option value="">Tipo de Animales... </option>
+          <option *ngFor="let tip of apiTipoanimal" [value]="tip.idtip">{{ tip.nomtip }}</option>
+        </select>
+        <div *ngIf="submitted && f.tipoanimal.errors" class="invalid-feedback">
+          <p *ngIf="f.tipoanimal.errors.required"> Seleccione una opcion </p>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-pie">
+      <button type="button" class="btn-customm" (click)="c('Save click')"> Cancelar </button>
+      <button type="submit" class="btn-custom"> Guardar </button>
+    </div>
+  </form>
+</ng-template>

@@ -1,0 +1,335 @@
+<table class="table tabla-sombra">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">CEDULA </th>
+      <th scope="col">NOMBRE & APELLIDOS </th>
+      <th scope="col">CELULARX</th>
+      <th scope="col"> ESTADO </th>
+      <th scope="col" class="text-center"> ACCIONES </th>
+    </tr>
+  </thead>
+  <tbody *ngFor="let per of apiPersonas | paginate: { itemsPerPage: 6, currentPage: pageActual } ; index as con">
+    <tr>
+      <td *ngIf="per.estado == 1" class="activo" scope="col">{{con+1}}</td>
+      <td *ngIf="per.estado == 0" class="inactivo" scope="col">{{con+1}}</td>
+
+      <td *ngIf="per.estado == 1" class="activo">{{per.cedula}} </td>
+      <td *ngIf="per.estado == 0" class="inactivo">{{per.cedula}} </td>
+
+      <td *ngIf="per.estado == 1" class="activo">{{per.nombre}} {{per.ap}} {{per.am}}</td>
+      <td *ngIf="per.estado == 0" class="inactivo">{{per.nombre}} {{per.ap}} {{per.am}}</td>
+
+      <td *ngIf="per.estado == 1" class="activo">{{per.telefono}}</td>
+      <td *ngIf="per.estado == 0" class="inactivo">{{per.telefono}}</td>
+
+      <td>
+        <!-- estado -->
+        <a *ngIf="per.estado == 1" class="btn-custom">Activo</a>
+        <a *ngIf="per.estado == 0" class="btn-customm">Inactivo</a>
+      </td>
+
+      <!--Modificar-->
+      <td class="text-center">
+        <a *ngIf="per.estado == 1" href="javascript:void(0)" (click)="llamaModalMod(contentMod, per)"
+          class="bi bi-pencil-fill enlace-icono"></a>
+        <a *ngIf="per.estado == 0" class="bi bi-pencil-fill enlace-iconoo">
+        </a>
+      
+      <!--Eliminacion logica-->
+      
+        <a *ngIf="per.estado==1" href="javascript:void(0)" (click)="llamaModalDel(contentDel, per)"
+          class="bi bi-trash-fill enlace-icono"></a>
+        <a *ngIf="per.estado==0" class="bi bi-trash-fill enlace-iconoo"></a>
+      
+
+      <!--Habilitar -->
+      
+        <a *ngIf="per.estado==0" href="javascript:void(0)" (click)="llamaModalHab(contentHab, per)"
+          class="bi bi-arrow-clockwise enlace-icono"></a>
+        <a *ngIf="per.estado==1" class="bi bi-arrow-clockwise enlace-iconoo"></a>
+      
+      <!--Adicionar Usuario  -->
+      
+        <a *ngIf="per.usuarios == null" href="javascript:void(0)" (click)="llamaModalUsuario(contentUsuario, per)" class="bi bi-bag-fill enlace-icono">
+        </a>
+        <a *ngIf="per.usuarios != null" href="javascript:void(0)" (click)="llamaModalModUsuario(contentModUsuario, per)" class="bi bi-bag-fill enlace-iconoo">
+              
+        </a>
+      </td>
+      
+    </tr>
+  </tbody>
+  <tfoot>
+    <td colspan="8" align="center">
+      <pagination-controls (pageChange)="pageActual = $event" previousLabel="" nextLabel=""
+        class="my-pagination"></pagination-controls>
+    </td>
+  </tfoot>
+
+</table>
+<!--VENTANA MODAL PARA MODIFICAR DATOS  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentMod let-c="close" let-d="dismiss" id="modal-add">
+  <div class="modal-cuu">
+    <h4 class="modal-title" id="modal-basic-title" style="color: #236259; font-weight: bold;">Modificar Persona</h4>
+
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="modal-body">
+
+      <div class="form-group mixtad">
+        <label>Cedula<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" formControlName="cedula" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.cedula.errors }" />
+        <div *ngIf="submitted && f.cedula.errors" class="invalid-feedback">
+          <p *ngIf="f.cedula.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.cedula.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.cedula.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+      <div class="form-group mixtad">
+        <label> Nombre<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" formControlName="nombre" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.nombre.errors }" />
+        <div *ngIf="submitted && f.nombre.errors" class="invalid-feedback">
+          <p *ngIf="f.nombre.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.nombre.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.nombre.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+      <div class="form-group mixtad">
+        <label> Apellido Paterno</label>
+        <input type="text" formControlName="ap" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.ap.errors }" />
+        <div *ngIf="submitted && f.ap.errors" class="invalid-feedback">
+          <p *ngIf="f.ap.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.ap.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.ap.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+      <div class="mixtad form-group">
+        <label>Apellido Materno<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" formControlName="am" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.am.errors }" />
+        <div *ngIf="submitted && f.am.errors" class="invalid-feedback">
+          <p *ngIf="f.am.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.am.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.am.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label> Genero<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <div class="form-check form-check-inline float-right radio-container">
+          <input class="form-check-input" type="radio" formControlName="genero" name="genero" id="exampleRadios1"
+            value="F">
+          <label class="form-check-label" for="exampleRadios1"> Femenino </label>
+        </div>
+        <div class="form-check form-check-inline float-right radio-container">
+          <input class="form-check-input" type="radio" formControlName="genero" name="genero" id="exampleRadios2"
+            value="M">
+          <label class="form-check-label" for="exampleRadios2"> Masculino </label>
+        </div>
+        <div *ngIf="submitted && f.genero.errors" class="invalid-feedback">
+          <p *ngIf="f.genero.errors.required"> Seleccione una opcion </p>
+        </div>
+      </div>
+
+      <div class="form-group mixtad ">
+        <label> Telefono <span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" formControlName="telefono" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.telefono.errors }" />
+        <div *ngIf="submitted && f.telefono.errors" class="invalid-feedback">
+          <p *ngIf="f.telefono.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.telefono.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.telefono.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+      <div class="form-group mixtad">
+        <label> Direccion <span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" formControlName="direccion" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.direccion.errors }" />
+        <div *ngIf="submitted && f.direccion.errors" class="invalid-feedback">
+          <p *ngIf="f.direccion.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.direccion.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.direccion.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+
+      <!--Email-->
+      <div class="formEmp-group">
+        <label> Correo Electronico : </label>
+        <input type="email" formControlName="email" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.email.errors }" />
+        <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+          <p *ngIf="f.email.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.email.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.email.errors.maxlength"> Máximo 30 caracteres </p>
+          <p *ngIf="f.email.errors.pattern"> Solo se aceptan Letras </p>
+        </div>
+      </div>
+    </div>
+    <div class="modal-pie">
+      <button type="button" class="btn-custoo" (click)="c('Save click')"> Cancelar </button>
+      <button type="submit" class="btn-custo"> Modifcar </button>
+    </div>
+  </form>
+</ng-template>
+
+<!-- VENTANA MODAL PARA OPCION ELIMINAR xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentDel let-c="close" let-d="dismiss">
+  <div class="modal-cu">
+  </div>
+  <div class="modal-body">
+    <h5 class="text-center">¿Esta seguro? Se dara de baja a:
+      <h5 style="color:#236259"><strong>{{ personasI.nombre }} {{ personasI.ap }} {{ personasI.am }}</strong></h5>
+    </h5>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmitDel()">
+    <div class="modal-pie">
+      <button type="button" class="btn-custoo" (click)="c('Save click')">Cancelar</button>
+      <button type="submit" class="btn-custo"> Aceptar </button>
+    </div>
+  </form>
+</ng-template>
+
+<!-- VENTANA MODAL PARA OPCION HABILITAR *************************************************************  -->
+<ng-template #contentHab let-c="close" let-d="dismiss">
+  <div class="modal-cu">
+  </div>
+  <div class="modal-body">
+    <h5 class="text-center">¿Esta seguro? De habilitar a:
+      <h5 style="color:#236259"><strong>{{ personasI.nombre }} {{ personasI.ap }} {{ personasI.am }}</strong></h5>
+    </h5>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmitHab()">
+    <div class="modal-pie">        
+      <button type="button" class="btn-custoo" (click)="c('Save click')">Cancelar</button>
+      <button type="submit" class="btn-custo"> Aceptar </button>
+    </div>
+  </form>
+</ng-template>
+
+<!-- ******************************ACCESO AL SISTEMA *************************************************-->
+
+  <!-- VENTANA MODAL PARA DATOS DE ACCESO *************************************************************-->
+  <ng-template #contentUsuario let-c="close" let-d="dismiss" id="modal-add">
+  <div class="modal-cuu">
+    <h4 class="modal-title" id="modal-basic-title" style="color: #236259; font-weight: bold;">Adicionar Usuario</h4>
+
+  </div>
+  <div class="modal-cuu">
+    <h7 class="modal-title" id="modal-basic-title" style="color: #5f5e5e; font-weight: bold;" >De: {{ perInfo }}</h7>
+  </div>
+  <form [formGroup]="formUsuario" (ngSubmit)="onSubmitUsuario()">
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Nombre de Usuario<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" formControlName="login" class="form-control" [ngClass]="{ 'is-invalid': submitted && f2.login.errors }" />
+        <div *ngIf="submitted && f2.login.errors" class="invalid-feedback">
+          <p *ngIf="f2.login.errors.required">Ingrese un nombre de usuario.</p>
+          <p *ngIf="f2.login.errors.minlength">Mínimo 4 dígitos</p>
+          <p *ngIf="f2.login.errors.maxlength">Máximo 15 dígitos</p>
+        </div>
+      </div>
+      <div class="mixtad form-group">
+        <label>Password<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <div class="input-group">
+          <input [type]="hidePassword ? 'password' : 'text'" formControlName="password" class="form-control" [ngClass]="{'is-invalid': submitted && f2.password.errors}" />
+          <div class="input-group-append">
+            <span class="input-group-text icon-button" (click)="togglePasswordVisibility()" [ngStyle]="{'border-color': '#ccc', 'background-color': 'white'}" [class.focused]="passwordFocused">
+              <i class="bi" [ngClass]="hidePassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'" [style.color]="hidePassword ? 'rgb(153, 152, 152)' : '#236259'"></i>
+            </span>
+          </div>
+          <div *ngIf="submitted && f2.password.errors" class="invalid-feedback">
+            <p *ngIf="f2.password.errors.required">Campo obligatorio</p>
+            <p *ngIf="f2.password.errors.minlength">Mínimo 8 caracteres</p>
+            <p *ngIf="f2.password.errors.maxlength">Máximo 20 caracteres</p>
+          </div>
+        </div>
+      </div>
+      <div class="mixtad form-group">
+        <label>Repetir Password<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <div class="input-group">
+          <input [type]="hidePasswordRep ? 'password' : 'text'" formControlName="passwordRep" class="form-control" [ngClass]="{'is-invalid': submitted && f2.passwordRep.errors}" />
+          <div class="input-group-append">
+            <span class="input-group-text icon-button" (click)="togglePasswordRepVisibility()" [ngStyle]="{'border-color': '#ccc', 'background-color': 'white'}" [class.focused]="passwordRepFocused">
+              <i class="bi" [ngClass]="hidePasswordRep ? 'bi-eye-slash-fill' : 'bi-eye-fill'" [style.color]="hidePasswordRep ? 'rgb(153, 152, 152)' : '#236259'"></i>
+            </span>
+          </div>
+          <div *ngIf="submitted && f2.passwordRep.errors" class="invalid-feedback">
+            <p *ngIf="f2.passwordRep.errors.required">Campo obligatorio</p>
+            <p *ngIf="f2.passwordRep.errors.minlength">Mínimo 8 caracteres</p>
+            <p *ngIf="f2.passwordRep.errors.maxlength">Máximo 20 caracteres</p>
+            <p *ngIf="f2.passwordRep.errors.mustMatch">Las contraseñas no coinciden</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-pie">
+      <button type="button" class="btn-custoo" (click)="c('Save click')">Cancelar</button>
+      <button type="submit" class="btn-custo">Guardar</button>
+    </div>
+  </form>
+</ng-template>
+
+    <!-- Modificacion de Usuario  -->
+    <ng-template #contentModUsuario let-c="close" let-d="dismiss" id="modal-add">
+      <div class="modal-cuu">
+        <h4 class="modal-title" id="modal-basic-title" style="color: #236259; font-weight: bold;">Modificar Usuario</h4>
+    
+      </div>
+      <div class="modal-cuu">
+        <h7 class="modal-title" id="modal-basic-title" style="color: #5f5e5e; font-weight: bold;" >De: {{ perInfo }}</h7>
+      </div>
+      <form [formGroup]="formUsuario" (ngSubmit)="onSubmitModUsuario()">
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Nombre de Usuario<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+            <input type="text" formControlName="login" class="form-control" [ngClass]="{ 'is-invalid': submitted && f2.login.errors }" />
+            <div *ngIf="submitted && f2.login.errors" class="invalid-feedback">
+              <p *ngIf="f2.login.errors.required">Ingrese un nombre de usuario.</p>
+              <p *ngIf="f2.login.errors.minlength">Mínimo 4 dígitos</p>
+              <p *ngIf="f2.login.errors.maxlength">Máximo 15 dígitos</p>
+            </div>
+          </div>
+          <div class="mixtad form-group">
+            <label>Password<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+            <div class="input-group">
+              <input [type]="hidePassword ? 'password' : 'text'" formControlName="password" class="form-control" [ngClass]="{'is-invalid': submitted && f2.password.errors}" />
+              <div class="input-group-append">
+                <span class="input-group-text icon-button" (click)="togglePasswordVisibility()" [ngStyle]="{'border-color': '#ccc', 'background-color': 'white'}" [class.focused]="passwordFocused">
+                  <i class="bi" [ngClass]="hidePassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'" [style.color]="hidePassword ? 'rgb(153, 152, 152)' : '#236259'"></i>
+                </span>
+              </div>
+              <div *ngIf="submitted && f2.password.errors" class="invalid-feedback">
+                <p *ngIf="f2.password.errors.required">Campo obligatorio</p>
+                <p *ngIf="f2.password.errors.minlength">Mínimo 8 caracteres</p>
+                <p *ngIf="f2.password.errors.maxlength">Máximo 20 caracteres</p>
+              </div>
+            </div>
+          </div>
+          <div class="mixtad form-group">
+            <label>Repetir Password<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+            <div class="input-group">
+              <input [type]="hidePasswordRep ? 'password' : 'text'" formControlName="passwordRep" class="form-control" [ngClass]="{'is-invalid': submitted && f2.passwordRep.errors}" />
+              <div class="input-group-append">
+                <span class="input-group-text icon-button" (click)="togglePasswordRepVisibility()" [ngStyle]="{'border-color': '#ccc', 'background-color': 'white'}" [class.focused]="passwordRepFocused">
+                  <i class="bi" [ngClass]="hidePasswordRep ? 'bi-eye-slash-fill' : 'bi-eye-fill'" [style.color]="hidePasswordRep ? 'rgb(153, 152, 152)' : '#236259'"></i>
+                </span>
+              </div>
+              <div *ngIf="submitted && f2.passwordRep.errors" class="invalid-feedback">
+                <p *ngIf="f2.passwordRep.errors.required">Campo obligatorio</p>
+                <p *ngIf="f2.passwordRep.errors.minlength">Mínimo 8 caracteres</p>
+                <p *ngIf="f2.passwordRep.errors.maxlength">Máximo 20 caracteres</p>
+                <p *ngIf="f2.passwordRep.errors.mustMatch">Las contraseñas no coinciden</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-pie">
+          <button type="button" class="btn-custoo" (click)="c('Save click')">Cancelar</button>
+          <button type="submit" class="btn-custo">Guardar</button>
+        </div>
+      </form>
+    </ng-template>

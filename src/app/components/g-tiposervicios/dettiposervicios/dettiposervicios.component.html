@@ -1,0 +1,157 @@
+
+<table class="table tabla-sombra">
+    <thead class="thead-light">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">NOMBRE</th>
+          <th scope="col">PRECIO</th>
+          <th scope="col">TIPO ANIMAL</th>
+          <th scope="col">DESCRIPCION</th>
+          <th scope="col"> ESTADO </th>
+          <th scope="col" colspan="3" class="text-center"> ACCIONES </th>
+        </tr>
+    </thead>
+    <tbody *ngFor="let tips of apiTiposervicios | paginate: { itemsPerPage: 5, currentPage: pageActual } ; index as con">
+        <tr>
+          <td *ngIf="tips.estado == 1" class="activo" scope="col">{{con+1}}</td> 
+          <td *ngIf="tips.estado == 0" class="inactivo" scope="col">{{con+1}}</td> 
+          <td *ngIf="tips.estado == 1" class="activo">{{tips.nomser}} </td>
+          <td *ngIf="tips.estado == 0" class="inactivo" >{{tips.nomser}} </td>
+          <td *ngIf="tips.estado == 1" class="activo">{{tips.preser}} </td>
+          <td *ngIf="tips.estado == 0" class="inactivo" >{{tips.preser}} </td>
+          <td *ngIf="tips.estado == 1" class="activo">{{tips.tipoanimal.nomtip}} </td>
+          <td *ngIf="tips.estado == 0" class="inactivo" >{{tips.tipoanimal.nomtip}} </td>
+          <td *ngIf="tips.estado == 1" class="activo">{{tips.desser}} </td>
+          <td *ngIf="tips.estado == 0" class="inactivo" >{{tips.desser}} </td>
+
+          <td>
+            <!-- estado -->
+            <a *ngIf="tips.estado == 1" class="btn-custom">Activo</a>  
+            <a *ngIf="tips.estado == 0" class="btn-customm">Inactivo</a> 
+          </td>
+          <!--Modificar-->
+          <td>
+            <a *ngIf="tips.estado == 1" href="javascript:void(0)" (click)="llamaModalMod(contentMod, tips)" class="bi bi-pencil-fill enlace-icono"></a>
+            <a *ngIf="tips.estado == 0" class="bi bi-pencil-fill enlace-iconoo"></a>              
+          </td>
+          <!--Eliminacion logica-->
+          <td>
+            <a *ngIf="tips.estado==1" href="javascript:void(0)" (click)="llamaModalDel(contentDel, tips)" class="bi bi-trash-fill enlace-icono"></a>            
+            <a *ngIf="tips.estado==0" class="bi bi-trash-fill enlace-iconoo"></a>
+          </td>
+          <!--Habilitar -->
+          <td>
+            <a *ngIf="tips.estado==0" href="javascript:void(0)" (click)="llamaModalHab(contentHab, tips)" class="bi bi-arrow-clockwise enlace-icono"></a>
+            <a *ngIf="tips.estado==1" class="bi bi-arrow-clockwise enlace-iconoo"></a>
+          </td>
+          
+
+        </tr>       
+    </tbody>
+    <tfoot>
+      <td colspan="8" align="center" >
+        <pagination-controls (pageChange)="pageActual = $event" previousLabel=""
+        nextLabel="" class="my-pagination"></pagination-controls>
+      </td>
+    </tfoot>
+      
+</table>
+
+<!--VENTANA MODAL PARA MODIFICAR DATOS  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentMod let-c="close" let-d="dismiss" id="modal-add" >
+  <div class="modal-cuu" >
+    <h4 class="modal-title" id="modal-basic-title" style="color: #236259; font-weight: bold;"> Modificar Datos Tipo de Servicio... </h4>
+  </div>  
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="modal-body" >  
+                <!-- Nombre del Servicio -->
+                <div class="form-group">     
+                  <label> Nombre<span style="color: #8B0000; font-size: 1.2em;">*</span></label> 
+                  <input type="text" formControlName="nomser" class="form-control" [ngClass]="{'is-invalid': submitted && f.nomser.errors }"/>
+                  <div *ngIf="submitted && f.nomser.errors" class="invalid-feedback">
+                      <p *ngIf="f.nomser.errors.required"> Campo obligatorio </p> 
+                      <p *ngIf="f.nomser.errors.minlength"> Mínimo 5 caracteres </p>
+                      <p *ngIf="f.nomser.errors.maxlength"> Máximo 30 caracteres </p>              
+                  </div>
+                </div>   
+            <!-- Precio del Servicio -->           
+            <div class="form-group mixtad">
+              <label> Precio<span style="color: #8B0000; font-size: 1.2em;">*</span></label> 
+              <input type="number" formControlName="preser" class="form-control" [ngClass]="{'is-invalid': submitted && f.preser.errors }"/>
+              <div *ngIf="submitted && f.preser.errors" class="invalid-feedback">
+                  <p *ngIf="f.preser.errors.required"> Campo obligatorio </p> 
+                  <p *ngIf="f.preser.errors.minlength"> Mínimo 5 caracteres </p>
+                  <p *ngIf="f.preser.errors.maxlength"> Máximo 30 caracteres </p>              
+              </div>
+          </div>    
+         <!--TipoAnimal-->
+         <div class="mixtad form-group">
+          <label>Tipo Animal<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+          <select formControlName="tipoanimal" class="form-control max form-select" [ngClass]="{'is-invalid': submitted && f.tipoanimal.errors}">
+              <option value="">Tipo de Animales... </option>              
+              <option *ngFor="let tip of apiTipoanimal" [value]="tip.idtip">{{ tip.nomtip }}</option>
+          </select>
+          <div *ngIf="submitted && f.tipoanimal.errors" class="invalid-feedback">
+              <p *ngIf="f.tipoanimal.errors.required"> Seleccione una opcion  </p>              
+          </div>
+        </div>    
+                <!-- Descripcion del Servicio -->            
+                <div class="form-group">
+                    <label> Descripcion</label> 
+                    <input type="text" formControlName="desser" class="form-control" [ngClass]="{'is-invalid': submitted && f.desser.errors }"/>
+                    <div *ngIf="submitted && f.desser.errors" class="invalid-feedback">
+                        <p *ngIf="f.desser.errors.required"> Campo obligatorio </p> 
+                        <p *ngIf="f.desser.errors.minlength"> Mínimo 5 caracteres </p>
+                        <p *ngIf="f.desser.errors.maxlength"> Máximo 30 caracteres </p>              
+                    </div>
+                </div>  
+  
+      </div>      
+      <div class="modal-pie">
+        <button type="button" class="btn-custoo" (click)="c('Save click')"> Cancelar </button>
+        <button type="submit" class="btn-custo" > Modifcar </button>
+      </div>
+  </form> 
+</ng-template>
+
+<!-- VENTANA MODAL PARA OPCION ELIMINAR xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentDel let-c="close" let-d="dismiss">
+  <div class="modal-cu">
+  </div>
+  <div class="modal-body">
+    <h5 class="text-center" >¿Esta seguro? Se dara de baja al Tipo de Servicio:
+     <h5 style="color:#236259; font-weight: bold;"><strong>{{ tipsI.nomser }}</strong></h5>
+   </h5>
+ </div>
+ <form [formGroup]="form" (ngSubmit)="onSubmitDel()">
+  <div class="modal-pie">        
+    <button type="button" class="btn-custoo" (click)="c('Save click')">Cancelar</button>
+    <button type="submit" class="btn-custo"> Aceptar </button>
+  </div>
+</form>
+</ng-template>
+
+ <!-- VENTANA MODAL PARA OPCION HABILITAR *************************************************************  -->
+ <ng-template #contentHab let-c="close" let-d="dismiss">
+  <div class="modal-cu">
+  </div>
+  <div class="modal-body">
+    <h5 class="text-center" >¿Esta seguro? De habilitar al Tipo de Servicio:
+      <h5 style="color:#236259; font-weight: bold;"><strong>{{ tipsI.nomser }}</strong></h5>
+    </h5>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmitHab()">
+    <div class="modal-pie">        
+      <button type="button" class="btn-custoo" (click)="c('Save click')">Cancelar</button>
+      <button type="submit" class="btn-custo"> Aceptar </button>
+    </div>
+  </form>
+</ng-template>
+
+
+  
+
+
+
+
+

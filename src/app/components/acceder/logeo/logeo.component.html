@@ -1,0 +1,65 @@
+<div class="container py-3 d-flex justify-content-center align-items-center min-vh-100">
+  <div class="card login-card rounded-3 shadow-sm p-2" style="width: 320px;">
+
+
+    <div class="headerr d-flex flex-column align-items-center justify-content-center mb-4">
+      <img id="fotom" src="assets/login.jpg" alt="no tieneFoto">
+    </div>
+
+    <form [formGroup]="formAcceso" (ngSubmit)="iniciarSesion(contentShow)" style="padding: 15px; margin-top: 120px;">
+      <!-- Username -->
+      <div class="mb-3">
+        <div class="input-group mb-2">
+          <span class="input-group-text">
+            <i class="bi bi-person-fill"></i>
+          </span>
+          <input type="text" formControlName="login" id="login" placeholder="USERNAME.." class="form-control form-control-lg rounded-2" [ngClass]="{ 'is-invalid': submitted && f.login.errors }" />
+          <div *ngIf="submitted && f.login.errors" class="invalid-feedback">
+            <p *ngIf="f.login.errors.required">Debe ingresar su usuario</p>
+          </div>
+        </div>
+      </div>
+      <!-- Password -->
+      <div class="mb-3">
+        <div class="input-group mb-2">
+          <span class="input-group-text">
+            <i class="bi bi-lock-fill"></i>
+          </span>
+          <input [type]="hidePassword ? 'password' : 'text'" formControlName="password" id="password" placeholder="PASSWORD.." class="form-control form-control-lg rounded-2" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+          <div class="input-group-append">
+            <span class="input-group-text icon-button" (click)="togglePasswordVisibility()" [ngStyle]="{'border-color': '#ccc', 'background-color': 'white'}">
+              <i class="bi" [ngClass]="hidePassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'" [style.color]="hidePassword ? 'rgb(153, 152, 152)' : '#236259'"></i>
+            </span>
+          </div>
+          <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+            <p *ngIf="f.password.errors.required">Debe ingresar su contraseña</p>
+          </div>
+        </div>
+      </div>
+      <!-- Buttons -->
+      <div class="text-center">
+        <button class="btn btn-custoo btn-lg me-3" type="button" (click)="goHome()">Cancelar</button>
+        <button class="btn btn-custo btn-lg ms-3" type="submit" id="btnLogin">Ingresar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
+
+
+  
+  <!-- VENTANA MODAL ACCESO -->
+  <ng-template #contentShow let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{bienvenido}}</h4>
+    </div>
+    <div class="modal-body">
+       <h4 style="color:blue;">{{ xusuario2 }}</h4>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" (click)="Bienvenido()" >Ingresar </button>
+    </div>
+  </ng-template>
+  

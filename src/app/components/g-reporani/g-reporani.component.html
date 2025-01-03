@@ -1,0 +1,173 @@
+<div class="container">
+    <div class="container-with-shadow">
+      <div class="content">
+        <h5 class="text-center" style="color: #236259; font-weight: bold;">REPORTE DE ANIMALES </h5>
+        <!--Inicio de formulario del Filtro
+  
+            <a href="javascript:void(0)" (click)="llamaModalAdd(contentAdd)" class="btn-custom-color">Nueva Guia</a>
+            
+            -->
+            <div class="button-container">
+              <button type="button" class="btn-custom" (click)="generarPDF()">Generar Reporte</button>
+              <button type="button" class="btn-customm" (click)="exportToExcel()">Exportar a Excel</button>
+            </div>
+            
+      </div>
+    </div>
+    <div class="dropdown-divider"></div>
+    <!--Inicio de formulario del Filtro-->  
+    <form [formGroup]="formBusqueda" (ngSubmit)="buscarAnimales()" class="mb-5 mx-auto" style="max-width: 1000px;">
+      <div class="row">
+
+        <div class="col-md-3">
+          <div class="form-group">
+            <select id="idGuiasenasag" class="form-control" formControlName="idGuiasenasag" placeholder="Guia Senasag">
+              <option value="">Guia Sanasag</option>
+              <option *ngFor="let guia of apiGuiasenasag" [value]="guia.idguisen">{{ guia.nroguia }}</option>
+            </select>
+          </div>
+        </div>
+    
+        <div class="col-md-3">
+          <div class="form-group">
+            <select id="idTipoanimal" class="form-control" formControlName="idTipoanimal" placeholder="Tipo de Animal">
+              <option value="">Tipo Animal</option>
+              <option *ngFor="let tipani of  apiTipoanimal" [value]="tipani.idtip">{{ tipani.nomtip }}</option>
+            </select>
+          </div>
+        </div>
+    
+        <div class="col-md-3">
+          <div class="form-group">
+            <select id="idCorrales" class="form-control" formControlName="idCorrales" placeholder="Corrales">
+              <option value="">Corrales</option>
+              <option *ngFor="let corral of apiCorrales" [value]="corral.idcorral">{{ corral.nomcor }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="form-group">
+            <select id="idRazas" class="form-control" formControlName="idRazas" placeholder="Razas">
+              <option value="">Razas</option>
+              <option *ngFor="let raz of apiRazas" [value]="raz.idraz">{{ raz.nomraz }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    
+      <div class="row mt-3">
+        <div class="col-md-3">
+          <div class="form-group">
+            <input type="date" id="fechaInicio" class="form-control" formControlName="fechaInicio" placeholder="Fecha Inicio" required>
+            <div *ngIf="formBusqueda.get('fechaInicio')?.invalid && formBusqueda.get('fechaInicio')?.touched" class="text-danger">
+              Fecha de inicio es requerida.
+            </div>
+          </div>
+        </div>
+    
+        <div class="col-md-3">
+          <div class="form-group">
+            <input type="date" id="fechaFin" class="form-control" formControlName="fechaFin" placeholder="Fecha Fin" required>
+            <div *ngIf="formBusqueda.get('fechaFin')?.invalid && formBusqueda.get('fechaFin')?.touched" class="text-danger">
+              Fecha de fin es requerida.
+            </div>
+          </div>
+        </div>
+
+            <!-- Campo de peso mínimo -->
+    <div class="col-md-3">
+      <div class="form-group">
+        <input type="number" id="pesoMin" class="form-control" formControlName="pesoMin" placeholder="Peso Mínimo">
+      </div>
+    </div>
+
+        <!-- Campo de peso máximo -->
+        <div class="col-md-3">
+          <div class="form-group">
+            <input type="number" id="pesoMax" class="form-control" formControlName="pesoMax" placeholder="Peso Máximo">
+          </div>
+        </div>
+
+
+        
+    
+        <div class="col-md-4">
+          <div class="form-group opciones">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" formControlName="estado" name="estado" id="activo" value="1">
+              <label class="form-check-label" for="activo">Activo</label>
+            </div>
+            <div class="form-check form-check-inline">
+A              <label class="form-check-label" for="inactivo">Baja</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" formControlName="estado" name="estado" id="todos" value="-1" checked>
+              <label class="form-check-label" for="todos">Todos</label>
+            </div>
+          </div>
+        </div>
+        
+    
+        <!-- Botones en la misma fila -->
+        <div class="col-md-2 d-flex align-items-center justify-content-between mt-0 clas">
+          <button type="button" class="btn-customm" (click)="restablecerFormulario()" style="margin-top: -15px;">Resetear</button>
+          <button type="submit" class="btn-custom" style="margin-top: -15px;">Buscar</button>
+        </div>
+      </div>
+    </form> 
+  
+    <!--fin de formulario del Filtro-->
+    <div class="dropdown-dividerR"></div>
+    <div>
+  
+  
+      <table class="table tabla-sombra">
+        <thead class="thead-light text-center">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">FECHA LLEGADA</th>
+            <th scope="col">RAZA</th>
+            <th scope="col">GUIA</th>
+            <th scope="col">CORRAL</th>
+            <th scope="col">TIPO ANIMAL</th>
+            <th scope="col">PESO</th>
+            <th scope="col">ESTADO</th>
+          </tr>
+        </thead>
+        <tbody class="text-center" *ngFor="let ani of apiAnimales ; index as con">
+          <tr>
+            <td *ngIf="ani.estado == 1" class="activo" scope="col">{{con+1}}</td>
+            <td *ngIf="ani.estado == 0" class="inactivo" scope="col">{{con+1}}</td>
+  
+            <td *ngIf="ani.estado == 1" class="activo">{{ani.feclleg | date: 'dd/MM/yyyy'}} </td>
+            <td *ngIf="ani.estado == 0" class="inactivo">{{ani.feclleg | date: 'dd/MM/yyyy'}} </td>
+
+            <td *ngIf="ani.estado == 1" class="activo">{{ani.razas.nomraz}} </td>
+            <td *ngIf="ani.estado == 0" class="inactivo">{{ani.razas.nomraz}} </td>
+  
+            <td *ngIf="ani.estado == 1" class="activo">{{ani.guiasenasag.nroguia}} </td>
+            <td *ngIf="ani.estado == 0" class="inactivo">{{ani.guiasenasag.nroguia}} </td>
+  
+            <td *ngIf="ani.estado == 1" class="activo">{{ani.corrales.nomcor}} </td>
+            <td *ngIf="ani.estado == 0" class="inactivo">{{ani.corrales.nomcor}} </td>
+  
+            <td *ngIf="ani.estado == 1" class="activo">{{ani.tipoanimal.nomtip}} </td>
+            <td *ngIf="ani.estado == 0" class="inactivo">{{ani.tipoanimal.nomtip}} </td>
+  
+  
+            <td *ngIf="ani.estado == 1" class="activo">{{ani.pesani}} </td>
+            <td *ngIf="ani.estado == 0" class="inactivo">{{ani.pesani}} </td>
+            <td>
+              <!-- estado -->
+              <a *ngIf="ani.estado == 1" class="btn-custom">Activo</a>
+              <a *ngIf="ani.estado == 0" class="btn-customm">Baja</a>
+            </td>
+  
+          </tr>
+        </tbody>
+        <tfoot class="text-center">
+        </tfoot>
+      </table>
+    </div>
+  </div>

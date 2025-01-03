@@ -1,0 +1,154 @@
+<div class="container">
+  <div class="container-with-shadow">
+    <div class="content">
+      <h5 class="text-center" style="color: #236259; font-weight: bold;">GESTIÓN USUARIOS</h5>
+      <a href="javascript:void(0)" (click)="llamaModalAdd(contentAdd)" class="btn-custom-color">Nueva Persona</a>
+    </div>
+  </div>
+  <div class="dropdown-divider"></div>
+  <form [formGroup]="formFiltro" class="filtro-form">
+    <div class="formArriba">
+      <div class="form-group filtro">
+        <div class="input-group">
+          <input class="form-control" formControlName="filtro" type="text" name="busqueda" placeholder="Buscar...."
+            (keyup)="filtrarNombre()">
+          <span class="input-group-addon">
+            <i class="bi bi-search"></i>
+          </span>
+        </div>
+      </div>
+
+
+      <div class="form-group opciones">
+        <div class="form-check form-check-inline ">
+          <input class="form-check-input" type="radio" formControlName="estadosPer" name="estadosPer"
+            id="exampleRadios1" value="1" (change)="filtrarNombre()">
+          <label class="form-check-label" for="exampleRadios1">Activo</label>
+        </div>
+        <div class="form-check form-check-inline radio-container">
+          <input class="form-check-input" type="radio" formControlName="estadosPer" name="estadosPer"
+            id="exampleRadios2" value="0" (change)="filtrarNombre()">
+          <label class="form-check-label" for="exampleRadios2">Inactivo</label>
+        </div>
+        <div class="form-check form-check-inline radio-container">
+          <input class="form-check-input" type="radio" formControlName="estadosPer" name="estadosPer"
+            id="exampleRadios3" value="-1" (change)="filtrarNombre()" checked="true">
+          <label class="form-check-label" for="exampleRadios3">Todos</label>
+        </div>
+      </div>
+    </div>
+  </form>
+  <!--fin de formulario del Filtro-->
+  <div class="dropdown-divider"></div>
+  <div>
+    <app-detpersonas></app-detpersonas>
+  </div>
+
+</div>
+
+
+
+<!--VENTANA MODAL PARA ADICIONAR DATOS  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentAdd let-c="close" let-d="dismiss" id="modal-add">
+  <div class="modal-cuu">
+    <h4 class="modal-title" id="modal-basic-title" style="font-weight: bold;"> Adicionar Perosna... </h4>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="modal-body">
+      <div class="form-group mixtad">
+        <label>Cédula <span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" formControlName="cedula" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.cedula.errors }" />
+        <div *ngIf="submitted && f.cedula.errors" class="invalid-feedback">
+          <p *ngIf="f.cedula.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.cedula.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.cedula.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+      <div class="form-group mixtad">
+        <label> Nombre <span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" formControlName="nombre" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.nombre.errors }" />
+        <div *ngIf="submitted && f.nombre.errors" class="invalid-feedback">
+          <p *ngIf="f.nombre.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.nombre.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.nombre.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+      <div class="form-group mixtad">
+        <label> Apellido Paterno </label>
+        <input type="text" formControlName="ap" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.ap.errors }" />
+        <div *ngIf="submitted && f.ap.errors" class="invalid-feedback">
+          <p *ngIf="f.ap.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.ap.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+      <div class="mixtad form-group">
+        <label>Apellido Materno <span style="color: #8B0000; font-size: 1.2em;">*</span> </label>
+        <input type="text" formControlName="am" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.am.errors }" />
+        <div *ngIf="submitted && f.am.errors" class="invalid-feedback">
+          <p *ngIf="f.am.errors.email">Correo con errores en su formato</p>
+          <p *ngIf="f.am.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.am.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label> Genero<span style="color: #8B0000; font-size: 1.2em;">*</span> </label>
+        <div class="form-check form-check-inline float-right radio-container">
+          <input class="form-check-input" type="radio" formControlName="genero" name="genero" id="exampleRadios1"
+            value="F">
+          <label class="form-check-label" for="exampleRadios1"> Femenino </label>
+        </div>
+        <div class="form-check form-check-inline float-right radio-container">
+          <input class="form-check-input" type="radio" formControlName="genero" name="genero" id="exampleRadios2"
+            value="M">
+          <label class="form-check-label" for="exampleRadios2"> Masculino </label>
+        </div>
+        <div *ngIf="submitted && f.genero.errors" class="invalid-feedback">
+          <p *ngIf="f.genero.errors.required"> Seleccione una opcion </p>
+        </div>
+      </div>
+
+      <div class="form-group mixtad">
+        <label> Telefono<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" formControlName="telefono" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.telefono.errors }" />
+        <div *ngIf="submitted && f.telefono.errors" class="invalid-feedback">
+          <p *ngIf="f.telefono.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.telefono.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.telefono.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+      <div class="form-group mixtad">
+        <label> Direccion<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" formControlName="direccion" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.direccion.errors }" />
+        <div *ngIf="submitted && f.direccion.errors" class="invalid-feedback">
+          <p *ngIf="f.direccion.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.direccion.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.direccion.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+
+      <!--Email-->
+      <div class="formEmp-group">
+        <label> Correo Electronico</label>
+        <input type="email" formControlName="email" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.email.errors }" />
+        <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+          <p *ngIf="f.email.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.email.errors.maxlength"> Máximo 30 caracteres </p>
+          <p *ngIf="f.email.errors.pattern"> Solo se aceptan Letras </p>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-pie">
+      <button type="button" class="btn-customm" (click)="c('Save click')"> Cancelar </button>
+      <button type="submit" class="btn-custom"> Guardar </button>
+    </div>
+  </form>
+</ng-template>

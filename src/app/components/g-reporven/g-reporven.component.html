@@ -1,0 +1,138 @@
+<div class="container">
+    <div class="container-with-shadow">
+      <div class="content">
+        <h5 class="text-center" style="color: #236259; font-weight: bold;">REPORTE DE VENTAS</h5>
+            
+        <div class="button-container">
+          <button type="button" class="btn-custom" (click)="generarPDF()">Generar Reporte</button>
+          <button type="button" class="btn-customm" (click)="exportToExcelVentas()">Exportar a Excel</button>
+        </div>
+            
+      </div>
+    </div>
+    <div class="dropdown-divider"></div>
+      <!--Inicio de formulario del Filtro-->
+      <form [formGroup]="formBusqueda" (ngSubmit)="buscareporven()" class="mb-5 mx-auto" style="max-width: 900px;">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <select id="idCliente" class="form-control" formControlName="idCliente" placeholder="Clientes">
+                <option value="">Clientes</option>
+                <option *ngFor="let cli of  apiClientes" [value]="cli.idcli">{{ cli.nomcli }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <input id="numven" type="number" class="form-control" formControlName="numven" placeholder="Nª de Venta">
+
+            </div>
+          </div>
+        </div>
+      
+        <div class="row mt-3">
+          <div class="col-md-3">
+            <div class="form-group">
+              <input type="date" id="fechaInicio" class="form-control" formControlName="fechaInicio" placeholder="Fecha Inicio" required>
+              <div *ngIf="formBusqueda.get('fechaInicio')?.invalid && formBusqueda.get('fechaInicio')?.touched" class="text-danger">
+                Fecha de inicio es requerida.
+              </div>
+            </div>
+          </div>
+      
+          <div class="col-md-3">
+            <div class="form-group">
+              <input type="date" id="fechaFin" class="form-control" formControlName="fechaFin" placeholder="Fecha Fin" required>
+              <div *ngIf="formBusqueda.get('fechaFin')?.invalid && formBusqueda.get('fechaFin')?.touched" class="text-danger">
+                Fecha de fin es requerida.
+              </div>
+            </div>
+          </div>
+      
+          <div class="col-md-4">
+            <div class="form-group opciones">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" formControlName="estado" name="estado" id="activo" value="1">
+                <label class="form-check-label" for="activo">Activo</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" formControlName="estado" name="estado" id="inactivo" value="0">
+                <label class="form-check-label" for="inactivo">Baja</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" formControlName="estado" name="estado" id="todos" value="-1" checked>
+                <label class="form-check-label" for="todos">Todos</label>
+              </div>
+            </div>
+          </div><br>
+
+        
+          <!-- Botones en la misma fila -->
+          <div class="col-md-2 d-flex align-items-center justify-content-between mt-0">
+            <button type="button" class="btn-customm" (click)="restablecerFormulario()" style="margin-top: -15px;">Resetear</button>
+            <button type="submit" class="btn-custom" style="margin-top: -15px;">Buscar</button>
+          </div>
+          <div class="dado">
+            <p><strong style="color: #236259;">| RESES | </strong><strong style="color: #236259;">Mayor:</strong> {{ mayorReses?.raza }} ({{ mayorReses?.total }})<strong style="color: #236259;"> Menor:</strong> {{ menorReses?.raza }} ({{ menorReses?.total }})
+              <strong style="color: #236259;">| CERDOS  | </strong><strong style="color: #236259;">Mayor:</strong> {{ mayorCerdos?.raza }} ({{ mayorCerdos?.total }})<strong style="color: #236259;"> Menor:</strong>  {{ menorCerdos?.raza }} ({{ menorCerdos?.total }})</p>
+          </div>
+        </div>
+      </form> 
+           
+    <!--fin de formulario del Filtro-->
+    <div class="dropdown-dividerR"></div>
+    <div>
+  
+      <table class="table tabla-sombra">
+        <thead class="thead-light text-center">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">FECHA</th>
+            <th scope="col">Nº RECIBO</th>
+            <th scope="col">CLIENTES</th>
+            <th scope="col">CANT. ANIMALES</th>
+            <th scope="col">IMPORTE</th>
+  
+          </tr>
+        </thead>
+        <tbody class="text-center" *ngFor="let ven of apiVentas ; index as con">
+          <tr>
+            <td *ngIf="ven.estado == 1" class="activo" scope="col">{{con+1}}</td>
+            <td *ngIf="ven.estado == 0" class="inactivo" scope="col">{{con+1}}</td>
+  
+            <td *ngIf="ven.estado == 1" class="activo">{{ven.fecven | date: 'dd/MM/yyyy'}} </td>
+            <td *ngIf="ven.estado == 0" class="inactivo">{{venfecven | date: 'dd/MM/yyyy'}} </td>
+
+            <td *ngIf="ven.estado == 1" class="activo">{{ven.numven}} </td>
+            <td *ngIf="ven.estado == 0" class="inactivo">{{ven.numven}} </td>
+  
+            <td *ngIf="ven.estado == 1" class="activo">{{ven.clientes.nomcli}} </td>
+            <td *ngIf="ven.estado == 0" class="inactivo">{{ven.clientes.nomcli}} </td>
+
+            <td *ngIf="ven.estado == 1" class="activo">{{ven.canani}} </td>
+            <td *ngIf="ven.estado == 0" class="inactivo">{{ven.canani}} </td>
+  
+            <td *ngIf="ven.estado == 1" class="activo">{{ven.impven}} </td>
+            <td *ngIf="ven.estado == 0" class="inactivo">{{ven.impven}} </td>
+
+
+  
+          </tr>
+        </tbody>
+        <tfoot class="text-center">
+          <tr>
+            <td colspan="4">TOTAL</td> <!-- Deja las primeras columnas vacías -->
+            <td>{{totalcanani}}</td> <!-- Muestra el total de animales -->
+            <td>{{totalven}}</td> <!-- Muestra el total de animales -->
+          </tr>          
+
+        </tfoot>
+
+  
+      </table>
+  
+  
+    </div>
+  
+  </div>
+

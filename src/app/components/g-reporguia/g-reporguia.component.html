@@ -1,0 +1,173 @@
+<div class="container">
+  <div class="container-with-shadow">
+    <div class="content">
+      <h5 class="text-center" style="color: #236259; font-weight: bold;">REPORTE DE GUIA SENASAG</h5>
+      <div class="button-container">
+        <button type="button" class="btn-custom" (click)="generarPDF()">Generar Reporte</button>
+        <button type="button" class="btn-customm" (click)="exportToExcelGuiaSenasag()">Exportar a Excel</button>
+      </div>
+         
+    </div>
+  </div>
+  <div class="dropdown-divider"></div>
+  <!--Inicio de formulario del Filtro-->
+
+  <form [formGroup]="formBusqueda" (ngSubmit)="buscarPorFechas()" class="mb-5 mx-auto" style="max-width: 900px;">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="form-group">
+          <select id="idGranja" class="form-control" formControlName="idGranja" placeholder="Granja">
+            <option value="">Granjas</option>
+            <option *ngFor="let granja of apiGranjas" [value]="granja.idgranja">{{ granja.nomgra }}</option>
+          </select>
+        </div>
+      </div>
+  
+      <div class="col-md-4">
+        <div class="form-group">
+          <select id="idDepartamento" class="form-control" formControlName="idDepartamento" placeholder="Departamento">
+            <option value="">Departamentos</option>
+            <option *ngFor="let departamento of apiDepartamentos" [value]="departamento.iddep">{{ departamento.nomdep }}</option>
+          </select>
+        </div>
+      </div>
+  
+      <div class="col-md-4">
+        <div class="form-group">
+          <select id="idTipoServicio" class="form-control" formControlName="idTipoServicio" placeholder="Tipo de Servicio">
+            <option value="">Tipo Servicios</option>
+            <option *ngFor="let tipoServicio of apiTiposervicios" [value]="tipoServicio.idtipser">{{ tipoServicio.nomser }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  
+    <div class="row mt-3">
+      <div class="col-md-3">
+        <div class="form-group">
+          <input type="date" id="fechaInicio" class="form-control" formControlName="fechaInicio" placeholder="Fecha Inicio" required>
+          <div *ngIf="formBusqueda.get('fechaInicio')?.invalid && formBusqueda.get('fechaInicio')?.touched" class="text-danger">
+            Fecha de inicio es requerida.
+          </div>
+        </div>
+      </div>
+  
+      <div class="col-md-3">
+        <div class="form-group">
+          <input type="date" id="fechaFin" class="form-control" formControlName="fechaFin" placeholder="Fecha Fin" required>
+          <div *ngIf="formBusqueda.get('fechaFin')?.invalid && formBusqueda.get('fechaFin')?.touched" class="text-danger">
+            Fecha de fin es requerida.
+          </div>
+        </div>
+      </div>
+  
+      <div class="col-md-4">
+        <div class="form-group opciones">
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" formControlName="estado" name="estado" id="activo" value="1">
+            <label class="form-check-label" for="activo">Completo</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" formControlName="estado" name="estado" id="inactivo" value="0">
+            <label class="form-check-label" for="inactivo">Pendiente</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" formControlName="estado" name="estado" id="todos" value="-1" checked>
+            <label class="form-check-label" for="todos">Todos</label>
+          </div>
+        </div>
+      </div>
+      
+  
+      <!-- Botones en la misma fila -->
+      <div class="col-md-2 d-flex align-items-center justify-content-between mt-0">
+        <button type="button" class="btn-customm" (click)="restablecerFormulario()" style="margin-top: -15px;">Resetear</button>
+        <button type="submit" class="btn-custom" style="margin-top: -15px;">Buscar</button>
+      </div>
+    </div>
+  </form>
+  
+  
+
+  
+
+  
+  
+
+  <!--fin de formulario del Filtro-->
+  <div class="dropdown-dividerR"></div>
+  <div>
+
+
+    <table class="table tabla-sombra">
+      <thead class="thead-light text-center">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">FECHA </th>
+          <th scope="col">N° GUIA</th>
+          <th scope="col">GRANJA</th>
+          <th scope="col">DEPARTAMENTO</th>
+          <th scope="col">TIPO SERVICIO </th>
+          <th scope="col">CANT. HEMBRAS</th>
+          <th scope="col">CANT. MACHOS</th>
+          <th scope="col">TOTAL ANIMALES</th>
+          <th scope="col">TOTAL INGRESO</th>
+          <th scope="col"> ESTADO </th>
+
+        </tr>
+      </thead>
+      <tbody class="text-center" *ngFor="let guia of apiGuiasenasag ; index as con">
+        <tr>
+          <td *ngIf="guia.estado == 1" class="activo" scope="col">{{con+1}}</td>
+          <td *ngIf="guia.estado == 0" class="inactivo" scope="col">{{con+1}}</td>
+
+          <td *ngIf="guia.estado == 1" class="activo">{{guia.feclle | date: 'dd/MM/yyyy'}} </td>
+          <td *ngIf="guia.estado == 0" class="inactivo">{{guia.feclle | date: 'dd/MM/yyyy'}} </td>
+
+          <td *ngIf="guia.estado == 1" class="activo">{{guia.nroguia}} </td>
+          <td *ngIf="guia.estado == 0" class="inactivo">{{guia.nroguia}} </td>
+
+          <td *ngIf="guia.estado == 1" class="activo">{{guia.granjas.nomgra}} </td>
+          <td *ngIf="guia.estado == 0" class="inactivo">{{guia.granjas.nomgra}} </td>
+
+          <td *ngIf="guia.estado == 1" class="activo">{{guia.departamentos.nomdep}} </td>
+          <td *ngIf="guia.estado == 0" class="inactivo">{{guia.departamentos.nomdep}} </td>
+
+          <td *ngIf="guia.estado == 1" class="activo">{{guia.tiposervicios.nomser}} </td>
+          <td *ngIf="guia.estado == 0" class="inactivo">{{guia.tiposervicios.nomser}} </td>
+
+          <td *ngIf="guia.estado == 1" class="activo">{{guia.tothem}} </td>
+          <td *ngIf="guia.estado == 0" class="inactivo">{{guia.tothem}} </td>
+
+          <td *ngIf="guia.estado == 1" class="activo">{{guia.totmac}} </td>
+          <td *ngIf="guia.estado == 0" class="inactivo">{{guia.totmac}} </td>
+
+          <td *ngIf="guia.estado == 1" class="activo">{{guia.totani}} </td>
+          <td *ngIf="guia.estado == 0" class="inactivo">{{guia.totani}} </td>
+
+          <td *ngIf="guia.estado == 1" class="activo">{{guia.ingguia}} </td>
+          <td *ngIf="guia.estado == 0" class="inactivo">{{guia.ingguia}} </td>
+          <td>
+            <!-- estado -->
+            <a *ngIf="guia.estado == 1" class="btn-custom">Completo</a>
+            <a *ngIf="guia.estado == 0" class="btn-customm">Pendiente</a>
+          </td>
+
+        </tr>
+      </tbody>
+      <tfoot class="text-center">
+        <tr>
+          <td colspan="6">TOTAL</td> <!-- Deja las primeras columnas vacías -->
+          <td>{{totalHembras}}</td> <!-- Muestra el total de animales -->
+          <td>{{totalMachos}} </td> <!-- Muestra el total de hembras -->
+          <td>{{totalAnimales}}</td> <!-- Muestra el total de machos -->
+          <td>{{totalIngreso}}</td> <!-- Muestra el total de ingreso -->
+        </tr>
+      </tfoot>
+
+    </table>
+
+
+  </div>
+
+</div>

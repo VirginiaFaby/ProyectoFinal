@@ -1,0 +1,122 @@
+<div class="container">
+  <div class="container-with-shadow">
+    <div class="content">
+      <h5 class="text-center" style="color: #236259; font-weight: bold;">GESTIÓN CAMARA</h5>
+      <a href="javascript:void(0)" (click)="llamaModalAdd(contentAdd)" class="btn-custom-color">Nuevo Camara</a>
+    </div>
+  </div>
+  <div class="dropdown-divider"></div>
+  <form [formGroup]="formFiltro" class="filtro-form">
+    <div class="formArriba">
+      <div class="form-group filtro">
+        <div class="input-group">
+          <input class="form-control" formControlName="filtro" type="text" name="busqueda" placeholder="Buscar...."
+            (keyup)="filtrarNombre()">
+          <span class="input-group-addon">
+            <i class="bi bi-search"></i>
+          </span>
+        </div>
+      </div>
+
+
+      <div class="form-group opciones">
+        <div class="form-check form-check-inline ">
+          <input class="form-check-input" type="radio" formControlName="estadosCam" name="estadosCam"
+            id="exampleRadios1" value="1" (change)="filtrarNombre()">
+          <label class="form-check-label" for="exampleRadios1">Activo</label>
+        </div>
+        <div class="form-check form-check-inline radio-container">
+          <input class="form-check-input" type="radio" formControlName="estadosCam" name="estadosCam"
+            id="exampleRadios2" value="0" (change)="filtrarNombre()">
+          <label class="form-check-label" for="exampleRadios2">Inactivo</label>
+        </div>
+        <div class="form-check form-check-inline radio-container">
+          <input class="form-check-input" type="radio" formControlName="estadosCam" name="estadosCam"
+            id="exampleRadios3" value="-1" (change)="filtrarNombre()" checked="true">
+          <label class="form-check-label" for="exampleRadios3">Todos</label>
+        </div>
+      </div>
+    </div>
+  </form>
+  <!--fin de formulario del Filtro-->
+  <div class="dropdown-divider"></div>
+  <div>
+    <app-detcamara></app-detcamara>
+  </div>
+
+</div>
+
+<!--VENTANA MODAL PARA ADICIONAR DATOS  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentAdd let-c="close" let-d="dismiss" id="modal-add">
+  <div class="modal-cuu">
+    <h4 class="modal-title" id="modal-basic-title" style="font-weight: bold;"> Adicionar Camara... </h4>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="modal-body">
+
+      <div class="form-group">
+        <label>Nombre de Camara<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" formControlName="nomcam" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.nomcam.errors }" />
+        <div *ngIf="submitted && f.nomcam.errors" class="invalid-feedback">
+          <p *ngIf="f.nomcam.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.nomcam.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.nomcam.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+      <div class="form-group mixtad">
+        <label>Capacidad (Kg.)<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="number" formControlName="capcam" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.capcam.errors }" />
+        <div *ngIf="submitted && f.capcam.errors" class="invalid-feedback">
+          <p *ngIf="f.capcam.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.capcam.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.capcam.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+
+      <div class="form-group mixtad">
+        <label>Temperatura (Grados)<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="number" formControlName="temcam" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.temcam.errors }" />
+        <div *ngIf="submitted && f.temcam.errors" class="invalid-feedback">
+          <p *ngIf="f.temcam.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.temcam.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.temcam.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+
+      <!-- Unidad de Temperatura -->
+      <div class="mixtad form-group">
+        <label>Unidades Térmicas<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+        <select formControlName="unitem" class="form-select max form-control"
+          [ngClass]="{'is-invalid': submitted && f.unitem.errors}">
+          <option value="">Unidad Temperatura</option>
+          <option value="Celsius">Celsius</option>
+          <option value="Fahrenheit ">Fahrenheit </option>
+        </select>
+        <div *ngIf="submitted && f.unitem.errors" class="invalid-feedback">
+          <p *ngIf="f.unitem.errors.required">Seleccione una opción</p>
+        </div>
+      </div>
+
+      <!--TipoAnimal-->
+      <div class="form-group mixtad ">
+        <label>Tipo Animal<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+        <select formControlName="tipoanimal" class="form-control form-select"
+          [ngClass]="{'is-invalid': submitted && f.tipoanimal.errors}">
+          <option value="">Tipo de Animales... </option>
+          <option *ngFor="let tip of apiTipoanimal" [value]="tip.idtip">{{ tip.nomtip }}</option>
+        </select>
+        <div *ngIf="submitted && f.tipoanimal.errors" class="invalid-feedback">
+          <p *ngIf="f.tipoanimal.errors.required"> Seleccione una opcion </p>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-pie">
+      <button type="button" class="btn-customm" (click)="c('Save click')"> Cancelar </button>
+      <button type="submit" class="btn-custom"> Guardar </button>
+    </div>
+  </form>
+</ng-template>

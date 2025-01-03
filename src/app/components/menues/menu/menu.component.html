@@ -1,0 +1,23 @@
+<nav *ngIf="autenticado && rol" class="sidebar bg-custom">
+    <div class="logo">
+        <a href=""><img src="assets/matadero.png" width="200" height="60" alt="Logo"></a>
+    </div>
+
+    <ul class="nav flex-column">
+        <li *ngFor="let menu of menuConProcesos" class="nav-item">
+            <!-- Título del menú -->
+            <a class="nav-link" (click)="seleccionarMenu(menu)">
+                {{ menu.nombre }}
+            </a>
+
+            <!-- Lista de procesos -->
+            <ul *ngIf="menuSeleccionado === menu" class="nav flex-column procesos-list">
+                <li *ngFor="let proceso of menu.procesos" class="nav-item">
+                    <a class="nav-link proceso-link" (click)="cambiopro(proceso.link)">
+                        {{ proceso.nombre }}
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</nav>

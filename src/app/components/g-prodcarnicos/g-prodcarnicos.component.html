@@ -1,0 +1,286 @@
+<div class="container">
+  <div class="container-with-shadow">
+    <div class="content">
+      <h5 class="text-center" style="color: #236259; font-weight: bold;">GESTIÓN PRODUCTOS CARNICOS</h5>
+      <a href="javascript:void(0)" (click)="llamaModalAdd(contentAdd)" class="btn-custom-color">Nuevo Producto
+        Carnicos</a>
+    </div>
+  </div>
+  <div class="dropdown-divider"></div>
+  <form [formGroup]="formFiltro" class="filtro-form">
+    <div class="formArriba">
+      <div class="form-group filtro">
+        <div class="input-group">
+          <input class="form-control" formControlName="filtro" type="text" name="busqueda" placeholder="Buscar...."
+            (keyup)="filtrarNombre()">
+          <span class="input-group-addon">
+            <i class="bi bi-search"></i>
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group opciones">
+        <div class="form-check form-check-inline ">
+          <input class="form-check-input" type="radio" formControlName="estadosPrdc" name="estadosPrdc"
+            id="exampleRadios1" value="1" (change)="filtrarNombre()">
+          <label class="form-check-label" for="exampleRadios1">Activo</label>
+        </div>
+        <div class="form-check form-check-inline radio-container">
+          <input class="form-check-input" type="radio" formControlName="estadosPrdc" name="estadosPrdc"
+            id="exampleRadios2" value="0" (change)="filtrarNombre()">
+          <label class="form-check-label" for="exampleRadios2">Inactivo</label>
+        </div>
+        <div class="form-check form-check-inline radio-container">
+          <input class="form-check-input" type="radio" formControlName="estadosPrdc" name="estadosPrdc"
+            id="exampleRadios3" value="-1" (change)="filtrarNombre()" checked="true">
+          <label class="form-check-label" for="exampleRadios3">Todos</label>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!--fin de formulario del Filtro-->
+  <div class="dropdown-divider"></div>
+  <div>
+    <app-detprodcarnicos></app-detprodcarnicos>
+  </div>
+
+</div>
+
+
+
+<!--VENTANA MODAL PARA ADICIONAR DATOS  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentAdd let-c="close" let-d="dismiss" id="modal-add">
+  <div class="modal-cuu">
+    <h4 class="modal-title" id="modal-basic-title" style="font-weight: bold;"> Adicionar Producto Carnico... </h4>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="modal-body">
+
+
+      <div class="form-group mixtad">
+        <label>Fecha Ingreso<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="date" formControlName="fechaing" class="form-control"
+          [ngClass]="{'is-invalid': submitted && form.get('fechaing').errors}" />
+        <div *ngIf="submitted && form.get('fechaing').errors" class="invalid-feedback">
+          <p *ngIf="form.get('fechaing').errors.required">Campo obligatorio</p>
+          <p *ngIf="form.get('fechaing').errors.dateNotToday">La fecha debe ser de hoy</p>
+        </div>
+      </div>
+
+      <!--clientes-->
+      <div class="mixtad form-group" (mouseleave)="interactuandoConLista = false">
+        <label>Buscar Cliente<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" class="form-control" [class.is-invalid]="submitted && !clienteSeleccionado"
+          placeholder="Ingrese el nombre o NIT del cliente" [formControl]="clienteCtrl" (focus)="mostrarLista = true"
+          (input)="filtrarClientes(clienteCtrl.value)" (blur)="ocultarLista()" />
+        <ul *ngIf="mostrarLista && filteredClientes.length" class="list-group-clientes"
+          (mouseenter)="interactuandoConLista = true" (mouseleave)="interactuandoConLista = false">
+          <li *ngFor="let cli of filteredClientes" class="list-group-item" (click)="seleccionarCliente(cli)">
+            {{ cli.nomcli }} - {{ cli.nit }}
+          </li>
+        </ul>
+        <div *ngIf="submitted && !clienteSeleccionado" class="invalid-feedback">
+          <p>Debe seleccionar un cliente.</p>
+        </div>
+      </div>
+
+      <!--Tabla -->
+      <table class="table tabla-sombra">
+        <thead class="thead-light">
+          <tr>
+            <th>#</th>
+            <th>Descripcion</th>
+            <th>Tipo Animales</th>
+            <th>Camara</th>
+            <th>Peso</th>
+            <th>Op.</th>
+          </tr>
+        </thead>
+        <tbody *ngFor=" let det of apiDetprdctemp, index as con">
+          <tr>
+            <td scope="col">{{con+1}}</td>
+            <td scope="col">{{det.tipoprodcarnico.nompro}}</td>
+            <td scope="col">{{det.tipoanimal.nomtip}}</td>
+            <td scope="col">{{det.camara.nomcam}}</td>
+            <td scope="col">{{det.pesoing}}</td>
+            <td>
+              <a href="javascript:void(0)" (click)="eliminardet(det.idtemprodc ,det.pesoing, det.camara.idcamfri)"
+                class="bi bi-trash-fill enlace-iconoo"></a>
+            </td>
+          </tr>
+        </tbody>
+        <tr>
+          <td>
+            <a href="javascript:void(0)" (click)="llamaModaldet(contentdet)"
+              class="bi bi-plus-circle-fill enlace-icono"></a>
+          </td>
+          <td></td>
+          <td></td>
+          <td scope="col">TOTAL</td>
+          <td>{{ total }}</td>
+        </tr>
+      </table>
+      <!--Tabla fin  -->
+
+      <!--Observacion-->
+      <div class="form-group ">
+        <label>Observaciones: </label>
+        <textarea formControlName="obserpro" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.obserpro.errors }" placeholder="Indique las anomalías internas detectadas durante el sacrificio, como lesiones o infecciones, que redujeron la carne utilizable y no apta para el consumo" ></textarea>
+        <div *ngIf="submitted && f.obserpro.errors" class="invalid-feedback">
+          <p *ngIf="f.obserpro.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.obserpro.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.obserpro.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+    </div>
+    <div class="modal-pie">
+      <button type="button" class="btn-customm" (click)="cancelar()"> Cancelar </button>
+      <button type="submit" class="btn-custom"> Guardar </button>
+    </div>
+  </form>
+</ng-template>
+
+<!-- Modal de Adicion de Detserviciofaena -->
+<ng-template #contentdet let-c="close" let-d="dismiss" id="modal-add">
+  <div class="modal-cuu">
+    <h4 class="modal-title" id="modal-basic-title" style="font-weight: bold;">
+      Adicionar Detalle de Productos Carnicos...
+    </h4>
+  </div>
+
+  <form [formGroup]="formdet" (ngSubmit)="onDetcompras()">
+    <div class="modal-body">
+      <div class="row">
+        <!-- Columna izquierda: Buscador con imagen debajo -->
+        <div class="col-md-4">
+          <!-- Buscador -->
+          <!-- Servicio faena -->
+          <div class="form-group">
+            <label>Servicio Faena<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+            <select formControlName="serviciofaena" class="form-control form-select"
+              [ngClass]="{'is-invalid': submitted && f3.serviciofaena.errors}" (change)="onServicioFaenaChange($event)">
+              <option value="">Servicio faena ... </option>
+              <option *ngFor="let serfa of apiServiciofaena" [value]="serfa.idserfae">{{serfa.numfae}}</option>
+            </select>
+            <div *ngIf="submitted && f3.serviciofaena.errors" class="invalid-feedback">
+              <p *ngIf="f3.serviciofaena.errors.required"> Seleccione una opcion </p>
+            </div>
+          </div>
+
+
+
+          <!-- Imagen debajo del buscador -->
+          <div class="text-center mt-4 imagen-estatica">
+            <img src="assets/res.jpeg" alt="Imagen representativa" class="img-fluid" />
+          </div>
+        </div>
+
+        <!-- Columna derecha: Inputs -->
+        <div class="col-md-8">
+          <!-- Detalle de Servicio Faena -->
+          <div class="form-group mixtad ">
+            <label>Selecionar Animal (U.A.)<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+            <select formControlName="detserviciofaena" class="form-control form-select"
+              [ngClass]="{'is-invalid': submitted && f3.detserviciofaena.errors}"
+              (change)="onDetalleServicioFaenaChange($event)">
+              <option value="">Detalle Servicio... </option>
+              <option *ngFor="let dserfa of filteredDetserviciofaena" [value]="dserfa.iddetser">
+                {{ dserfa.animales.razas.nomraz }} {{ dserfa.animales.pesani }} <!-- Verifica que esto exista -->
+              </option>
+            </select>
+            <div *ngIf="submitted && f3.detserviciofaena.errors" class="invalid-feedback">
+              <p *ngIf="f3.detserviciofaena.errors.required">Seleccione una opción</p>
+            </div>
+          </div>
+
+          <!-- Tipo de Animal -->
+          <div class="form-group mixtad ">
+            <label>Tipo Animal</label><br>
+            <select formControlName="tipoanimal" class="form-control form-select"
+              [ngClass]="{'is-invalid': submitted && f3.tipoanimal.errors}">
+              <option value="">Tipo de Animales... </option>
+              <option *ngFor="let tip of apiTipoanimal" [value]="tip.idtip">{{ tip.nomtip }}</option>
+            </select>
+            <div *ngIf="submitted && f3.tipoanimal.errors" class="invalid-feedback">
+              <p *ngIf="f3.tipoanimal.errors.required"> Seleccione una opcion </p>
+            </div>
+          </div>
+
+
+
+
+          <!--Tipo Prodcarnico
+      <div class="form-group mixtad ">
+        <label>Tipo Producto Carnico</label><br>
+        <select formControlName="tipoprodcarnico" class="form-control form-select"
+          [ngClass]="{'is-invalid': submitted && f3.tipoprodcarnico.errors}">
+          <option value="">Tipo de Productos... </option>
+          <option *ngFor="let tipp of apiTipoprodcarnico" [value]="tipp.idtipro">{{ tipp.nompro }}</option>
+        </select>
+        <div *ngIf="submitted && f3.tipoprodcarnico.errors" class="invalid-feedback">
+          <p *ngIf="f3.tipoprodcarnico.errors.required"> Seleccione una opcion </p>
+        </div>
+      </div>
+-->
+
+          <!-- Tipo Producto Cárnico -->
+          <div class="form-group mixtadpe ">
+            <label>Tipo Producto Cárnico<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+            <select formControlName="tipoprodcarnico" class="form-control form-select"
+              [ngClass]="{'is-invalid': submitted && f3.tipoprodcarnico.errors}">
+              <option value="">Tipo de Productos... </option>
+              <option *ngFor="let tipp of filteredTipoprodcarnico" [value]="tipp.idtipro">{{ tipp.nompro }}</option>
+            </select>
+            <div *ngIf="submitted && f3.tipoprodcarnico.errors" class="invalid-feedback">
+              <p *ngIf="f3.tipoprodcarnico.errors.required"> Seleccione una opción </p>
+            </div>
+          </div>
+
+          <!--Cantidad -->
+          <div class="mixtad form-group">
+            <label> Peso (Kg.)<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+            <input type="number" formControlName="pesoing" class="form-control"
+              [ngClass]="{'is-invalid': submitted && f3.pesoing.errors }" (ngModelChange)="calcularTotalSubdet()" />
+            <div *ngIf="submitted && f3.pesoing.errors" class="invalid-feedback">
+              <p *ngIf="f3.pesoing.errors.required"> Campo obligatorio </p>
+              <p *ngIf="f3.pesoing.errors.minlength"> Mínimo 5 caracteres </p>
+              <p *ngIf="f3.pesoing.errors.maxlength"> Máximo 30 caracteres </p>
+            </div>
+          </div>
+
+          <!-- Cámara de frío -->
+          <div class="form-group mixtad">
+            <label>Cámara de Frío<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+            <select formControlName="camara" class="form-control form-select"
+              [ngClass]="{'is-invalid': submitted && f3.camara.errors}">
+              <option value="">Selecciona una cámara...</option>
+              <option *ngFor="let cam of filteredCamara" [value]="cam.idcamfri">{{ cam.nomcam }}</option>
+            </select>
+            <div *ngIf="submitted && f3.camara.errors" class="invalid-feedback">
+              <p *ngIf="f3.camara.errors.required">Seleccione una opción</p>
+            </div>
+          </div>
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-pie">
+      <button type="button" class="btn-customm" (click)="c('Cancel click')">Cancelar</button>
+      <button type="submit" class="btn-custom">Guardar</button>
+    </div>
+  </form>
+</ng-template>

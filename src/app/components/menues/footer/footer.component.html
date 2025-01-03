@@ -1,0 +1,25 @@
+<div class="header">
+
+  <div class="logo">
+    <a href=""><img src="assets/matadero.png" width="90" height="35" alt="Logo"></a>
+  </div>
+  <p class="titulo">Matadero Municipal de tarija </p>
+
+  <div class="contenedor">
+    <div class="derecha ingreso">{{usuarioConec}}</div>
+  </div>
+
+  <div class="col-lg">
+    <p *ngIf="usuarioConec == 'Invitado'; else desconectar">
+      <a [routerLink]="['/login']" class="nav-link ingreso">Ingresar</a>
+    </p>
+    
+    <ng-template #desconectar>
+      <p>
+        <a [routerLink]="['/desconectar']" class="nav-link">
+          <i class="bi bi-box-arrow-right custom-icon"></i>
+        </a>
+      </p>
+    </ng-template>
+  </div>
+</div>

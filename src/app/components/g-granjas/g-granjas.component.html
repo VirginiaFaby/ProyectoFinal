@@ -1,0 +1,187 @@
+<div class="container">
+  <div class="container-with-shadow">
+    <div class="content">
+      <h5 class="text-center" style="color: #236259; font-weight: bold;">GESTIÓN GRANJAS</h5>
+      <a href="javascript:void(0)" (click)="llamaModalAdd(contentAdd)" class="btn-custom-color">Nueva Granja</a>
+    </div>
+  </div>
+  <div class="dropdown-divider"></div>
+  <!-- Inicio de formulario del Filtro -->
+  <form [formGroup]="formFiltro" class="filtro-form">
+    <div class="formArriba">
+      <div class="form-group filtro">
+        <div class="input-group">
+          <input class="form-control" formControlName="filtro" type="text" name="busqueda" placeholder="Buscar...."
+            (keyup)="filtrarNombre()">
+          <span class="input-group-addon">
+            <i class="bi bi-search"></i>
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group tipo d-flex align-items-center">
+        <select class="form-select max custom-select" formControlName="idtip" (change)="filtrarNombre()">
+          <option value="-1" selected>Tipo de Animal</option>
+          <!-- Ajustado para que la opción "Todos" esté seleccionada por defecto -->
+          <option *ngFor="let tip of apiTipoanimal" [value]="tip.idtip">{{ tip.nomtip }}</option>
+        </select>
+      </div>
+
+      <div class="form-group opciones">
+        <div class="form-check form-check-inline radio-container">
+          <input class="form-check-input" type="radio" formControlName="estadosGra" name="estadosGra"
+            id="exampleRadios1" value="1" (change)="filtrarNombre()">
+          <label class="form-check-label" for="exampleRadios1">Activos</label>
+        </div>
+        <div class="form-check form-check-inline radio-container">
+          <input class="form-check-input" type="radio" formControlName="estadosGra" name="estadosGra"
+            id="exampleRadios2" value="0" (change)="filtrarNombre()">
+          <label class="form-check-label" for="exampleRadios2">Bajas</label>
+        </div>
+        <div class="form-check form-check-inline radio-container">
+          <input class="form-check-input" type="radio" formControlName="estadosGra" name="estadosGra"
+            id="exampleRadios3" value="-1" (change)="filtrarNombre()" checked>
+          <label class="form-check-label" for="exampleRadios3">Todos</label>
+        </div>
+      </div>
+    </div>
+  </form>
+  <!-- Fin de formulario del Filtro -->
+  <div class="dropdown-divider"></div>
+
+  <div>
+    <app-detgranjas></app-detgranjas>
+  </div>
+</div>
+
+
+<!--VENTANA MODAL PARA ADICIONAR DATOS  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentAdd let-c="close" let-d="dismiss" id="modal-add">
+  <div class="modal-cuu">
+    <h4 class="modal-title" id="modal-basic-title" style="font-weight: bold;"> Adicionar Granja... </h4>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="modal-body">
+      
+
+      <!--Codigo-->
+      <div class="form-group mixtad">
+        <label> Codigo<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="number" formControlName="codigo" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.codigo.errors }" />
+        <div *ngIf="submitted && f.codigo.errors" class="invalid-feedback">
+          <p *ngIf="f.codigo.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.codigo.errors.min"> Solo Numeros Positivos </p>
+          <p *ngIf="f.codigo.errors.pattern"> No pueden ser Menos de 7 ni Mas de 8 digitos </p>
+
+        </div>
+      </div>
+      <!-- Nombre de la Granja -->
+      <div class="form-group mixtad ">
+        <label> Nombre de Granja<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" formControlName="nomgra" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.nomgra.errors }" />
+        <div *ngIf="submitted && f.nomgra.errors" class="invalid-feedback">
+          <p *ngIf="f.nomgra.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.nomgra.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.nomgra.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+      <!-- Propietario de la Granja -->
+      <div class="form-group mixtad">
+        <label> Propietario<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" formControlName="progra" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.progra.errors }" />
+        <div *ngIf="submitted && f.progra.errors" class="invalid-feedback">
+          <p *ngIf="f.progra.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.progra.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.progra.errors.maxlength"> Máximo 30 caracteres </p>
+          <p *ngIf="f.progra.errors.pattern"> Solo Introduca Letras </p>
+
+        </div>
+      </div>
+
+      <!--TipoAnimal-->
+      <div class="form-group mixtad">
+        <label>Tipo Animal<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+        <select formControlName="tipoanimal" class="form-control max form-select"
+          [ngClass]="{'is-invalid': submitted && f.tipoanimal.errors}">
+          <option value="">Tipo de Animales... </option>
+          <option *ngFor="let tip of apiTipoanimal" [value]="tip.idtip">{{ tip.nomtip }}</option>
+        </select>
+        <div *ngIf="submitted && f.tipoanimal.errors" class="invalid-feedback">
+          <p *ngIf="f.tipoanimal.errors.required"> Seleccione una opcion </p>
+        </div>
+      </div>
+      <!-- Telefono de la Granja -->
+      <div class="form-grou mixtad">
+        <label> Telefono<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="number" formControlName="telegra" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.telegra.errors }" />
+        <div *ngIf="submitted && f.telegra.errors" class="invalid-feedback">
+          <p *ngIf="f.telegra.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.telegra.errors.min"> Solo Numeros Positivos </p>
+          <p *ngIf="f.telegra.errors.pattern">El Telefono debe tener exactamente 8 dígitos </p>
+        </div>
+      </div>
+      <!-- Correo de la Granja -->
+      <div class="form-group mixtad">
+        <label> Correo</label>
+        <input type="email" formControlName="correogra" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.correogra.errors }" />
+        <div *ngIf="submitted && f.correogra.errors" class="invalid-feedback">
+          <p *ngIf="f.correogra.errors.email">Correo con errores en su formato</p>
+          <p *ngIf="f.correogra.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.correogra.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+
+      <!-- Departamentos -->
+      <div class="form-group mixtad col-md-4">
+        <label> Departamentos<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+        <select formControlName="departamentos" class="form-select form-control"
+          [ngClass]="{'is-invalid': submitted && f.departamentos.errors}" (change)="cargarProvincias()">
+          <option value="">Departamentos...</option>
+          <option *ngFor="let dep of apidepartamentos" [value]="dep.iddep">{{dep.nomdep}}</option>
+        </select>
+        <div *ngIf="submitted && f.departamentos.errors" class="invalid-feedback">
+          <p *ngIf="f.departamentos.errors.required"> Seleccione una opcion </p>
+        </div>
+      </div>
+
+
+      <!-- Provincias -->
+      <div class="form-group mixtad col-md-4">
+        <label> Provincias<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+        <select formControlName="provincias" class="form-select form-control"
+          [ngClass]="{'is-invalid': submitted && f.provincias.errors}" (change)="cargarMunicipios()">
+          <option value="">Provincias... </option>
+          <option *ngFor="let provin of apiProvincias" [value]="provin.idprovin">{{provin.nomprovin}}</option>
+        </select>
+        <div *ngIf="submitted && f.provincias.errors" class="invalid-feedback">
+          <p *ngIf="f.provincias.errors.required"> Seleccione una opcion </p>
+        </div>
+      </div>
+
+      <!-- Municipios  -->
+      <div class="form-group mixtad col-md-4">
+        <label> Municipios<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+        <select formControlName="municipios" class="form-select  form-control"
+          [ngClass]="{'is-invalid': submitted && f.municipios.errors}">
+          <option value="">Municipios... </option>
+          <option *ngFor="let municipio of apiMunicipios" [value]="municipio.idmun">{{ municipio.nommun }}</option>
+        </select>
+        <div *ngIf="submitted && f.municipios.errors" class="invalid-feedback">
+          <p *ngIf="f.municipios.errors.required"> Seleccione una opcion </p>
+        </div>
+      </div>
+
+
+      
+    </div>
+    <div class="modal-pie">
+      <button type="button" class="btn-customm" (click)="c('Save click')"> Cancelar </button>
+      <button type="submit" class="btn-custom"> Guardar </button>
+    </div>
+  </form>
+</ng-template>

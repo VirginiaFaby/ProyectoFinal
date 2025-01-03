@@ -1,0 +1,75 @@
+<div class="container">
+  <div class="container-with-shadow">
+    <div class="content">
+      <h5 class="text-center" style="color: #236259; font-weight: bold;">GESTIÓN ROLES</h5>
+      <a href="javascript:void(0)" (click)="llamaModalAdd(contentAdd)" class="btn-custom-color">Nuevo Rol</a>
+    </div>
+  </div>
+  <div class="dropdown-divider"></div>
+  <!-- Inicio de formulario del Filtro -->
+  <form [formGroup]="formFiltro" class="filtro-form">
+    <div class="formArriba">
+      <div class="form-group filtro">
+        <div class="input-group">
+          <input class="form-control" formControlName="filtro" type="text" name="busqueda" placeholder="Buscar...."
+            (keyup)="filtrarNombre()">
+          <span class="input-group-addon">
+            <i class="bi bi-search"></i>
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group opciones">
+        <div class="form-check form-check-inline radio-container">
+          <input class="form-check-input" type="radio" formControlName="estadoRol" name="estadoRol"
+            id="exampleRadios1" value="1" (change)="filtrarNombre()">
+          <label class="form-check-label" for="exampleRadios1">Activos</label>
+        </div>
+        <div class="form-check form-check-inline radio-container">
+          <input class="form-check-input" type="radio" formControlName="estadoRol" name="estadoRol"
+            id="exampleRadios2" value="0" (change)="filtrarNombre()">
+          <label class="form-check-label" for="exampleRadios2">Inactivo</label>
+        </div>
+        <div class="form-check form-check-inline radio-container">
+          <input class="form-check-input" type="radio" formControlName="estadoRol" name="estadoRol"
+            id="exampleRadios3" value="-1" (change)="filtrarNombre()" checked>
+          <label class="form-check-label" for="exampleRadios3">Todos</label>
+        </div>
+      </div>
+    </div>
+  </form>
+  <!-- Fin de formulario del Filtro -->
+  <div class="dropdown-divider"></div>
+  <div>
+    <app-detroles></app-detroles>
+  </div>
+</div>
+
+
+<!--VENTANA MODAL PARA ADICIONAR DATOS  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentAdd let-c="close" let-d="dismiss" id="modal-add" >
+  <div class="modal-cuu" >
+    <h4 class="modal-title" id="modal-basic-title" style="font-weight: bold;"> Adicionar Rol... </h4>
+
+  </div>  
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="modal-body" >          
+            <div class="form-group">
+              <label> Nombre Roles<span style="color: #8B0000; font-size: 1.2em;">*</span></label> 
+              <input type="text" formControlName="nombre" class="form-control" [ngClass]="{'is-invalid': submitted && f.nombre.errors }"/>
+              <div *ngIf="submitted && f.nombre.errors" class="invalid-feedback">
+                  <p *ngIf="f.nombre.errors.required"> Campo obligatorio </p> 
+                  <p *ngIf="f.nombre.errors.minlength"> Mínimo 5 caracteres </p>
+                  <p *ngIf="f.nombre.errors.maxlength"> Máximo 30 caracteres </p>              
+              </div>
+            </div>              
+        </div>      
+      <div class="modal-pie">
+        <button type="button" class="btn-customm" (click)="c('Save click')"> Cancelar </button>
+        <button type="submit" class="btn-custom"> Guardar </button>
+      </div>
+  </form> 
+</ng-template>
+
+
+

@@ -1,0 +1,191 @@
+<table class="table tabla-sombra">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">NOMBRE DE CAMARA</th>
+      <th scope="col">TEMPERATURA</th>
+      <th scope="col">UNI TEM</th>
+      <th scope="col">TIPO ANIMAL</th>
+      <th scope="col">CAPACIDAD</th>
+      <th scope="col">OCUPADO</th>
+      <th scope="col">LIBRE</th>
+      <th scope="col"> ESTADO </th>
+      <th scope="col" colspan="3" class="text-center"> ACCIONES </th>
+    </tr>
+  </thead>
+  <tbody *ngFor="let cam of apiCamara| paginate: { itemsPerPage: 5, currentPage: pageActual } ; index as con">
+    <tr>
+      <td *ngIf="cam.estado == 1" class="activo" scope="col">{{con+1}}</td>
+      <td *ngIf="cam.estado == 0" class="inactivo" scope="col">{{con+1}}</td>
+      <td *ngIf="cam.estado == 1" class="activo">{{cam.nomcam}} </td>
+      <td *ngIf="cam.estado == 0" class="inactivo">{{cam.nomcam}} </td>
+
+      <td *ngIf="cam.estado == 1" class="activo text-center">{{cam.temcam}} </td>
+      <td *ngIf="cam.estado == 0" class="inactivo text-center">{{cam.temcam}} </td>
+      <td *ngIf="cam.estado == 1" class="activo">{{cam.unitem }} </td>
+      <td *ngIf="cam.estado == 0" class="inactivo">{{cam.unitem }} </td>
+      <td *ngIf="cam.estado == 1" class="activo">{{cam.tipoanimal.nomtip}} </td>
+      <td *ngIf="cam.estado == 0" class="inactivo">{{cam.tipoanimal.nomtip}} </td>
+
+      <td *ngIf="cam.estado == 1" class="activo text-center">{{cam.capcam}} </td>
+      <td *ngIf="cam.estado == 0" class="inactivo text-center">{{cam.capcam}} </td>
+
+      <td *ngIf="cam.estado == 1" class="activo text-center">{{cam.canting }} </td>
+      <td *ngIf="cam.estado == 0" class="inactivo text-center">{{cam.canting }} </td>
+
+      <td *ngIf="cam.estado == 1" class="activo text-center">{{cam.saldo }} </td>
+      <td *ngIf="cam.estado == 0" class="inactivo text-center">{{cam.saldo }} </td>
+
+
+      <td>
+        <!-- estado -->
+        <a *ngIf="cam.estado == 1" class="btn-custom">Activo</a>
+        <a *ngIf="cam.estado == 0" class="btn-customm">Inactivo</a>
+      </td>
+
+      <!--Modificar-->
+      <td>
+        <a *ngIf="cam.estado == 1" href="javascript:void(0)" (click)="llamaModalMod(contentMod, cam)"
+          class="bi bi-pencil-fill enlace-icono"></a>
+        <a *ngIf="cam.estado == 0" class="bi bi-pencil-fill enlace-iconoo">
+        </a>
+      </td>
+
+      <!--Eliminacion logica-->
+      <td>
+        <a *ngIf="cam.estado==1" href="javascript:void(0)" (click)="llamaModalDel(contentDel, cam)"
+          class="bi bi-trash-fill enlace-icono"></a>
+        <a *ngIf="cam.estado==0" class="bi bi-trash-fill enlace-iconoo"></a>
+      </td>
+
+      <!--Habilitar -->
+      <td>
+        <a *ngIf="cam.estado==0" href="javascript:void(0)" (click)="llamaModalHab(contentHab, cam)"
+          class="bi bi-arrow-clockwise enlace-icono"></a>
+        <a *ngIf="cam.estado==1" class="bi bi-arrow-clockwise enlace-iconoo"></a>
+      </td>
+
+    </tr>
+  </tbody>
+  <tfoot>
+    <td colspan="13" align="center">
+      <pagination-controls (pageChange)="pageActual = $event" previousLabel="" nextLabel=""
+        class="my-pagination"></pagination-controls>
+    </td>
+  </tfoot>
+
+</table>
+
+
+<!--VENTANA MODAL PARA MODIFICAR DATOS  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentMod let-c="close" let-d="dismiss" id="modal-add">
+  <div class="modal-cuu">
+    <h4 class="modal-title" id="modal-basic-title" style="color: #236259; font-weight: bold;"> Modificar Datos de
+      Camara... </h4>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="modal-body">
+
+      <div class="form-group">
+        <label>Nombre de Camara<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" formControlName="nomcam" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.nomcam.errors }" />
+        <div *ngIf="submitted && f.nomcam.errors" class="invalid-feedback">
+          <p *ngIf="f.nomcam.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.nomcam.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.nomcam.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+      <div class="form-group mixtad">
+        <label>Capacidad (Kg.)<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="number" formControlName="capcam" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.capcam.errors }" />
+        <div *ngIf="submitted && f.capcam.errors" class="invalid-feedback">
+          <p *ngIf="f.capcam.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.capcam.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.capcam.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+
+      <div class="form-group mixtad">
+        <label>Temperatura (Grados)<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="number" formControlName="temcam" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.temcam.errors }" />
+        <div *ngIf="submitted && f.temcam.errors" class="invalid-feedback">
+          <p *ngIf="f.temcam.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.temcam.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.temcam.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+
+      <!-- Unidad de Temperatura -->
+      <div class="mixtad form-group">
+        <label>Unidades Térmicas<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+        <select formControlName="unitem" class="form-select max form-control"
+          [ngClass]="{'is-invalid': submitted && f.unitem.errors}">
+          <option value="">Unidad Temperatura</option>
+          <option value="Celsius">Celsius</option>
+          <option value="Fahrenheit ">Fahrenheit </option>
+        </select>
+        <div *ngIf="submitted && f.unitem.errors" class="invalid-feedback">
+          <p *ngIf="f.unitem.errors.required">Seleccione una opción</p>
+        </div>
+      </div>
+
+      <!--TipoAnimal-->
+      <div class="form-group mixtad ">
+        <label>Tipo Animal<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+        <select formControlName="tipoanimal" class="form-control form-select"
+          [ngClass]="{'is-invalid': submitted && f.tipoanimal.errors}">
+          <option value="">Tipo de Animales... </option>
+          <option *ngFor="let tip of apiTipoanimal" [value]="tip.idtip">{{ tip.nomtip }}</option>
+        </select>
+        <div *ngIf="submitted && f.tipoanimal.errors" class="invalid-feedback">
+          <p *ngIf="f.tipoanimal.errors.required"> Seleccione una opcion </p>
+        </div>
+      </div>
+
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-custoo" (click)="c('Save click')"> Cancelar </button>
+      <button type="submit" class="btn-custo"> Modifcar </button>
+    </div>
+  </form>
+</ng-template>
+
+
+
+<!-- VENTANA MODAL PARA OPCION ELIMINAR xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentDel let-c="close" let-d="dismiss">
+  <div class="modal-cu">
+  </div>
+  <div class="modal-body">
+    <h5 class="text-center">¿Esta seguro? Se dara de baja al Camara:
+      <h5 style="color:#236259; font-weight: bold;"><strong>{{ camaraI.nomcam }}</strong></h5>
+    </h5>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmitDel()">
+    <div class="modal-pie">
+      <button type="button" class="btn-custoo" (click)="c('Save click')"> Cancelar</button>
+      <button type="submit" class="btn-custo"> Aceptar </button>
+    </div>
+  </form>
+</ng-template>
+
+<!-- VENTANA MODAL PARA OPCION HABILITAR *************************************************************  -->
+<ng-template #contentHab let-c="close" let-d="dismiss">
+  <div class="modal-cu">
+  </div>
+  <div class="modal-body">
+    <h5 class="text-center">¿Esta seguro? De habilitar la Camara:
+      <h5 style="color:#236259"><strong>{{ camaraI.nomcam }}</strong></h5>
+    </h5>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmitHab()">
+    <div class="modal-pie">
+      <button type="button" class="btn-custoo" (click)="c('Save click')">Cancelar</button>
+      <button type="submit" class="btn-custo"> Aceptar </button>
+    </div>
+  </form>
+</ng-template>

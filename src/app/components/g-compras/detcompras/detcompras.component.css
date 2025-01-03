@@ -1,0 +1,424 @@
+.my-pagination /deep/ .ngx-pagination .current{
+    background:#70caee;
+}
+
+.form-group {
+    margin-right: 8px;
+}
+
+.colum-2 {
+    width: 48%;
+    display: inline-block
+}
+.colum-error {
+    width: 50%;
+    display: inline-block;
+}
+select {
+    text-align: left;
+    height: 38px;
+    width: 100%;
+}
+#narchivo{
+    border: none;
+    background-color: white;
+    margin-left: 50%;
+}
+#imprimir {
+    width: 200px;
+    vertical-align: middle;
+}
+select {
+    width: 60%;
+}
+.form-check {
+    width: 25%;
+}
+
+.a{
+    margin-right: 38px;
+    border-radius: 100px;
+}
+.selec{
+    width: 150px;
+    height: 40px;
+    border: 1px solid #c3c3c3;
+}
+.mixtad {
+  width: 48%;
+  display: inline-block;
+  padding: 10px;
+}
+.max{
+  width: 200px;
+  height: 40px;
+  border: 1px solid #c3c3c3;
+}
+modal-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 200%;
+    pointer-events: auto;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: 0.3rem;
+    outline: 0;
+}
+.mixtadd {
+    width: 48%;
+    display: inline-block;
+    
+  }
+
+  .container {
+  margin-left: 208px; /* Establece un margen izquierdo de 1000px */
+  max-width: 1150px; /* Asegura que el ancho máximo del contenedor no exceda 1200px */
+  margin-right: 10px; /* Permite centrar horizontalmente con margen derecho automático */
+  padding-top: 90px; /* Añade un relleno interno de 90px */
+}
+
+
+.container-with-shadow {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #fff;
+
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+ 
+}
+
+
+
+
+.form-group.filtro .input-group {
+    position: relative;
+   }
+   
+   .form-group.filtro .input-group-addon {
+    position: absolute;
+    left: 10px; /* Ajusta el espacio entre el icono y el borde izquierdo del input */
+    top: 50%;
+    transform: translateY(-50%);
+   }
+   
+   .form-group.filtro .input-group-addon i {
+    font-size: 1.2em; /* Ajusta el tamaño del icono según sea necesario */
+    color: #6c757d; /* Ajusta el color del icono */
+   }
+   
+   .formArriba {
+    width: 100%;
+    padding-top: 10px;
+    display: flex;
+    align-items: center;
+   }
+   
+   .formArriba .form-group {
+    margin-left: 30px;
+   }
+   
+   .formArriba select {
+    text-align: left;
+   }
+   
+   .filtro {
+    width: 30%;
+   }
+   
+   .tipo select {
+    width: 100%;
+    height: 38px;
+   }
+   
+   .opciones {
+    width: 100%;
+    padding-top: 10px;
+   }
+   
+   .form-group.filtro .input-group input.form-control {
+    padding-left: 30px; /* Ajusta el padding izquierdo para que el texto del placeholder comience después del icono */
+   }
+   
+   .form-group.tipo {
+    position: relative;
+   }
+   
+   .form-group.tipo .select-icon {
+    position: absolute;
+    top: 50%;
+    left: 10px; /* Ajusta la posición del icono en el lado izquierdo */
+    transform: translateY(-50%);
+   }
+   
+   .form-group.tipo .select-icon i {
+    font-size: 1.2em; /* Ajusta el tamaño del icono según sea necesario */
+    color: #6c757d; /* Ajusta el color del icono */
+   }
+   
+   .form-group.tipo select {
+    width: auto; /* Ajuste para que el ancho del select se adapte dinámicamente al contenido */
+    height: 38px;
+   }
+   
+   .btn-custom-color { 
+    background-color: #236259;
+    color: #fff;
+    padding: 10px 20px; /* Ajusta el relleno según sea necesario */
+    text-decoration: none; /* Elimina el subrayado del enlace */
+    transition: background-color 0.3s ease; /* Transición suave */
+    border-radius: 5px;
+    font-weight: bold; /* Hace que el texto sea negrita */
+  }
+  
+   
+   .btn-custom-color:focus {
+    background-color: #2e7d87; /* Cambia a un tono ligeramente más claro al enfocar */
+    outline: none; /* Elimina el contorno predeterminado del enlace enfocado */
+   }
+   
+   .btn-custom-color:hover {
+    background-color: #2e7d87; /* Cambia a un tono ligeramente más claro al pasar el mouse */
+    color: #fff; /* Ajusta el color del texto al pasar el mouse */
+   }
+   
+   .radio-container .form-check-input {
+    accent-color: #2e7d87; /* Cambia el color del botón de radio a rojo */
+   }
+   
+   .radio-container .form-check-label {
+    color: rgb(44, 43, 43); /* Cambia el color del texto a rojo */
+   }
+   
+   /* Cambio de color de botones del formulario */
+   .btn-custom {
+    background-color: #236259;
+    color: #fff;
+    padding: 8px 20px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    border-radius: 5px;
+    border: none;
+   }
+   
+   .btn-customm {
+    background-color: rgb(153, 152, 152);
+    color: #fff;
+    padding: 8px 20px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    border-radius: 5px;
+    border: none;
+   }
+   
+   .mixtad {
+    width: 50%;
+    display: inline-block;
+    padding: 10px;
+   }
+   
+   .container-with-shadow {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* Agregar sombra */
+    padding: 15px; /* Agregar espacio alrededor del contenido */
+   }
+   
+   .content {
+    display: flex;
+    align-items: center; /* Centrar verticalmente */
+    justify-content: space-between; /* Alinear elementos a los extremos */
+   }
+   
+   .filtro-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+   }
+   
+   .filtro-form .form-group {
+    width: 100%;
+    max-width: 250px; /* ajusta el ancho máximo del formulario según sea necesario */
+   }
+   
+   .filtro-form .formArriba {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px; /* espacio entre los elementos del formulario */
+   }
+   
+  
+   
+   /* Asegurar que todos los elementos del formulario tengan el mismo tamaño y espaciado */
+   .filtro-form .form-group input,
+   .filtro-form .form-group select,
+   .filtro-form .form-group .form-check-input {
+    width: 100%; /* Asegura que todos los elementos tengan el mismo ancho */
+    height: 36px; /* Altura uniforme para todos los elementos */
+    
+   }
+  
+   .dropdown-divider {
+    margin-top: 10px; /* Ajusta la separación hacia arriba */
+    margin-bottom: 10px; /* Ajusta la separación hacia arriba */
+    height: 3px; /* Ajusta el grosor de la línea */
+    background-color: #dcdcdc; /* Color gris */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* Agregar sombra */
+  }
+  .modal-cuu   {
+    padding: 15px;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #236259;
+    display: flex;
+    align-items: center; /* Centra verticalmente el contenido */
+    justify-content: center; /* Centra horizontalmente el contenido */
+    height: 100%;
+  }
+  .modal-pie {
+    padding: 10px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  
+  .modal-pie button {
+    margin: 3px; /* Ajusta el margen entre los botones */
+  }
+  
+
+  .my-pagination /deep/ .ngx-pagination .current{
+    background: #236259;
+  }
+  .tabla-sombra {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.40);
+    }
+  
+    .btn-custom {
+      background-color: #236259;
+      color: #fff;
+      padding: 8px 20px; /* Ajusta el relleno según sea necesario */
+      text-decoration: none; /* Elimina el subrayado del enlace */
+      transition: background-color 0.3s ease; /* Transición suave */
+      border-radius: 5px;
+    }
+    .btn-customm {
+      background-color: rgb(153, 152, 152);
+      color: #fff;
+      padding: 8px 15px; /* Ajusta el relleno según sea necesario */
+      text-decoration: none; /* Elimina el subrayado del enlace */
+      transition: background-color 0.3s ease; /* Transición suave */
+      border-radius: 5px;
+    }
+    
+    .enlace-icono {
+      font-size: 20px;
+      color: #236259;
+      margin: 5px;
+  }
+  
+  .enlace-iconoo {
+      font-size: 20px;
+      color:rgb(153, 152, 152);
+      margin: 5px;
+  }
+  
+  .modal-cuu   {
+    padding: 15px;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+    display: flex;
+    align-items: center; /* Centra verticalmente el contenido */
+    justify-content: center; /* Centra horizontalmente el contenido */
+    height: 100%;
+  }
+  
+  
+  
+  
+  .modal-cu {
+    padding: 15px;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+  }
+    .modal-pie {
+      padding: 10px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+  
+  /* Cambio de color de botones del formulario */
+  .btn-custo {
+    background-color: #236259;
+    color: #fff;
+    padding: 8px 20px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    border-radius: 5px;
+    border: none;
+    margin: 5px;
+  }
+  
+  .btn-custoo {
+    background-color: rgb(153, 152, 152);
+    color: #fff;
+    padding: 8px 20px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    border-radius: 5px;
+    border: none;
+  }
+  .mixtad {
+    width: 50%;
+    display: inline-block;
+    padding: 10px;
+  }
+
+  .opciones {
+    width: 100%;
+    padding-top: 10px;
+   }
+
+  .radio-container .form-check-input {
+    accent-color: #2e7d87; /* Cambia el color del botón de radio a rojo */
+   }
+   
+   .radio-container .form-check-label {
+    color: rgb(44, 43, 43); /* Cambia el color del texto a rojo */
+   }
+  .mixtadm {
+    width: 48%;
+    display: inline-block;
+  }
+
+  /* Clases para la segunda tabla (modificadas con un prefijo único) */
+.table.tabla-sombra-2 {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.40);
+}
+
+.table.tabla-sombra-2 th,
+.table.tabla-sombra-2 td {
+  padding: 0.5rem; /* Ajusta el padding de todas las celdas */
+}
+
+.table.tabla-sombra-2 .form-group {
+  margin-bottom: 0; /* Elimina el margen inferior de los grupos de formularios */
+}
+
+.table.tabla-sombra-2 input[type="number"] {
+  width: 100%; /* Ajusta el ancho de los inputs al 100% */
+}
+
+.input-wrapper-2 {
+  display: flex;
+  justify-content: flex-end; /* Alinea los inputs al lado derecho */
+}

@@ -1,0 +1,221 @@
+<table class="table tabla-sombra">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">CODIGO</th>
+      <th scope="col">GRANJA</th>
+      <th scope="col">PROPIETARIO</th>
+      <th scope="col">TIPO</th>
+      <th scope="col"> ESTADO </th>
+      <th scope="col" colspan="3" class="text-center"> ACCIONES </th>
+    </tr>
+  </thead>
+  <tbody *ngFor="let gra of apiGranjas | paginate: { itemsPerPage: 6, currentPage: pageActual } ; index as con">
+    <tr>
+      <td *ngIf="gra.estado == 1" class="activo" scope="col">{{con+1}}</td>
+      <td *ngIf="gra.estado == 0" class="inactivo" scope="col">{{con+1}}</td>
+      <td *ngIf="gra.estado == 1" class="activo">{{gra.codigo}} </td>
+      <td *ngIf="gra.estado == 0" class="inactivo">{{gra.codigo}} </td>
+      <td *ngIf="gra.estado == 1" class="activo">{{gra.nomgra}} </td>
+      <td *ngIf="gra.estado == 0" class="inactivo">{{gra.nomgra}} </td>
+      <td *ngIf="gra.estado == 1" class="activo">{{gra.progra}} </td>
+      <td *ngIf="gra.estado == 0" class="inactivo">{{gra.progra}} </td>
+      <td *ngIf="gra.estado == 1" class="activo">{{gra.tipani}} </td>
+      <td *ngIf="gra.estado == 0" class="inactivo">{{gra.tipani}} </td>
+      <td>
+        <!-- estado -->
+        <a *ngIf="gra.estado == 1" class="btn-custom">Activo</a>
+        <a *ngIf="gra.estado == 0" class="btn-customm">Inactivo</a>
+      </td>
+      <!--Modificar-->
+      <td>
+        <a *ngIf="gra.estado == 1" href="javascript:void(0)" (click)="llamaModalMod(contentMod, gra)" class="bi bi-pencil-fill enlace-icono"></a>
+        <a *ngIf="gra.estado == 0" class="bi bi-pencil-fill enlace-iconoo"></a>
+      </td>
+      <!--Eliminacion logica-->
+      <td>
+        <a *ngIf="gra.estado==1" href="javascript:void(0)" (click)="llamaModalDel(contentDel, gra)" class="bi bi-trash-fill enlace-icono"></a>
+        <a *ngIf="gra.estado==0" class="bi bi-trash-fill enlace-iconoo"></a>
+      </td>
+      <!--Habilitar -->
+      <td>
+        <a *ngIf="gra.estado==0" href="javascript:void(0)" (click)="llamaModalHab(contentHab, gra)" class="bi bi-arrow-clockwise enlace-icono"></a>
+        <a *ngIf="gra.estado==1" class="bi bi-arrow-clockwise enlace-iconoo"></a>
+      </td>
+
+    </tr>
+  </tbody>
+  <tfoot>
+    <td colspan="8" align="center">
+      <pagination-controls (pageChange)="pageActual = $event" previousLabel="" nextLabel=""
+        class="my-pagination"></pagination-controls>
+    </td>
+  </tfoot>
+
+</table>
+
+<!--VENTANA MODAL PARA MODIFICAR DATOS  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentMod let-c="close" let-d="dismiss" id="modal-add">
+  <div class="modal-cuu">
+    <h4 class="modal-title" id="modal-basic-title" style="color: #236259; font-weight: bold;"> Modificar Datos de la Granja ... </h4>
+ 
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="modal-body">
+
+
+  <!--Codigo-->
+      <div class="form-group mixtad">
+        <label> Codigo<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="number" formControlName="codigo" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.codigo.errors }" />
+        <div *ngIf="submitted && f.codigo.errors" class="invalid-feedback">
+          <p *ngIf="f.codigo.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.codigo.errors.min"> Solo Numeros Positivos </p>
+          <p *ngIf="f.codigo.errors.pattern"> No pueden ser Menos de 7 ni Mas de 8 digitos </p>
+
+        </div>
+      </div>
+      <!-- Nombre de la Granja -->
+      <div class="form-group mixtad ">
+        <label> Nombre de Granja<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" formControlName="nomgra" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.nomgra.errors }" />
+        <div *ngIf="submitted && f.nomgra.errors" class="invalid-feedback">
+          <p *ngIf="f.nomgra.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.nomgra.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.nomgra.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+      <!-- Propietario de la Granja -->
+      <div class="form-group mixtad">
+        <label> Propietario<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" formControlName="progra" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.progra.errors }" />
+        <div *ngIf="submitted && f.progra.errors" class="invalid-feedback">
+          <p *ngIf="f.progra.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.progra.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.progra.errors.maxlength"> Máximo 30 caracteres </p>
+          <p *ngIf="f.progra.errors.pattern"> Solo Introduca Letras </p>
+
+        </div>
+      </div>
+
+      <!--TipoAnimal-->
+      <div class="form-group mixtad">
+        <label>Tipo Animal<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+        <select formControlName="tipoanimal" class="form-control max form-select"
+          [ngClass]="{'is-invalid': submitted && f.tipoanimal.errors}">
+          <option value="">Tipo de Animales... </option>
+          <option *ngFor="let tip of apiTipoanimal" [value]="tip.idtip">{{ tip.nomtip }}</option>
+        </select>
+        <div *ngIf="submitted && f.tipoanimal.errors" class="invalid-feedback">
+          <p *ngIf="f.tipoanimal.errors.required"> Seleccione una opcion </p>
+        </div>
+      </div>
+      <!-- Telefono de la Granja -->
+      <div class="form-grou mixtad">
+        <label> Telefono<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="number" formControlName="telegra" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.telegra.errors }" />
+        <div *ngIf="submitted && f.telegra.errors" class="invalid-feedback">
+          <p *ngIf="f.telegra.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.telegra.errors.min"> Solo Numeros Positivos </p>
+          <p *ngIf="f.telegra.errors.pattern">El Telefono debe tener exactamente 8 dígitos </p>
+        </div>
+      </div>
+      <!-- Correo de la Granja -->
+      <div class="form-group mixtad">
+        <label> Correo</label>
+        <input type="email" formControlName="correogra" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.correogra.errors }" />
+        <div *ngIf="submitted && f.correogra.errors" class="invalid-feedback">
+          <p *ngIf="f.correogra.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.correogra.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.correogra.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+
+      <!-- Departamentos -->
+      <div class="form-group mixtad col-md-4">
+        <label> Departamentos<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+        <select formControlName="departamentos" class="form-select form-control"
+          [ngClass]="{'is-invalid': submitted && f.departamentos.errors}" (change)="cargarProvincias()">
+          <option value="">Departamentos...</option>
+          <option *ngFor="let dep of apidepartamentos" [value]="dep.iddep">{{dep.nomdep}}</option>
+        </select>
+        <div *ngIf="submitted && f.departamentos.errors" class="invalid-feedback">
+          <p *ngIf="f.departamentos.errors.required"> Seleccione una opcion </p>
+        </div>
+      </div>
+
+
+      <!-- Provincias -->
+      <div class="form-group mixtad col-md-4">
+        <label> Provincias<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+        <select formControlName="provincias" class="form-select form-control"
+          [ngClass]="{'is-invalid': submitted && f.provincias.errors}" (change)="cargarMunicipios()">
+          <option value="">Provincias... </option>
+          <option *ngFor="let provin of apiProvincias" [value]="provin.idprovin">{{provin.nomprovin}}</option>
+        </select>
+        <div *ngIf="submitted && f.provincias.errors" class="invalid-feedback">
+          <p *ngIf="f.provincias.errors.required"> Seleccione una opcion </p>
+        </div>
+      </div>
+
+      <!-- Municipios  -->
+      <div class="form-group mixtad col-md-4">
+        <label> Municipios<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+        <select formControlName="municipios" class="form-select  form-control"
+          [ngClass]="{'is-invalid': submitted && f.municipios.errors}">
+          <option value="">Municipios... </option>
+          <option *ngFor="let municipio of apiMunicipios" [value]="municipio.idmun">{{ municipio.nommun }}</option>
+        </select>
+        <div *ngIf="submitted && f.municipios.errors" class="invalid-feedback">
+          <p *ngIf="f.municipios.errors.required"> Seleccione una opcion </p>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-pie">
+      <button type="button" class="btn-custoo" (click)="c('Save click')"> Cancelar </button>
+      <button type="submit" class="btn-custo"> Modifcar </button>
+    </div>
+  </form>
+</ng-template>
+
+
+<!-- VENTANA MODAL PARA OPCION ELIMINAR xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentDel let-c="close" let-d="dismiss">
+  <div class="modal-cu">
+  </div>
+  <div class="modal-body">
+    <h5 class="text-center" >¿Esta seguro? Se dara de baja a la Granja:
+     <h5 style="color:#236259; font-weight: bold;"><strong>{{ graI.nomgra }}</strong></h5>
+   </h5>
+ </div>
+ <form [formGroup]="form" (ngSubmit)="onSubmitDel()">
+  <div class="modal-pie">        
+    <button type="button" class="btn-custoo" (click)="c('Save click')">Cancelar</button>
+    <button type="submit" class="btn-custo"> Aceptar </button>
+  </div>
+</form>
+</ng-template>
+
+ <!-- VENTANA MODAL PARA OPCION HABILITAR *************************************************************  -->
+ <ng-template #contentHab let-c="close" let-d="dismiss">
+  <div class="modal-cu">
+  </div>
+  <div class="modal-body">
+    <h5 class="text-center" >¿Esta seguro? De habilitar Granja:
+      <h5 style="color:#236259; font-weight: bold;"><strong>{{ graI.nomgra }}</strong></h5>
+    </h5>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmitHab()">
+    <div class="modal-pie">        
+      <button type="button" class="btn-custoo" (click)="c('Save click')">Cancelar</button>
+      <button type="submit" class="btn-custo"> Aceptar </button>
+    </div>
+  </form>
+</ng-template>
+

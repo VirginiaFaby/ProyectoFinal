@@ -1,0 +1,219 @@
+.my-pagination /deep/ .ngx-pagination .current{
+  background: #236259;
+}
+.tabla-sombra {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.40);
+  }
+
+  .btn-custom {
+    background-color: #236259;
+    color: #fff;
+    padding: 8px 20px; /* Ajusta el relleno según sea necesario */
+    text-decoration: none; /* Elimina el subrayado del enlace */
+    transition: background-color 0.3s ease; /* Transición suave */
+    border-radius: 5px;
+  }
+  .btn-customm {
+    background-color: rgb(153, 152, 152);
+    color: #fff;
+    padding: 8px 15px; /* Ajusta el relleno según sea necesario */
+    text-decoration: none; /* Elimina el subrayado del enlace */
+    transition: background-color 0.3s ease; /* Transición suave */
+    border-radius: 5px;
+  }
+  
+  .enlace-icono {
+    font-size: 20px;
+    color: #236259;
+    margin: 5px;
+}
+
+.enlace-iconoo {
+    font-size: 20px;
+    color:rgb(153, 152, 152);
+    margin: 5px;
+}
+
+.modal-cuu   {
+  padding: 15px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333;
+  display: flex;
+  align-items: center; /* Centra verticalmente el contenido */
+  justify-content: center; /* Centra horizontalmente el contenido */
+  height: 100%;
+}
+
+
+.modal-cu {
+  padding: 15px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333;
+}
+  .modal-pie {
+    padding: 10px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+/* Cambio de color de botones del formulario */
+.btn-custo {
+  background-color: #236259;
+  color: #fff;
+  padding: 8px 20px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  border-radius: 5px;
+  border: none;
+  margin: 5px;
+}
+
+.btn-custoo {
+  background-color: rgb(153, 152, 152);
+  color: #fff;
+  padding: 8px 20px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  border-radius: 5px;
+  border: none;
+}
+.mixtad {
+  width: 50%;
+  display: inline-block;
+  padding: 10px;
+}
+
+
+.mixtadd {
+  width: 25%;
+  display: inline-block;
+  padding: 10px;
+}
+.mixtadm {
+  width: 48%;
+  display: inline-block;
+}
+
+.dropdown-divider {
+  margin-top: 10px; /* Ajusta la separación hacia arriba */
+  margin-bottom: 10px; /* Ajusta la separación hacia arriba */
+  height: 3px; /* Ajusta el grosor de la línea */
+  background-color: #dcdcdc; /* Color gris */
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* Agregar sombra */
+}
+
+/* Clases para la segunda tabla (modificadas con un prefijo único) */
+.table.tabla-sombra-2 {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.40);
+}
+
+.table.tabla-sombra-2 th,
+.table.tabla-sombra-2 td {
+  padding: 0.5rem; /* Ajusta el padding de todas las celdas */
+}
+
+.table.tabla-sombra-2 .form-group {
+  margin-bottom: 0; /* Elimina el margen inferior de los grupos de formularios */
+}
+
+.table.tabla-sombra-2 input[type="number"] {
+  width: 100%; /* Ajusta el ancho de los inputs al 100% */
+}
+
+.input-wrapper-2 {
+  display: flex;
+  justify-content: flex-end; /* Alinea los inputs al lado derecho */
+}
+
+
+
+
+
+
+
+
+.list-group-granjas {
+  position: absolute;
+  z-index: 1000;
+  background-color: white;
+  border: 1px solid #ccc;
+  max-height: 350px;
+  overflow-y: auto;
+  width: 91%;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.list-group-granjas .list-group-item {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.list-group-granjas .list-group-item:hover {
+  background-color: #f1f1f1;
+}
+
+
+ /*modal formulario **/ 
+
+  
+/* Imagen estática debajo del buscador */
+.imagen-estatica {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  /* Centrar la imagen */
+}
+
+.imagen-estatica img {
+  max-width: 250px;
+  display: block;
+  /* Bloque para asegurar su alineación */
+  margin: 0 auto;
+  /* Centrado horizontal */
+  border-radius: 50%;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+.mixtad.form-group {
+  margin-bottom: 2px; /* Reduce el espacio entre campos */
+}
+
+.form-group input,
+.form-group select {
+  margin: 0; /* Elimina márgenes adicionales */
+  padding: 4px 8px; /* Ajusta el espacio interno */
+}
+
+.modal-body .row > div {
+  margin-bottom: 5px; /* Controla el espacio entre columnas */
+}
+
+.modal-pie {
+  margin-top: -30px; /* Reducir el margen superior */
+  text-align: center; /* Centrar los botones */
+}
+
+.modal-cuu{
+  margin-bottom: -5px;
+}
+::ng-deep .modal-dialog {
+  margin-top: 2%; /* Ajusta la distancia desde la parte superior */
+}
+.mixtadd {
+  padding-left: 25px;
+  margin-top: -10px;
+
+}
+.mixtadpe {
+  padding-right: 25px;
+  margin-top: 5px;
+ 
+}
+
+::ng-deep .modal-dialog {
+  margin-top: 2%; /* Ajusta la distancia desde la parte superior */
+}

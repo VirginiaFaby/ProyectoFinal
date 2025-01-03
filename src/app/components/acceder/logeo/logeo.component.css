@@ -1,0 +1,86 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .card {
+    width: 400px;
+    background-color: #fff;
+    margin: 25px auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+  
+  .login-card {
+    padding: 20px;
+  }
+  
+  .login-logo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover; /* Para asegurarse de que la imagen se ajuste correctamente */
+  }
+  
+  .input-group-text {
+    background-color: #fff;
+    border: none;
+  }
+  
+  .user-icon {
+    width: 20px;
+    height: 20px;
+  }
+  .btn-custoo {
+    background-color: rgb(153, 152, 152);
+    color: #fff;
+    padding: 6px 15px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    border-radius: 5px;
+    border: none;
+  }
+  
+  .btn-custo {
+    background-color: #236259;
+    color: #fff;
+    padding: 6px 15px;
+    
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    border-radius: 5px;
+    border: none;
+    margin: 5px;
+  }
+  
+  .btn-custo:hover {
+    background-color: #164c4e;
+  }
+  
+  .headerr {
+    position: absolute;
+    height: 147px;
+    width: 94%;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    top: -30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    background-image: linear-gradient(to right, #fff, #236259);
+  }
+  .headerr img {
+    position: absolute;
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    top: 23px;
+  }

@@ -1,0 +1,316 @@
+<table class="table tabla-sombra">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">FECHA </th>
+      <th scope="col">N° GUIA</th>
+      <th scope="col">N° GRANJA</th>
+      <th scope="col">T. ANIMALES</th>
+      <th scope="col">REG. ANIMALES</th>
+      <th scope="col"> ESTADO </th>
+      <th scope="col" colspan="3" class="text-center"> ACCIONES </th>
+    </tr>
+  </thead>
+  <tbody *ngFor="let guia of apiGuiasenasag | paginate: { itemsPerPage: 6, currentPage: pageActual } ; index as con">
+    <tr>
+      <td *ngIf="guia.estado == 1" class="activo" scope="col">{{con+1}}</td>
+      <td *ngIf="guia.estado == 0" class="inactivo" scope="col">{{con+1}}</td>
+
+      <td *ngIf="guia.estado == 1" class="activo">{{guia.feclle | date: 'dd/MM/yyyy'}} </td>
+      <td *ngIf="guia.estado == 0" class="inactivo">{{guia.feclle | date: 'dd/MM/yyyy'}} </td>
+
+      <td *ngIf="guia.estado == 1" class="activo">{{guia.nroguia}} </td>
+      <td *ngIf="guia.estado == 0" class="inactivo">{{guia.nroguia}} </td>
+
+      <td *ngIf="guia.estado == 1" class="activo">{{guia.granjas.nomgra}} </td>
+      <td *ngIf="guia.estado == 0" class="inactivo">{{guia.granjas.nomgra}} </td>
+
+      <td *ngIf="guia.estado == 1" class="text-center activo">{{guia.totani}} </td>
+      <td *ngIf="guia.estado == 0" class="text-center inactivo">{{guia.totani}} </td>
+
+      <td *ngIf="guia.estado == 1" class="text-center activo">{{guia.guiani}} </td>
+      <td *ngIf="guia.estado == 0" class="text-center inactivo">{{guia.guiani}} </td>
+
+      <td>
+        <!-- estado -->
+        <a *ngIf="guia.estado == 1" class="btn-custom">Completo</a>
+        <a *ngIf="guia.estado == 0" class="btn-customm">Pendiente</a>
+      </td>
+      <!--Modificar-->
+      <td>
+        <a *ngIf="guia.estado == 0" href="javascript:void(0)" (click)="llamaModalMod(contentMod, guia)"
+          class="bi bi-pencil-fill enlace-icono"></a>
+        <a *ngIf="guia.estado == 1" class="bi bi-pencil-fill enlace-iconoo">
+        </a>
+      </td>
+      <!--Eliminacion logica-->
+      <td>
+        <a *ngIf="guia.estado==0" href="javascript:void(0)" (click)="llamaModalDel(contentDel, guia)"
+          class="bi bi-trash-fill enlace-icono"></a>
+        <a *ngIf="guia.estado==1" class="bi bi-trash-fill enlace-iconoo"></a>
+      </td>
+
+      <!--vitas -->
+      <td>
+        <a href="javascript:void(0)" (click)="llamaModalVer(contentVer, guia)" class="bi bi-eye-fill enlace-icono"></a>
+
+      </td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <td colspan="8" align="center">
+      <pagination-controls (pageChange)="pageActual = $event" previousLabel="" nextLabel=""
+        class="my-pagination"></pagination-controls>
+    </td>
+  </tfoot>
+
+</table>
+
+
+<!--VENTANA MODAL PARA MODIFICAR DATOS  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentMod let-c="close" let-d="dismiss" id="modal-add">
+  <div class="modal-cuu">
+    <h4 class="modal-title" id="modal-basic-title" style="color: #236259; font-weight: bold;"> Modificar Guia de Movimiento Senasag... </h4>
+
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-5">
+
+          <!-- Buscardor Granjas-->
+          <div class="form-group" (mouseleave)="interactuandoConListaGranjas = false">
+            <label>Buscar Granja:</label>
+            <input type="text" class="form-control" [formControl]="granjaCtrl"
+              placeholder="Ingrese el nombre o código de la granja" (focus)="mostrarListaGranjas = true"
+              (input)="filtrarGranjas(granjaCtrl.value)" />
+            <ul *ngIf="mostrarListaGranjas && filteredGranjas.length" class="list-group-granjas"
+              (mouseenter)="interactuandoConListaGranjas = true" (mouseleave)="interactuandoConListaGranjas = false">
+              <li *ngFor="let granja of filteredGranjas" class="list-group-item" (click)="seleccionarGranja(granja)">
+                {{ granja.nomgra }} - {{ granja.codigo }}
+              </li>
+            </ul>
+            <div *ngIf="submitted && !granjaSeleccionada" class="invalid-feedback">
+              Seleccione una opción.
+            </div>
+          </div>
+
+
+
+          <!-- Imagen debajo del buscador -->
+          <div class="text-center mt-4 imagen-estatica">
+            <img src="assets/guia.jpeg" alt="Imagen representativa" class="img-fluid" />
+          </div>
+        </div>
+
+        <!-- Columna derecha: Inputs -->
+        <div class="col-md-7">
+          <!-- Fecha Guiasenasag -->
+          <div class="mixtad form-group">
+            <label>Fecha<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+            <input type="date" formControlName="feclle" class="form-control"
+              [ngClass]="{'is-invalid': submitted && f.feclle.errors }" />
+            <div *ngIf="submitted && f.feclle.errors" class="invalid-feedback">
+              <p *ngIf="f.feclle.errors.required"> Campo obligatorio </p>
+              <p *ngIf="f.feclle.errors.minlegth"> Mínimo 5 caracteres </p>
+              <p *ngIf="f.feclle.errors.maxlength"> Máximo 30 caracteres </p>
+            </div>
+          </div>
+
+          <!-- Numero de Guiasenasag -->
+          <div class="mixtad form-group">
+            <label>N° GMA<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+            <input type="number" formControlName="nroguia" class="form-control"
+              [ngClass]="{'is-invalid': submitted && f.nroguia.errors }" />
+            <div *ngIf="submitted && f.nroguia.errors" class="invalid-feedback">
+              <p *ngIf="f.nroguia.errors.required"> Campo obligatorio </p>
+              <p *ngIf="f.nroguia.errors.minlegth"> Mínimo 5 caracteres </p>
+              <p *ngIf="f.nroguia.errors.maxlength"> Máximo 30 caracteres </p>
+              <p *ngIf="f.nroguia.errors.min"> Numeros Positivos</p>
+            </div>
+          </div>
+
+          <!--Departamento -->
+          <div class="mixtad form-group">
+            <label>Departamento<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+            <select formControlName="departamentos" class="form-control max form-select"
+              [ngClass]="{'is-invalid': submitted && f.departamentos.errors}" (ngModelChange)="cargarOficinasLocales()">
+              <option value="">Selecciones un Departamentos ... </option>
+              <option *ngFor="let dep of apiDepartamentos" [value]="dep.iddep">{{ dep.nomdep }}</option>
+            </select>
+            <div *ngIf="submitted && f.departamentos.errors" class="invalid-feedback">
+              <p *ngIf="f.departamentos.errors.required"> Seleccione una opcion </p>
+            </div>
+          </div>
+          <!-- Oficina Local  -->
+          <div class="mixtad form-group">
+            <label> Oficina Local:</label><br>
+            <select formControlName="oficinalocal" class="form-control form-select max"
+              [ngClass]="{'is-invalid': submitted && f.oficinalocal.errors}">
+              <option value="">Oficinas Locales... </option>
+              <option *ngFor="let oficina of apiOficinasLocales" [value]="oficina.idofi">{{ oficina.nomofi }}</option>
+            </select>
+            <div *ngIf="submitted && f.oficinalocal.errors" class="invalid-feedback">
+              <p *ngIf="f.oficinalocal.errors.required"> Seleccione una opcion </p>
+            </div>
+          </div>
+
+          <!-- Ingreso de Hembras -->
+          <div class="form-group mixtad col-md-4">
+            <label>Hembras<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+            <input type="number" formControlName="tothem" class="form-control"
+              [ngClass]="{'is-invalid': submitted && f.tothem.errors }" (change)="sumarTotani()" />
+            <div *ngIf="submitted && f.tothem.errors" class="invalid-feedback">
+              <p *ngIf="f.tothem.errors.required"> Campo obligatorio </p>
+              <p *ngIf="f.tothem.errors.minlegth"> Mínimo 5 caracteres </p>
+              <p *ngIf="f.tothem.errors.maxlength"> Máximo 30 caracteres </p>
+              <p *ngIf="f.tothem.errors.min"> Numeros Positivos</p>
+            </div>
+          </div>
+          <!-- Ingreso de Machos  -->
+          <div class="form-group mixtad col-md-4">
+            <label>Machos<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+            <input type="number" formControlName="totmac" class="form-control"
+              [ngClass]="{'is-invalid': submitted && f.totmac.errors }" (change)="sumarTotani()" />
+            <div *ngIf="submitted && f.totmac.errors" class="invalid-feedback">
+              <p *ngIf="f.totmac.errors.required"> Campo obligatorio </p>
+              <p *ngIf="f.totmac.errors.minlegth"> Mínimo 5 caracteres </p>
+              <p *ngIf="f.totmac.errors.maxlength"> Máximo 30 caracteres </p>
+              <p *ngIf="f.totmac.errors.min"> Numeros Positivos</p>
+            </div>
+          </div>
+          <!-- Total Ingresos -->
+          <div class="form-group mixtad col-md-4">
+            <label>Total Animales</label>
+            <input type="number" formControlName="totani" class="form-control"
+              [ngClass]="{'is-invalid': submitted && f.totani.errors }" />
+            <div *ngIf="submitted && f.totani.errors" class="invalid-feedback">
+              <p *ngIf="f.totani.errors.required"> Campo obligatorio </p>
+              <p *ngIf="f.totani.errors.minlegth"> Mínimo 5 caracteres </p>
+              <p *ngIf="f.totani.errors.maxlength"> Máximo 30 caracteres </p>
+              <p *ngIf="f.totani.errors.min"> Numeros Positivos</p>
+            </div>
+          </div>
+          <div class="row">
+            <!-- Tipo de Servicio -->
+            <div class="form-group mixtadd col-md-8">
+              <label>Tipo de Servicios<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+              <select formControlName="tiposervicios" class="form-control form-select"
+                [ngClass]="{'is-invalid': submitted && f.tiposervicios.errors}" (change)="ontiposerviciosChange()">
+                <option value="">Tipo de Servicio... </option>
+                <option *ngFor="let tips of apiTiposervicios" [value]="tips.idtipser">{{ tips.nomser }}</option>
+              </select>
+              <div *ngIf="submitted && f.tiposervicios.errors" class="invalid-feedback">
+                <p *ngIf="f.tiposervicios.errors.required">Seleccione una opción</p>
+              </div>
+            </div>
+
+            <!-- Precio Pesaje -->
+            <div class="form-group mixtadpe col-md-4">
+              <label>Precio Pesaje</label>
+              <input type="number" formControlName="preguia" class="form-control text-right"
+                [ngClass]="{'is-invalid': submitted && f.preguia.errors}" (change)="calculateImpves()" />
+              <div *ngIf="submitted && f.preguia.errors" class="invalid-feedback">
+                <p *ngIf="f.preguia.errors.required">Campo obligatorio</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <!-- Ingreso por Pesaje -->
+            <div class="form-group mixtadpe col-md-4 offset-md-8">
+              <label>Ingreso Pesaje</label>
+              <input type="number" formControlName="ingguia" class="form-control text-right"
+                [ngClass]="{'is-invalid': submitted && f.ingguia.errors}" (change)="multiplicacionIngguia()" />
+              <div *ngIf="submitted && f.ingguia.errors" class="invalid-feedback">
+                <p *ngIf="f.ingguia.errors.required">Campo obligatorio</p>
+              </div>
+            </div>
+          </div>
+
+
+
+          <!--Observacion-->
+          <div class="form-group mixtadpe ">
+            <label>Observaciones: </label>
+            <textarea formControlName="observaciones" class="form-control"
+              [ngClass]="{'is-invalid': submitted && f.observaciones.errors }"></textarea>
+            <div *ngIf="submitted && f.observaciones.errors" class="invalid-feedback">
+              <p *ngIf="f.observaciones.errors.required"> Campo obligatorio </p>
+              <p *ngIf="f.observaciones.errors.minlength"> Mínimo 5 caracteres </p>
+              <p *ngIf="f.observaciones.errors.maxlength"> Máximo 30 caracteres </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="modal-pie">
+      <button type="button" class="btn-custoo" (click)="c('Save click')"> Cancelar </button>
+      <button type="submit" class="btn-custo"> Modifcar </button>
+    </div>
+  </form>
+</ng-template>
+
+<!-- VENTANA MODAL PARA OPCION ELIMINAR xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentDel let-c="close" let-d="dismiss">
+  <div class="modal-cu">
+  </div>
+  <div class="modal-body">
+    <h5 class="text-center">¿Esta seguro? Se dara de baja a la Guia Nº:
+      <h5 style="color:#236259; font-weight: bold;"><strong>{{ guiasenasagI.nroguia }} de la Granja {{
+          guiasenasagI.granjas.nomgra }} </strong></h5>
+    </h5>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmitDel()">
+    <div class="modal-pie">
+      <button type="button" class="btn-custoo" (click)="c('Save click')"> Cancelar</button>
+      <button type="submit" class="btn-custo"> Aceptar </button>
+    </div>
+  </form>
+</ng-template>
+
+<!--MODAL VER-->
+<ng-template #contentVer let-c="close" let-d="dismiss" id="modal-add">
+  <div class="modal-body">
+    <h4 class="text-center" style="color:#236259; font-weight: bold;">DETALLE DE INGRESO POR PESAJE DE ANIMALES</h4><br>
+    <h6 class="mixtadm text-center">FECHA:</h6>
+    <h6 class="mixtadm text-center">{{ guiasenasagI.feclle | date: 'dd/MM/yyyy'}}</h6>
+    <h6 class="mixtadm text-center">GRANJA:</h6>
+    <h6 class="mixtadm text-center">{{ guiasenasagI.granjas.nomgra }}</h6>
+    <h6 class="mixtadm text-center">CODIGO: </h6>
+    <h6 class="mixtadm text-center">{{ guiasenasagI.granjas.codigo}}</h6>
+
+    <table class="table tabla-sombra-2">
+      <thead class="thead-light">
+        <tr>
+          <th class="text-center">Cant.</th>
+          <th class="text-center">Descripción </th>
+          <th class="text-center">P. Unit. </th>
+          <th class="text-center">Importe</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="text-center">{{ guiasenasagI.totani}}</td>
+          <td class="text-center">SERVICO POR {{ guiasenasagI.tiposervicios.nomser}} DE LA GUÍA Nº {{ guiasenasagI.nroguia}} </td>
+          <td class="text-center">{{ guiasenasagI.preguia}}</td>
+          <td class="text-center">{{ guiasenasagI.ingguia}}</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="text-right" colspan="1">Total </td>
+          <td class="text-center">{{ guiasenasagI.ingguia}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="modal-pie">
+    <button type="button" class="btn-custoo" (click)="c('Save click')"> Cancelar </button>
+    <button type="submit" class="btn-custo" (click)="createPdf()">Crear PDF</button>
+  </div>
+
+</ng-template>

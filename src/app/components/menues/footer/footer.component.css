@@ -1,0 +1,54 @@
+.header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #f8f9fa; /* Color de fondo navbar-light */
+    color: black; /* Color del texto */
+    padding: 10px; /* Espaciado para la barra */
+    z-index: 1000; /* Asegura que la barra esté por encima de otros elementos */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.header .col-lg {
+    flex: 1;
+    text-align: center;
+}
+
+.header .col-lg.derecha {
+    text-align: right;
+}
+
+body {
+    padding-top: 50px; /* Ajustar según la altura de la barra superior */
+}
+img {
+    height: 55px;
+    width: 45px;
+    border-radius: 100%;
+    box-shadow: 5px 0 5px rgba(0, 0, 0, 0.5);
+    
+}
+.titulo {
+    font-size: 25px;
+    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lobster', cursive;
+    color: #236259;
+    margin-left: 15px;
+}
+.ingreso{
+    font-size: 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lobster', cursive;
+    color: #236259;
+}
+.derecha{
+    padding-left: 600px;
+}
+.custom-icon {
+    color: #236259;
+    font-size: 1.5rem;
+    font-weight: bold;
+}

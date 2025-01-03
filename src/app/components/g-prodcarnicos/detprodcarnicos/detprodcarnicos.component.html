@@ -1,0 +1,126 @@
+<table class="table tabla-sombra">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">FECHA</th>
+      <th scope="col">CLIENTES</th>
+      <th scope="col">PESO (KG)</th>
+      <th scope="col">ESTADO</th>
+      <th scope="col" colspan="4" class="text-center"> ACCIONES </th>
+    </tr>
+  </thead>
+  <tbody *ngFor="let prdc of apiProdcarnicos | paginate: { itemsPerPage: 6, currentPage: pageActual } ; index as con">
+    <tr>
+      <td *ngIf="prdc.estado == 1" class="activo" scope="col">{{con+1}}</td>
+      <td *ngIf="prdc.estado == 0" class="inactivo" scope="col">{{con+1}}</td>
+
+      <td *ngIf="prdc.estado == 1" class="activo">{{prdc.fechaing | date: 'dd/MM/yyyy'}} </td>
+      <td *ngIf="prdc.estado == 0" class="inactivo">{{prdc.fechaing | date: 'dd/MM/yyyy'}} </td>
+
+      <td *ngIf="prdc.estado == 1" class="activo">{{prdc.clientes.nomcli}} </td>
+      <td *ngIf="prdc.estado == 0" class="inactivo">{{prdc.clientes.nomcli}} </td>
+
+      <td *ngIf="prdc.estado == 1" class="activo">{{prdc.pesotot }} </td>
+      <td *ngIf="prdc.estado == 0" class="inactivo">{{prdc.pesotot}} </td>
+
+      <td>
+        <!-- estado -->
+        <a *ngIf="prdc.estado == 1" class="btn-custom">Activo</a>
+        <a *ngIf="prdc.estado == 0" class="btn-customm">Inactivo</a>
+      </td>
+    
+      <!--Eliminacion logica-->
+      <td>
+        <a *ngIf="prdc.estado==1" href="javascript:void(0)" (click)="llamaModalDel(contentDel, prdc)"
+          class="bi bi-trash-fill enlace-icono"></a>
+        <a *ngIf="prdc.estado==0" class="bi bi-trash-fill enlace-iconoo"></a>
+      </td>
+
+      <!--Vista -->
+      <td>
+        <a  href="javascript:void(0)" (click)="llamaModalMos(contentMos, prdc)"  class="bi bi-eye-fill enlace-icono"></a>
+      
+        <a ></a>
+      </td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <td colspan="8" align="center">
+      <pagination-controls (pageChange)="pageActual = $event" previousLabel="" nextLabel=""
+        class="my-pagination"></pagination-controls>
+    </td>
+  </tfoot>
+</table>
+
+
+<!-- VENTANA MODAL PARA OPCION ELIMINAR   -->
+<ng-template #contentDel let-c="close" let-d="dismiss">
+  <div class="modal-cu">
+  </div>
+  <div class="modal-body">
+    <h5 class="text-center">¿Esta seguro? Se dará de baja el detalle Nº
+      <strong style="color:#236259">{{ prdcI.numpro }} </strong> del Cliente <strong style="color:#236259">"{{ prdcI.clientes.nomcli }}"</strong>
+    </h5>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmitDel()">
+    <div class="modal-pie">
+      <button type="button" class="btn-custoo" (click)="c('Save click')">Cancelar</button>
+      <button type="submit" class="btn-custo"> Aceptar </button>
+    </div>
+  </form>
+</ng-template>
+
+
+
+
+<!-- VENTANA MODAL PARA OPCION MOSTRAR  *************************************************************  -->
+<ng-template #contentMos let-c="close" let-d="dismiss">
+
+  <div class="modal-body">
+    <h4 class="text-center" style="color:#236259; font-weight: bold;">DETALLE DE PRODUCTOS</h4><br>
+    <h6 class="mixtadm text-center">FECHA:</h6>
+    <h6 class="mixtadm text-center">{{prdcI.fechaing}}</h6>
+    <h6 class="mixtadm text-center">Nº DETALLE:</h6>
+    <h6 class="mixtadm text-center">{{ prdcI.numpro }}</h6>
+    <h6 class="mixtadm text-center">CLIENTES:</h6>
+    <h6 class="mixtadm text-center">{{prdcI.clientes.nomcli}}</h6>
+    <h6 class="mixtadm text-center">Nº FAENA:</h6>
+    <h6 class="mixtadm text-center">{{apiDetprodc[0]?.serviciofaena?.numfae}}</h6>
+    <h6 class="mixtadm text-center ">ANIMAL:</h6>
+    <h6 class="mixtadm text-center">RAZA {{apiDetprodc[0]?.detserviciofaena.animales.razas.nomraz}} CON PESO DE {{apiDetprodc[0]?.detserviciofaena.animales.pesani}} Kg. </h6>
+    
+
+
+    <table class="table tabla-sombra-2">
+      <thead class="thead-light">
+        <tr>
+          <th class="text-center">#</th>
+          <th class="text-center">Descripcion </th>
+          <th class="text-center">Peso (kg.)</th>
+        </tr>
+      </thead>
+      <tbody *ngFor=" let det of apiDetprodc, index as con" >
+        <tr>
+          <td scope="col" >{{con+1}}</td>
+          <td scope="col" >{{det.tipoprodcarnico.nompro}}</td>
+          <td scope="col" class="text-center">{{det.pesoing}}</td>
+
+        </tr>
+
+      </tbody>
+      <tr>
+        <td colspan="2" class="text-center">TOTAL</td>
+        <td class="text-center">{{ prdcI.pesotot }}</td>
+      </tr>
+    </table>
+    <h6 class="mixtadm1 text-center">Observacion:</h6>
+    <h6 class="mixtadm2 text-center">{{ prdcI.obserpro }}</h6>
+  </div>
+
+  <div class="modal-pie">
+    <button type="button" class="btn-custoo" (click)="c('Save click')"> Cancelar </button>
+    <button type="submit" class="btn-custo" (click)="createPdf()">Crear PDF</button>
+   
+  </div>
+</ng-template>
+

@@ -1,0 +1,236 @@
+<div class="container">
+  <div class="container-with-shadow">
+    <div class="content">
+      <h5 class="text-center" style="color: #236259; font-weight: bold;">GESTIÓN GUIA SENASAG</h5>
+      <a href="javascript:void(0)" (click)="llamaModalAdd(contentAdd)" class="btn-custom-color">Nueva Guia</a>
+    </div>
+  </div>
+  <div class="dropdown-divider"></div>
+  <!--Inicio de formulario del Filtro-->
+  <form [formGroup]="formFiltro" class="filtro-form">
+    <div class="form-inline-container">
+      <!-- Input de Granjas -->
+      <div class="form-group mixtad">
+        <select formControlName="idgranja" class="form-control compact-select" (change)="filtrarNombre()">
+          <option [ngValue]="null">Granja...</option>
+          <option *ngFor="let gra of apiGranjas" [ngValue]="gra.idgranja">{{ gra.nomgra }}</option>
+        </select>
+      </div>
+
+      <!-- Radios de Estado -->
+      <div class="form-group opciones">
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" formControlName="estadosGuia" name="estadosGuia"
+            id="exampleRadios1" value="1" (change)="filtrarNombre()">
+          <label class="form-check-label" for="exampleRadios1">Completo</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" formControlName="estadosGuia" name="estadosGuia"
+            id="exampleRadios2" value="0" (change)="filtrarNombre()">
+          <label class="form-check-label" for="exampleRadios2">Pendiente</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" formControlName="estadosGuia" name="estadosGuia"
+            id="exampleRadios3" value="-1" (change)="filtrarNombre()" checked="true">
+          <label class="form-check-label" for="exampleRadios3">Todos</label>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!--fin de formulario del Filtro-->
+  <div class="dropdown-divider"></div>
+  <div>
+    <app-detguiasenasag></app-detguiasenasag>
+  </div>
+
+</div>
+
+
+
+<!--VENTANA MODAL PARA ADICIONAR DATOS  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+
+<ng-template #contentAdd let-c="close" let-d="dismiss" id="modal-add">
+  <div class="modal-cuu">
+    <h4 class="modal-title" id="modal-basic-title"> Adicionar Guia de Movimiento Senasag... </h4>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-5">
+
+          <!-- Buscardor Granjas-->
+          <div class="form-group" (mouseleave)="interactuandoConListaGranjas = false">
+            <label>Buscar Granja:</label>
+            <input type="text" class="form-control" [class.is-invalid]="submitted && !granjaSeleccionada"
+              [formControl]="granjaCtrl" placeholder="Ingrese el nombre o código de la granja"
+              (focus)="mostrarListaGranjas = true" (input)="filtrarGranjas(granjaCtrl.value)"
+              (blur)="ocultarListaGranjas()" />
+            <ul *ngIf="mostrarListaGranjas && filteredGranjas.length" class="list-group-granjas"
+              (mouseenter)="interactuandoConListaGranjas = true" (mouseleave)="interactuandoConListaGranjas = false">
+              <li *ngFor="let granja of filteredGranjas" class="list-group-item" (click)="seleccionarGranja(granja)">
+                {{ granja.nomgra }} - {{ granja.codigo }}
+              </li>
+            </ul>
+            <div *ngIf="submitted && !granjaSeleccionada" class="invalid-feedback">
+              Seleccione una opción.
+            </div>
+          </div>
+
+
+          <!-- Imagen debajo del buscador -->
+          <div class="text-center mt-4 imagen-estatica">
+            <img src="assets/guia.jpeg" alt="Imagen representativa" class="img-fluid" />
+          </div>
+        </div>
+
+        <!-- Columna derecha: Inputs -->
+        <div class="col-md-7">
+          <!-- Fecha Guiasenasag -->
+          <div class="mixtad form-group">
+            <label>Fecha<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+            <input type="date" formControlName="feclle" class="form-control"
+              [ngClass]="{'is-invalid': submitted && f.feclle.errors }" />
+            <div *ngIf="submitted && f.feclle.errors" class="invalid-feedback">
+              <p *ngIf="f.feclle.errors.required"> Campo obligatorio </p>
+              <p *ngIf="f.feclle.errors.minlegth"> Mínimo 5 caracteres </p>
+              <p *ngIf="f.feclle.errors.maxlength"> Máximo 30 caracteres </p>
+            </div>
+          </div>
+
+          <!-- Numero de Guiasenasag -->
+          <div class="mixtad form-group">
+            <label>N° GMA<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+            <input type="number" formControlName="nroguia" class="form-control"
+              [ngClass]="{'is-invalid': submitted && f.nroguia.errors }" />
+            <div *ngIf="submitted && f.nroguia.errors" class="invalid-feedback">
+              <p *ngIf="f.nroguia.errors.required"> Campo obligatorio </p>
+              <p *ngIf="f.nroguia.errors.minlegth"> Mínimo 5 caracteres </p>
+              <p *ngIf="f.nroguia.errors.maxlength"> Máximo 30 caracteres </p>
+              <p *ngIf="f.nroguia.errors.min"> Numeros Positivos</p>
+            </div>
+          </div>
+
+          <!--Departamento -->
+          <div class="mixtad form-group">
+            <label>Departamento<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+            <select formControlName="departamentos" class="form-control max form-select"
+              [ngClass]="{'is-invalid': submitted && f.departamentos.errors}" (ngModelChange)="cargarOficinasLocales()">
+              <option value="">Departamentos ... </option>
+              <option *ngFor="let dep of apiDepartamentos" [value]="dep.iddep">{{ dep.nomdep }}</option>
+            </select>
+            <div *ngIf="submitted && f.departamentos.errors" class="invalid-feedback">
+              <p *ngIf="f.departamentos.errors.required"> Seleccione una opcion </p>
+            </div>
+          </div>
+          <!-- Oficina Local  -->
+          <div class="mixtad form-group">
+            <label> Oficina Local:</label><br>
+            <select formControlName="oficinalocal" class="form-control form-select max"
+              [ngClass]="{'is-invalid': submitted && f.oficinalocal.errors}">
+              <option value="">Oficinas Locales... </option>
+              <option *ngFor="let oficina of apiOficinasLocales" [value]="oficina.idofi">{{ oficina.nomofi }}</option>
+            </select>
+            <div *ngIf="submitted && f.oficinalocal.errors" class="invalid-feedback">
+              <p *ngIf="f.oficinalocal.errors.required"> Seleccione una opcion </p>
+            </div>
+          </div>
+
+          <!-- Ingreso de Hembras -->
+          <div class="form-group mixtad col-md-4">
+            <label>Hembras<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+            <input type="number" formControlName="tothem" class="form-control"
+              [ngClass]="{'is-invalid': submitted && f.tothem.errors }" (change)="sumarTotani()" />
+            <div *ngIf="submitted && f.tothem.errors" class="invalid-feedback">
+              <p *ngIf="f.tothem.errors.required"> Campo obligatorio </p>
+              <p *ngIf="f.tothem.errors.minlegth"> Mínimo 5 caracteres </p>
+              <p *ngIf="f.tothem.errors.maxlength"> Máximo 30 caracteres </p>
+              <p *ngIf="f.tothem.errors.min"> Numeros Positivos</p>
+            </div>
+          </div>
+          <!-- Ingreso de Machos  -->
+          <div class="form-group mixtad col-md-4">
+            <label>Machos<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+            <input type="number" formControlName="totmac" class="form-control"
+              [ngClass]="{'is-invalid': submitted && f.totmac.errors }" (change)="sumarTotani()" />
+            <div *ngIf="submitted && f.totmac.errors" class="invalid-feedback">
+              <p *ngIf="f.totmac.errors.required"> Campo obligatorio </p>
+              <p *ngIf="f.totmac.errors.minlegth"> Mínimo 5 caracteres </p>
+              <p *ngIf="f.totmac.errors.maxlength"> Máximo 30 caracteres </p>
+              <p *ngIf="f.totmac.errors.min"> Numeros Positivos</p>
+            </div>
+          </div>
+          <!-- Total Ingresos -->
+          <div class="form-group mixtad col-md-4">
+            <label>Total Animales</label>
+            <input type="number" formControlName="totani" class="form-control"
+              [ngClass]="{'is-invalid': submitted && f.totani.errors }" />
+            <div *ngIf="submitted && f.totani.errors" class="invalid-feedback">
+              <p *ngIf="f.totani.errors.required"> Campo obligatorio </p>
+              <p *ngIf="f.totani.errors.minlegth"> Mínimo 5 caracteres </p>
+              <p *ngIf="f.totani.errors.maxlength"> Máximo 30 caracteres </p>
+              <p *ngIf="f.totani.errors.min"> Numeros Positivos</p>
+            </div>
+          </div>
+          <div class="row">
+            <!-- Tipo de Servicio -->
+            <div class="form-group mixtadd col-md-8">
+              <label>Tipo de Servicios<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+              <select formControlName="tiposervicios" class="form-control form-select"
+                [ngClass]="{'is-invalid': submitted && f.tiposervicios.errors}" (change)="ontiposerviciosChange()">
+                <option value="">Tipo de Servicio... </option>
+                <option *ngFor="let tips of apiTiposervicios" [value]="tips.idtipser">{{ tips.nomser }}</option>
+              </select>
+              <div *ngIf="submitted && f.tiposervicios.errors" class="invalid-feedback">
+                <p *ngIf="f.tiposervicios.errors.required">Seleccione una opción</p>
+              </div>
+            </div>
+
+            <!-- Precio Pesaje -->
+            <div class="form-group mixtadpe col-md-4">
+              <label>Precio Pesaje</label>
+              <input type="number" formControlName="preguia" class="form-control text-right"
+                [ngClass]="{'is-invalid': submitted && f.preguia.errors}" (change)="calculateImpves()" />
+              <div *ngIf="submitted && f.preguia.errors" class="invalid-feedback">
+                <p *ngIf="f.preguia.errors.required">Campo obligatorio</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <!-- Ingreso por Pesaje -->
+            <div class="form-group mixtadpe col-md-4 offset-md-8">
+              <label>Ingreso Pesaje</label>
+              <input type="number" formControlName="ingguia" class="form-control text-right"
+                [ngClass]="{'is-invalid': submitted && f.ingguia.errors}" (change)="multiplicacionIngguia()" />
+              <div *ngIf="submitted && f.ingguia.errors" class="invalid-feedback">
+                <p *ngIf="f.ingguia.errors.required">Campo obligatorio</p>
+              </div>
+            </div>
+          </div>
+
+
+
+          <!--Observacion-->
+          <div class="form-group mixtadpe ">
+            <label>Observaciones: </label>
+            <textarea formControlName="observaciones" class="form-control"
+              [ngClass]="{'is-invalid': submitted && f.observaciones.errors }"></textarea>
+            <div *ngIf="submitted && f.observaciones.errors" class="invalid-feedback">
+              <p *ngIf="f.observaciones.errors.required"> Campo obligatorio </p>
+              <p *ngIf="f.observaciones.errors.minlength"> Mínimo 5 caracteres </p>
+              <p *ngIf="f.observaciones.errors.maxlength"> Máximo 30 caracteres </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!-- Pie del modal -->
+    <div class="modal-pie">
+      <button type="button" class="btn-customm" (click)="c('Save click')">Cancelar</button>
+      <button type="submit" class="btn-custom">Guardar</button>
+    </div>
+  </form>
+</ng-template>

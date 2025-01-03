@@ -1,0 +1,233 @@
+<table class="table tabla-sombra">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">FECHA LLEGADA</th>
+      <th scope="col">GUIA</th>
+      <th scope="col">CORRAL</th>
+      <th scope="col">TIPO ANIMAL</th>
+      <th scope="col">RAZA</th>
+      <th scope="col">TIPO</th>
+      <th scope="col">PESO</th>
+      <th scope="col">ESTADO</th>
+      <th scope="col" colspan="2" class="text-center">ACCIONES</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let ani of apiAnimales | paginate: { itemsPerPage: 6, currentPage: pageActual } ; index as con" 
+        [ngClass]="{'activo': ani.estado == 1, 'inactivo': ani.estado == 0}">
+        
+      <td scope="col">{{con + 1}}</td>
+      <td>{{ani.feclleg | date: 'dd/MM/yyyy' }}</td>
+      <td>{{ani.guiasenasag.nroguia}}</td>
+      <td>{{ani.corrales.nomcor}}</td>
+      <td>{{ani.tipoanimal.nomtip}}</td>
+      <td>{{ani.razas.nomraz}}</td>
+      <td>{{ani.tipocs}}</td>
+      <td>{{ani.pesani}}</td>
+      <td>
+        <a *ngIf="ani.estado == 1" class="btn-custom">Activo</a>
+        <a *ngIf="ani.estado == 0" class="btn-customm">Baja</a>
+      </td>
+      <!-- Modificar -->
+      <td>
+        <a *ngIf="ani.estado == 1" href="javascript:void(0)" (click)="llamaModalMod(contentMod, ani)"
+          class="bi bi-pencil-fill enlace-icono"></a>
+        <a *ngIf="ani.estado == 0" class="bi bi-pencil-fill enlace-iconoo"></a>
+      </td>
+      <!-- Eliminación lógica -->
+      <td>
+        <a *ngIf="ani.estado == 1" href="javascript:void(0)" (click)="llamaModalDel(contentDel, ani)"
+          class="bi bi-trash-fill enlace-icono"></a>
+        <a *ngIf="ani.estado == 0" class="bi bi-trash-fill enlace-iconoo"></a>
+      </td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="11" align="center">
+        <pagination-controls (pageChange)="pageActual = $event" previousLabel="" nextLabel=""
+          class="my-pagination"></pagination-controls>
+      </td>
+    </tr>
+  </tfoot>
+</table>
+
+
+
+<!--VENTANA MODAL PARA MODIFICAR DATOS  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentMod let-c="close" let-d="dismiss" id="modal-add">
+    <!-- Encabezado del modal -->
+    <div class="modal-cuu">
+      <h4 class="modal-title" id="modal-basic-title" style="font-weight: bold;">Adicionar Animal...</h4>
+    </div>
+  
+    <!-- Inicio del formulario en un contenedor de Flexbox -->
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="modal-body">
+        <div class="row">
+          <!-- Columna izquierda: Buscador con imagen debajo -->
+          <div class="col-md-5">
+            <!-- Buscador -->
+            <div class="form-group">
+              <label>N° Guia Senasag<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+              <select formControlName="guiasenasag" class="form-select" class="form-control"
+                [ngClass]="{'is-invalid': submitted && f.guiasenasag.errors}">
+                <option value="">N° Guia Senasag... </option>
+                <option *ngFor="let gui of apiGuiasenasag" value={{gui.idguisen}}>{{gui.nroguia}}</option>
+              </select>
+              <div *ngIf="submitted && f.guiasenasag.errors" class="invalid-feedback">
+                <p *ngIf="f.guiasenasag.errors.required"> Seleccione una opcion </p>
+              </div>
+            </div>
+  
+  
+            <!-- Imagen debajo del buscador -->
+            <div class="text-center mt-4 imagen-estatica">
+              <img src="assets/res.jpeg" alt="Imagen representativa" class="img-fluid" />
+            </div>
+          </div>
+  
+          <!-- Columna derecha: Inputs -->
+          <div class="col-md-7">
+            <!-- Animal Seleccionado -->
+            <div class="mixtad form-group">
+              <label>Fecha de llegada<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+              <input type="date" formControlName="feclleg" class="form-control"
+                [ngClass]="{'is-invalid': submitted && f.feclleg.errors }" />
+              <div *ngIf="submitted && f.feclleg.errors" class="invalid-feedback">
+                <p *ngIf="f.feclleg.errors.required"> Campo obligatorio </p>
+                <p *ngIf="f.feclleg.errors.minlength"> Mínimo 5 caracteres </p>
+                <p *ngIf="f.feclleg.errors.maxlength"> Máximo 30 caracteres </p>
+              </div>
+            </div>
+  
+            <!--TipoAnimal-->
+            <div class="mixtad form-group">
+              <label>Tipo Animal<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+              <select formControlName="tipoanimal" class="form-select max " class="form-control"
+                [ngClass]="{'is-invalid': submitted && f.tipoanimal.errors}" (ngModelChange)="cargarTipoanimal()">
+                <option value="">Tipo de Animales... </option>
+                <option *ngFor="let tip of apiTipoanimal" [value]="tip.idtip">{{ tip.nomtip }}</option>
+              </select>
+              <div *ngIf="submitted && f.tipoanimal.errors" class="invalid-feedback">
+                <p *ngIf="f.tipoanimal.errors.required"> Seleccione una opcion </p>
+              </div>
+            </div>
+            <!--Corrales-->
+            <div class="form-group mixtad">
+              <label>Corrales<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+              <select formControlName="corrales" class="form-control max form-select"
+                [ngClass]="{'is-invalid': submitted && f.corrales.errors}">
+                <option value="">Corrales ... </option>
+                <option *ngFor="let corr of apiCorrales" [value]="corr.idcorral">{{ corr.nomcor }}</option>
+              </select>
+              <div *ngIf="submitted && f.corrales.errors" class="invalid-feedback">
+                <p *ngIf="f.corrales.errors.required"> Corrales </p>
+              </div>
+            </div>
+  
+            <!-- Razas   -->
+            <div class=" mixtad form-group ">
+              <label>Raza de Animal<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+              <select formControlName="razas" class="form-select max form-control"
+                [ngClass]="{'is-invalid': submitted && f.razas.errors}">
+                <option value="">Razas de Animales </option>
+                <option *ngFor="let raz of apiRazas" [value]="raz.idraz">{{ raz.nomraz }}</option>
+              </select>
+              <div *ngIf="submitted && f.razas.errors" class="invalid-feedback">
+                <p *ngIf="f.razas.errors.required"> Seleccione una opcion </p>
+              </div>
+            </div>
+  
+            <div class="mixtad form-group">
+              <label>Edad del Animal (Años)<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+              <input type="text" formControlName="edadani" class="form-control"
+                [ngClass]="{'is-invalid': submitted && f.edadani.errors }" />
+              <div *ngIf="submitted && f.edadani.errors" class="invalid-feedback">
+                <p *ngIf="f.edadani.errors.required"> Campo obligatorio </p>
+                <p *ngIf="f.edadani.errors.minlength"> Mínimo 5 caracteres </p>
+                <p *ngIf="f.edadani.errors.maxlength"> Máximo 30 caracteres </p>
+              </div>
+            </div>
+  
+            <div class="mixtad form-group">
+              <label>Peso del Animal (Kg.)<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+              <input type="text" formControlName="pesani" class="form-control"
+                [ngClass]="{'is-invalid': submitted && f.pesani.errors }" />
+              <div *ngIf="submitted && f.pesani.errors" class="invalid-feedback">
+                <p *ngIf="f.pesani.errors.required"> Campo obligatorio </p>
+                <p *ngIf="f.pesani.errors.minlength"> Mínimo 5 caracteres </p>
+                <p *ngIf="f.pesani.errors.maxlength"> Máximo 30 caracteres </p>
+              </div>
+            </div>
+  
+  
+  
+            <div class="mixtad form-group">
+              <label>Origen del Animal<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+              <select formControlName="origenani" class="form-select max form-control"
+                [ngClass]="{'is-invalid': submitted && f.origenani.errors}">
+                <option value="">Seleccionar tipo</option>
+                <option value="CRIOLLA">CRIOLLA</option>
+                <option value="GRANJA">GRANJA</option>
+              </select>
+              <div *ngIf="submitted && f.origenani.errors" class="invalid-feedback">
+                <p *ngIf="f.origenani.errors.required">Seleccione una opción</p>
+              </div>
+            </div>
+  
+            <!-- Sexo del Animal -->
+            <div class="mixtad form-group">
+              <label>Sexo del Animal<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+              <select formControlName="sexo" class="form-select max form-control"
+                [ngClass]="{'is-invalid': submitted && f.sexo.errors}">
+                <option value="">Seleccionar Sexo</option>
+                <option value="macho">Macho</option>
+                <option value="hembra">Hembra</option>
+              </select>
+              <div *ngIf="submitted && f.sexo.errors" class="invalid-feedback">
+                <p *ngIf="f.sexo.errors.required">Seleccione una opción</p>
+              </div>
+            </div>
+  
+            <div class="mixtad form-group">
+              <label>Tipo<span style="color: #8B0000; font-size: 1.2em;">*</span></label><br>
+              <select formControlName="tipocs" class="form-select max form-control"
+                [ngClass]="{'is-invalid': submitted && f.tipocs.errors}">
+                <option value="">Seleccionar tipo</option>
+                <option value="compra">Compra</option>
+                <option value="servicio">Servicio</option>
+              </select>
+              <div *ngIf="submitted && f.tipocs.errors" class="invalid-feedback">
+                <p *ngIf="f.tipocs.errors.required">Seleccione una opción</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Pie del modal -->
+      <div class="modal-pie">
+        <button type="button" class="btn-customm" (click)="c('Save click')">Cancelar</button>
+        <button type="submit" class="btn-custom">Modificar</button>
+      </div>
+    </form>
+  </ng-template>
+
+<!-- VENTANA MODAL PARA OPCION ELIMINAR xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentDel let-c="close" let-d="dismiss">
+  <div class="modal-cu">
+  </div>
+  <div class="modal-body">
+    <h5 class="text-center" >¿Esta seguro? Se Eliminara el Animal:
+      <h5 style="color:#236259; font-weight: bold;"><strong> Con Nro de Guia {{ animalesI.guiasenasag.nroguia }}, de Raza {{ animalesI.razas.nomraz }} con un Peso de {{ animalesI.pesani }} </strong></h5>
+    </h5>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmitDel()">
+    <div class="modal-pie">
+      <button type="button" class="btn-custoo" (click)="c('Save click')"> Cancelar</button>
+      <button type="submit" class="btn-custo"> Aceptar </button>
+    </div>
+  </form>
+</ng-template>
+

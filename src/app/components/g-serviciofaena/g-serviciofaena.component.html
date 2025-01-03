@@ -1,0 +1,211 @@
+<div class="container">
+  <div class="container-with-shadow">
+    <div class="content">
+      <h5 class="text-center" style="color: #236259; font-weight: bold;">GESTIÓN SERVICIO DE FAENA</h5>
+      <a href="javascript:void(0)" (click)="llamaModalAdd(contentAdd)" class="btn-custom-color">Nuevo Servicio</a>
+    </div>
+  </div>
+  <div class="dropdown-divider"></div>
+  <form [formGroup]="formFiltro" class="filtro-form">
+    <div class="formArriba">
+
+      <div class="mixtad form-group">
+        <select formControlName="idcli" class="form-control max form-select" (change)="filtrarNombre()">
+          <option [ngValue]="null">Cliente...</option>
+          <option *ngFor="let cli of apiClientes" [ngValue]="cli.idcli">{{ cli.nomcli }}</option>
+        </select>
+      </div>
+
+      <div class="form-group opciones">
+        <div class="form-check form-check-inline radio-container">
+          <input class="form-check-input" type="radio" formControlName="estadosSerfa" name="estadosSerfa"
+            id="exampleRadios1" value="1" (change)="filtrarNombre()">
+          <label class="form-check-label" for="exampleRadios1">Activos</label>
+        </div>
+        <div class="form-check form-check-inline radio-container">
+          <input class="form-check-input" type="radio" formControlName="estadosSerfa" name="estadosSerfa"
+            id="exampleRadios2" value="0" (change)="filtrarNombre()">
+          <label class="form-check-label" for="exampleRadios2">Inactivos</label>
+        </div>
+        <div class="form-check form-check-inline radio-container">
+          <input class="form-check-input" type="radio" formControlName="estadosSerfa" name="estadosSerfa"
+            id="exampleRadios3" value="-1" (change)="filtrarNombre()" checked>
+          <label class="form-check-label" for="exampleRadios3">Todos</label>
+        </div>
+      </div>
+    </div>
+  </form>
+
+
+
+  <div class="dropdown-divider"></div>
+  <div>
+    <app-detserviciofaena></app-detserviciofaena>
+
+  </div>
+
+</div>
+
+
+
+<!--VENTANA MODAL PARA ADICIONAR DATOS  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  -->
+<ng-template #contentAdd let-c="close" let-d="dismiss" id="modal-add">
+  <div class="modal-cuu">
+    <h4 class="modal-title" id="modal-basic-title" style="font-weight: bold;"> Adicionar Servicio de Faena... </h4>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="modal-body">
+
+      <div class="form-group mixtad">
+        <label>Fecha<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="date" formControlName="fecser" class="form-control"
+          [ngClass]="{'is-invalid': submitted && form.get('fecser').errors}" />
+        <div *ngIf="submitted && form.get('fecser').errors" class="invalid-feedback">
+          <p *ngIf="form.get('fecser').errors.required">Campo obligatorio</p>
+          <p *ngIf="form.get('fecser').errors.dateNotToday">La fecha debe ser de hoy</p>
+        </div>
+      </div>
+
+
+      <!--clientes-->
+      <div class="mixtad form-group" (mouseleave)="interactuandoConLista = false">
+        <label>Buscar Cliente<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" class="form-control" [class.is-invalid]="submitted && !clienteSeleccionado"
+          placeholder="Ingrese el nombre o NIT del cliente" [formControl]="clienteCtrl" (focus)="mostrarLista = true"
+          (input)="filtrarClientes(clienteCtrl.value)" (blur)="ocultarLista()" />
+        <ul *ngIf="mostrarLista && filteredClientes.length" class="list-group-clientes"
+          (mouseenter)="interactuandoConLista = true" (mouseleave)="interactuandoConLista = false">
+          <li *ngFor="let cli of filteredClientes" class="list-group-item" (click)="seleccionarCliente(cli)">
+            {{ cli.nomcli }} - {{ cli.nit }}
+          </li>
+        </ul>
+        <div *ngIf="submitted && !clienteSeleccionado" class="invalid-feedback">
+          <p>Debe seleccionar un cliente.</p>
+        </div>
+      </div>
+
+
+      <!--Tabla -->
+      <table class="table tabla-sombra">
+        <thead class="thead-light">
+            <tr>
+              <th>#</th>
+              <th>DESCRIPCIÓN </th>
+              <th>CANT.</th>
+              <th>PRECIO</th>
+              <th>OP.</th>
+            </tr>
+        </thead>
+        <tbody *ngFor=" let det of apiDetserfatemp, index as con">
+          <tr>
+            <td scope="col">{{con+1}}</td>
+            <td scope="col">{{det.tiposervicios.nomser}} DE RAZA {{det.animales.razas.nomraz}} CON UN PESO DE
+              {{det.animales.pesani}} KG.</td>
+            <td scope="col">{{det.canser}}</td>
+            <td scope="col">{{det.preser}}</td>
+            <td>
+              <a href="javascript:void(0)" (click)="eliminardet(det.idtempser,det.preser,det.animales.idani)"
+                class="bi bi-trash-fill enlace-iconoo"></a>
+            </td>
+          </tr>
+        </tbody>
+        <tr>
+          <td>
+            <a href="javascript:void(0)" (click)="llamaModaldet(contentdet)"
+              class="bi bi-plus-circle-fill enlace-icono"></a>
+
+
+
+          </td>
+          <td></td>
+          <td scope="col">Total</td>
+          <td>{{ total }}</td>
+          <td></td>
+        </tr>
+      </table>
+      <!--Tabla fin  -->
+
+    </div>
+    <div class="modal-pie">
+      <button type="button" class="btn-customm" (click)="cancelar()"> Cancelar </button>
+      <button type="submit" class="btn-custom"> Guardar </button>
+    </div>
+  </form>
+</ng-template>
+
+<!-- Modal de Adicion de Detserviciofaena -->
+<ng-template #contentdet let-c="close" let-d="dismiss" id="modal-add">
+  <div class="modal-cuu">
+    <h4 class="modal-title" id="modal-basic-title" style="font-weight: bold;">
+      Adicionar Detalle de Servicio de Faena...
+    </h4>
+  </div>
+
+  <form [formGroup]="formdet" (ngSubmit)="onDetcompras()">
+    <div class="modal-body">
+      <div class="row">
+        <!-- Columna izquierda: Buscador con imagen debajo -->
+        <div class="col-md-5">
+          <!-- Buscador -->
+          <div class="form-group">
+            <label for="buscarAnimal">Buscar Animal<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+            <input type="text" id="buscarAnimal" class="form-control" placeholder="Buscar por raza, Nº Guia o peso"
+              (input)="filtrarAnimales($event.target.value)" />
+            <ul *ngIf="animalesFiltrados.length > 0" class="list-group-animales mt-2">
+              <li class="list-group-item" *ngFor="let animal of animalesFiltrados" (click)="seleccionarAnimal(animal)">
+                {{ animal.razas.nomraz }} - {{ animal.guiasenasag.nroguia }} - {{ animal.pesani }} kg
+              </li>
+            </ul>
+          </div>
+
+
+          <!-- Imagen debajo del buscador -->
+          <div class="text-center mt-4 imagen-estatica">
+            <img src="assets/anit.jpeg" alt="Imagen representativa" class="img-fluid" />
+          </div>
+        </div>
+
+        <!-- Columna derecha: Inputs -->
+        <div class="col-md-7">
+          <!-- Animal Seleccionado -->
+          <div class="form-group mixtad">
+            <label>Animal Seleccionado<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+            <input type="text" formControlName="animales" class="form-control"
+              [value]="animalSeleccionado?.razas.nomraz" disabled />
+          </div>
+
+ 
+
+          <!-- Código -->
+          <div class="form-group mixtad">
+            <label>Peso Animales:</label>
+            <input type="number" formControlName="pesani" class="form-control" [value]="animalSeleccionado?.pesani" />
+          </div>
+
+          <!-- Tipo de Servicios -->
+          <div class="form-group mixtad">
+            <label>Tipo de Servicios<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+            <select formControlName="tiposervicios" class="form-select form-control" (change)="ontiposerviciosChange()">
+              <option value="">Seleccione un tipo...</option>
+              <option *ngFor="let tips of tiposServiciosFiltrados" [value]="tips.idtipser">
+                {{ tips.nomser }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Precio Servicio -->
+          <div class="form-group mixtad">
+            <label>Precio Servicio<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+            <input type="number" formControlName="preser" class="form-control" (ngModelChange)="calcularTotaldet()" />
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-pie">
+      <button type="button" class="btn-customm" (click)="c('Cancel click')">Cancelar</button>
+      <button type="submit" class="btn-custom">Guardar</button>
+    </div>
+  </form>
+</ng-template>

@@ -1,0 +1,117 @@
+<table class="table tabla-sombra">
+    <thead class="thead-light">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">FECHA</th>
+        <th scope="col">CLIENTES</th>
+        <th scope="col">IMPORTE</th>
+        <th scope="col"> ESTADO </th>
+        <th scope="col" colspan="2" class="text-center"> ACCIONES </th>
+      </tr>
+    </thead>
+    <tbody *ngFor="let ven of  apiVentas | paginate: { itemsPerPage: 6, currentPage: pageActual } ; index as con">
+      <tr>
+        <td *ngIf="ven.estado == 1" class="activo" scope="col">{{con+1}}</td>
+        <td *ngIf="ven.estado == 0" class="inactivo" scope="col">{{con+1}}</td>
+        <td *ngIf="ven.estado == 1" class="activo">{{ven.fecven | date: 'dd/MM/yyyy'}} </td>
+        <td *ngIf="ven.estado == 0" class="inactivo">{{ven.fecven | date: 'dd/MM/yyyy'}} </td>
+        <td *ngIf="ven.estado == 1" class="activo">{{ven.clientes.nomcli}} </td>
+        <td *ngIf="ven.estado == 0" class="inactivo">{{ven.clientes.nomcli}} </td>
+        <td *ngIf="ven.estado == 1" class="activo">{{ven.impven}} </td>
+        <td *ngIf="ven.estado == 0" class="inactivo">{{ven.impven}} </td>
+        <td>
+          <!-- estado -->
+          <a *ngIf="ven.estado == 1" class="btn-custom">Activo</a>
+          <a *ngIf="ven.estado == 0" class="btn-customm">Inactivo</a>
+        </td>
+        <!--Eliminacion logica-->
+        <td>
+          <a *ngIf="ven.estado==1" href="javascript:void(0)" (click)="llamaModalDel(contentDel, ven)"
+            class="bi bi-trash-fill enlace-icono"></a>
+          <a *ngIf="ven.estado==0" class="bi bi-trash-fill enlace-iconoo"></a>
+        </td>
+        <!-- Vista -->
+        <td>
+          <a *ngIf="ven.estado==1" href="javascript:void(0)" (click)="llamaModalMos(contentMos, ven)"
+            class="bi bi-eye-fill enlace-icono"></a>
+          <a *ngIf="ven.estado==0" class="bi bi-eye-fill enlace-icono"></a>
+        </td>
+
+
+
+      </tr>
+    </tbody>
+    <tfoot>
+      <td colspan="8" align="center">
+        <pagination-controls (pageChange)="pageActual = $event" previousLabel="" nextLabel=""
+          class="my-pagination"></pagination-controls>
+      </td>
+    </tfoot>
+  
+  </table>
+
+  <!-- VENTANA MODAL PARA OPCION ELIMINAR -->
+<ng-template #contentDel let-c="close" let-d="dismiss">
+  <div class="modal-cu">
+  </div>
+  <div class="modal-body">
+    <h5 class="text-center">¿Esta seguro? Se eliminara la ventas del Cliente:
+      <h5 style="color:#236259; font-weight: bold;"><strong>{{ venI.clientes.nomcli}}</strong></h5>
+    </h5>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmitDel()">
+    <div class="modal-pie">
+      <button type="button" class="btn-custoo" (click)="c('Save click')"> Cancelar</button>
+      <button type="submit" class="btn-custo"> Aceptar </button>
+    </div>
+  </form>
+</ng-template>
+
+
+<!-- VENTANA MODAL PARA OPCION MOSTRAR  *************************************************************  -->
+<ng-template #contentMos let-c="close" let-d="dismiss">
+
+  <div class="modal-body">
+    <h4 class="text-center" style="color:#236259; font-weight: bold;">DETALLE DE VENTAS</h4><br>
+    <h6 class="mixtadm text-center">FECHA:</h6>
+    <h6 class="mixtadm text-center">{{ venI.fecven }}</h6>
+    <h6 class="mixtadm text-center">NUM DE DETALLE:</h6>
+    <h6 class="mixtadm text-center">{{ venI.numven }}</h6>
+    <h6 class="mixtadm text-center">CLIENTES:</h6>
+    <h6 class="mixtadm text-center">{{ venI.clientes.nomcli}}</h6>
+    <h6 class="mixtadm text-center">USUARIO</h6>
+    <h6 class="mixtadm text-center">{{ venI.personas.nombre}} {{ venI.personas.ap}}  {{ venI.personas.am}}</h6>
+
+
+    <table class="table tabla-sombra-2">
+      <thead class="thead-light">
+        <tr>
+          <th class="text-center">CANT.</th>
+          <th class="text-center">DESCRIPCIÓN </th>
+          <th class="text-center">PRECIO</th>
+          <th class="text-center">SUBTOTAL</th>
+
+        </tr>
+      </thead>
+      <tbody *ngFor=" let dven of apiDetventas, index as con">
+        <tr>
+          <td scope="col" class="text-center">{{con+1}}</td>
+          <td scope="col" class="text-center">RAZA {{dven.detcompras.animales.razas.nomraz}} CON UN PESO DE {{dven.detcompras.animales.pesani}}</td>
+          <td scope="col" class="text-center">{{dven.preven}}</td>
+          <td scope="col" class="text-center">{{dven.preven}}</td>
+        </tr>
+
+      </tbody>
+      <tr>
+        <td colspan="3" class="text-center">TOTAL</td>
+        <td class="text-center">{{ venI.impven }}</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="modal-pie">
+    <button type="button" class="btn-custoo" (click)="c('Save click')"> Cancelar </button>
+    <button type="submit" class="btn-custo" (click)="createPdf()">Crear PDF</button>
+
+  </div>
+</ng-template>

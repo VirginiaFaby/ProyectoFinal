@@ -1,0 +1,189 @@
+<div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show alert-floating" role="alert">
+  {{ successMessage }}
+  <button type="button" class="close" aria-label="Close" (click)="successMessage=''">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+
+<div class="container">
+  <div class="container-with-shadow">
+      <div class="content">
+        <h5 class="text-center" style="color: #236259; font-weight: bold;">GESTIÓN CLIENTES</h5>
+        <a href="javascript:void(0)" (click)="llamaModalAdd(contentAdd)" class="btn-custom-color">Nuevo Cliente</a>
+      </div>
+    </div>
+    <div class="dropdown-divider"></div>
+    <form [formGroup]="formFiltro" class="filtro-form">
+      <div class="formArriba">
+        <div class="form-group filtro">
+          <div class="input-group">
+            <input class="form-control" formControlName="filtro" type="text" name="busqueda" placeholder="Buscar...."
+              (keyup)="filtrarNombre()">
+            <span class="input-group-addon">
+              <i class="bi bi-search"></i>
+            </span>
+          </div>
+        </div>
+
+
+        <div class="form-group opciones">
+          <div class="form-check form-check-inline ">
+            <input class="form-check-input" type="radio" formControlName="estadosCli" name="estadosCli"
+              id="exampleRadios1" value="1" (change)="filtrarNombre()">
+            <label class="form-check-label" for="exampleRadios1">Activo</label>
+          </div>
+          <div class="form-check form-check-inline radio-container">
+            <input class="form-check-input" type="radio" formControlName="estadosCli" name="estadosCli"
+              id="exampleRadios2" value="0" (change)="filtrarNombre()">
+            <label class="form-check-label" for="exampleRadios2">Inactivo</label>
+          </div>
+          <div class="form-check form-check-inline radio-container">
+            <input class="form-check-input" type="radio" formControlName="estadosCli" name="estadosCli"
+              id="exampleRadios3" value="-1" (change)="filtrarNombre()" checked="true">
+            <label class="form-check-label" for="exampleRadios3">Todos</label>
+          </div>
+        </div>
+      </div>
+    </form>
+    <!--fin de formulario del Filtro-->
+    <div class="dropdown-divider"></div>
+    <div>
+      <app-detclientes></app-detclientes>
+    </div>
+
+  </div>
+
+
+
+
+<ng-template #contentAdd let-c="close" let-d="dismiss" id="modal-add">
+  <div class="modal-cuu">
+    <h4 class="modal-title" id="modal-basic-title" style="font-weight: bold;"> Adicionar Cliente... </h4>
+  </div>
+  <form [formGroup]="form" enctype="multipart/form-data" (ngSubmit)="onSubmit()">
+    <div class="modal-body">
+
+
+      <div class="form-group">
+        <label> Nombre Cliente<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" formControlName="nomcli" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.nomcli.errors }" />
+        <div *ngIf="submitted && f.nomcli.errors" class="invalid-feedback">
+          <p *ngIf="f.nomcli.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.nomcli.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.nomcli.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+
+      <div class="form-group mixtad">
+        <label> Nit<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" formControlName="nit" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.nit.errors }" />
+        <div *ngIf="submitted && f.nit.errors" class="invalid-feedback">
+          <p *ngIf="f.nit.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.nit.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.nit.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+
+      <div class="form-group mixtad">
+        <label>Nompre Propietario<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" formControlName="nompro" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.nompro.errors }" />
+        <div *ngIf="submitted && f.nompro.errors" class="invalid-feedback">
+          <p *ngIf="f.nompro.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.nompro.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.nompro.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+
+      <div class="form-group opciones">
+        <label class="mr-4">Tipo Cliente<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <div class="form-check form-check-inline radio-container">
+          <input class="form-check-input" type="radio" formControlName="tipcli" name="tipcli" id="exampleRadios1"
+            value="F" required>
+          <label class="form-check-label mr-4" for="exampleRadios1"> Frial </label>
+        </div>
+        <div class="form-check form-check-inline radio-container">
+          <input class="form-check-input" type="radio" formControlName="tipcli" name="tipcli" id="exampleRadios2"
+            value="C">
+          <label class="form-check-label mr-4" for="exampleRadios2"> Carniceria </label>
+        </div>
+        <div class="form-check form-check-inline radio-container">
+          <input class="form-check-input" type="radio" formControlName="tipcli" name="tipcli" id="exampleRadios3"
+            value="M">
+          <label class="form-check-label mr-4" for="exampleRadios3"> Mercado </label>
+        </div>
+        <div *ngIf="submitted && f.tipcli.errors" class="invalid-feedback">
+          <p *ngIf="f.tipcli.errors.required"> Seleccione una opcion </p>
+        </div>
+      </div>
+      <div *ngIf="form.get('tipcli').value === 'M'">
+
+        <div class="form-group mixtad">
+          <label for="mercado">Mercados</label>
+          <select id="mercado" formControlName="nommer" class="form-control"
+            [ngClass]="{'is-invalid': submitted && f.nommer.errors }">
+            <option value="" disabled selected>Selecciona un mercado</option>
+            <option value="Mercado Central">Mercado Central</option>
+            <option value="Mercado Campesino">Mercado Campesino</option>
+            <option value="Mercado Bolívar">Mercado Bolívar</option>
+            <option value="Mercado Lourdes">Mercado Lourdes</option>
+            <option value="Mercado Abasto del Sur">Mercado Abasto del Sur</option>
+            <option value="Mercado Senac">Mercado Senac</option>
+            <option value="Mercado Abaroa">Mercado Abaroa</option>
+            <option value="Mercado Narciso Campero">Mercado Narciso Campero</option>
+            <option value="Mercado La Loma">Mercado La Loma</option>
+            <option value="Mercado El Constructor">Mercado El Constructor</option>
+            <option value="Mercado San Bernardo">Mercado San Bernardo</option>
+
+          </select>
+          <div *ngIf="submitted && f.nommer.errors" class="invalid-feedback">
+            <p *ngIf="f.nommer.errors.required">Campo obligatorio</p>
+            <p *ngIf="f.nommer.errors.minlength">Mínimo 5 caracteres</p>
+            <p *ngIf="f.nommer.errors.maxlength">Máximo 30 caracteres</p>
+          </div>
+        </div>
+
+        <div class="form-group mixtad">
+          <label>Número de Local: </label>
+          <input type="number" formControlName="numlocal" class="form-control"
+            [ngClass]="{'is-invalid': submitted && f.numlocal.errors }" />
+          <div *ngIf="submitted && f.numlocal.errors" class="invalid-feedback">
+            <p *ngIf="f.numlocal.errors.required"> Campo obligatorio </p>
+            <p *ngIf="f.numlocal.errors.minlength"> Mínimo 1 caracter </p>
+            <p *ngIf="f.numlocal.errors.maxlength"> Máximo 10 caracteres </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group mixtad">
+        <label> Telefono<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" formControlName="telecli" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.telecli.errors }" />
+        <div *ngIf="submitted && f.telecli.errors" class="invalid-feedback">
+          <p *ngIf="f.telecli.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.telecli.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.telecli.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+      <div class="form-group mixtad">
+        <label> Direccion<span style="color: #8B0000; font-size: 1.2em;">*</span></label>
+        <input type="text" formControlName="direcli" class="form-control"
+          [ngClass]="{'is-invalid': submitted && f.direcli.errors }" />
+        <div *ngIf="submitted && f.direcli.errors" class="invalid-feedback">
+          <p *ngIf="f.direcli.errors.required"> Campo obligatorio </p>
+          <p *ngIf="f.direcli.errors.minlength"> Mínimo 5 caracteres </p>
+          <p *ngIf="f.direcli.errors.maxlength"> Máximo 30 caracteres </p>
+        </div>
+      </div>
+    </div>
+    <div class="modal-pie">
+      <button type="button" class="btn-customm" (click)="c('Save click')"> Cancelar </button>
+      <button type="submit" class="btn-custom"> Guardar </button>
+    </div>
+  </form>
+</ng-template>
+
+
